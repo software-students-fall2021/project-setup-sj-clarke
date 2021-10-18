@@ -1,2 +1,30 @@
-# Guide to Contributing
-Delete the contents of this file and replace with the contents of a proper guide to contributing to this project, as described in the [instructions](./instructions.md)
+# Team Norms 
+
+## Team values 
+. . . 
+
+
+## Sprint Cadence
+. . . 
+
+## Daily stand up 
+. . . 
+
+## Coding Standards
+. . . 
+
+# Other information
+
+
+## Git Workflow 
+. . . 
+
+
+## Insturctions for setting up local development 
+More information to come once we begin developing 
+
+
+## Instructions for building and testing the project 
+More information to come once the project reaches this stage 
+
+
