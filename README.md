@@ -31,7 +31,7 @@ Sarah-Jane Clarke - sjclarke10
 
 Emily Herschmann - eh2376@nyu.edu
 
-Danielle Zhao - daniellezhao
+Danielle Zhao - daniellehzhao
 
 Elizabeth Jiranek - elizabethjiranek
 
