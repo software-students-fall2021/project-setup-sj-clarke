@@ -8,104 +8,50 @@ import React from 'react'
 import Title from './header.js'
 import './homeScreen.css'
 
+
+import * as ReactBootStrap from "react-bootstrap"; 
+
 function Home(){
+    // dummy data for summary of current trip transactions
+    const transactions =  [
+  
+        {charger: "Sarah-Jane", chargee:  "Sam", expense: "$50"},
+        {charger: "Sarah", chargee:  "Liv", expense: "190"}
+        ]
+        
+    // creating a row for each instance within JSON file holding all of the transactions
+    const renderRow = (transaction, index) => {
+    // 1 row instance within a table 
     return (
+    <tr key = {index}>
+      <td>{transaction.charger}</td>
+      <td>{transaction.chargee}</td>
+      <td>{transaction.expense}</td>
+    </tr>
+    )
+    }
+    // general layout of home screen 
+    // use map to loop through all transactions and render a row for each one and display on home screen
+      return (
         <div className= "Home">
-            <Title/>
-            <title className ="CurrentTripTitle">Mexico 2021
-
-            <button type="button" class="btn btn-secondary btn-sm">More info</button>
-            </title>  
-
-            <table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Charger</th>
-      <th scope="col">Chargee</th>
-      <th scope="col">Expense Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr>
-      <th scope="row">11</th>
-      <td>Mark</td>
-      <td>Sarah</td>
-      <td>$90</td>
-    </tr>
-    <tr>
-      <th scope="row">10</th>
-      <td>Jack</td>
-      <td>Mike</td>
-      <td>$50</td>
-    </tr>
-    <tr>
-      <th scope="row">10</th>
-      <td>Mark</td>
-      <td>Sarah</td>
-      <td>$90</td>
-    </tr>
-    <tr>
-      <th scope="row">9</th>
-      <td>Jack</td>
-      <td>Mike</td>
-      <td>$50</td>
-    </tr>
-    <tr>
-      <th scope="row">8</th>
-      <td>Sarah</td>
-      <td>Mexico 2021</td>
-      <td>$900</td>
-    </tr>
-    <tr>
-      <th scope="row">7</th>
-      <td>Mark</td>
-      <td>Sarah</td>
-      <td>$90</td>
-    </tr>
-    <tr>
-      <th scope="row">6</th>
-      <td>Jack</td>
-      <td>Mike</td>
-      <td>$50</td>
-    </tr>
-    <tr>
-      <th scope="row">5</th>
-      <td>Sarah</td>
-      <td>Mexico 2021</td>
-      <td>$900</td>
-    </tr>
-    <tr>
-      <th scope="row">4</th>
-      <td>Mark</td>
-      <td>Sarah</td>
-      <td>$90</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Jack</td>
-      <td>Mike</td>
-      <td>$50</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Sarah</td>
-      <td>Mexico 2021</td>
-      <td>$900</td>
-    </tr>
-    <tr>
-      <th scope="row">1</th>
-      <td>Sarah</td>
-      <td>Mexico 2021</td>
-      <td>$900</td>
-    </tr>
-  </tbody>
-</table>
-        </div>
-
-
+        <Title/>
+        <title className ="CurrentTripTitle">Mexico 2021
+        <button type="button" class="btn btn-secondary btn-sm">More info</button>
+        </title>  
+        <ReactBootStrap.Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Charger</th>
+                <th>Chargee</th>
+                <th>Expense Amount</th>
+              </tr>
+          </thead>
+          <tbody>
+            {transactions.map(renderRow)}
+          </tbody>
+        </ReactBootStrap.Table>
+      </div>
 
     )
 }
-
 export default Home; 
