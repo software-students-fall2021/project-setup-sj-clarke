@@ -2,6 +2,7 @@ import React from 'react'
 import './allGroups.css'
 import { Form, Button, NavLink} from 'react-bootstrap';
 import Title from './header.js'
+import * as ReactBootStrap from "react-bootstrap"; 
 
 function AllGroups(){
      // dummy data for summary of current trip transactions
@@ -22,7 +23,6 @@ function AllGroups(){
     }
     return (
         <div className= "AllGroups">
-        <Title/>
         <title>All Groups
         <button type="button" class="btn btn-secondary btn-sm">More info</button>
         </title>  
@@ -34,7 +34,7 @@ function AllGroups(){
               </tr>
           </thead>
           <tbody>
-            {transactions.map(renderRow)}
+            {groups.map(renderRow)}
           </tbody>
         </ReactBootStrap.Table>
       </div>

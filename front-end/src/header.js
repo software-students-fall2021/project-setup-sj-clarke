@@ -8,11 +8,8 @@ import {useState} from 'react'
 import * as ReactBootStrap from "react-bootstrap"; 
 import  ExpenseAction from './addExpenseModal';
 import SettleUp from './settleUpModal';
-<<<<<<< HEAD
 import './friends.js';
 import Friends from './friends.js'
-=======
->>>>>>> 79472807a2ea6ee6306c536e658f86b2346579e9
 
 function Title() {
   const [showAddExpense, setAddExpense] = useState(false);
@@ -24,7 +21,7 @@ function Title() {
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
     <ReactBootStrap.Nav className="me-auto">
       <ReactBootStrap.Nav.Link href="#CreateAGroup">Create A Group</ReactBootStrap.Nav.Link>
-      <ReactBootStrap.Nav.Link href="#AllGroups">All Groups</ReactBootStrap.Nav.Link>
+      <ReactBootStrap.Nav.Link href="/allGroups">All Groups</ReactBootStrap.Nav.Link>
       <ReactBootStrap.Nav.Link href="/Friends">Friends</ReactBootStrap.Nav.Link>
       <ReactBootStrap.NavDropdown title="Current Group" id="collasible-nav-dropdown">
         <ReactBootStrap.NavDropdown.Item href="#action/AddExpense" onClick={() => setAddExpense(true)}>Add Expense</ReactBootStrap.NavDropdown.Item>
