@@ -4,11 +4,29 @@ import './App.css';
 import './homeScreen.js'
 
 import Home from './homeScreen.js'
+import Title from './header'
+import CurrentGroupMembers from './currentGroupMembers';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <Home/>
+        <Router>
+        <Title />
+        <Switch>
+        <Route exact path="/" component={Home}>
+            <Home/>
+          </Route >
+          <Route  path="/CurrentGroupMembers" component={CurrentGroupMembers}>
+            <CurrentGroupMembers tripName={"Mexico 2021"}/>
+          </Route>
+        </Switch>
+    </Router>
     </div>
+   
   );
 }
 
