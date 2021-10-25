@@ -13,7 +13,7 @@ function Title() {
   <ReactBootStrap.Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
     <ReactBootStrap.Nav className="me-auto">
-      <ReactBootStrap.Nav.Link href="#CreateAGroup">Create A Group</ReactBootStrap.Nav.Link>
+      <ReactBootStrap.Nav.Link href="/createGroup.js">Create A Group</ReactBootStrap.Nav.Link>
       <ReactBootStrap.Nav.Link href="#AllGroups">All Groups</ReactBootStrap.Nav.Link>
       <ReactBootStrap.NavDropdown title="Current Group" id="collasible-nav-dropdown">
         <ReactBootStrap.NavDropdown.Item href="#action/3.1">Add Expense</ReactBootStrap.NavDropdown.Item>
