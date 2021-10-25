@@ -12,8 +12,11 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 79472807a2ea6ee6306c536e658f86b2346579e9
 function App() {
   return (
     <div className="App">
@@ -26,9 +29,12 @@ function App() {
           <Route  path="/CurrentGroupMembers" component={CurrentGroupMembers}>
             <CurrentGroupMembers tripName={"Mexico 2021"}/>
           </Route>
+<<<<<<< HEAD
           <Route  path="/Friends" component={Friends}>
             <Friends/>
           </Route>
+=======
+>>>>>>> 79472807a2ea6ee6306c536e658f86b2346579e9
         </Switch>
     </Router>
     </div>

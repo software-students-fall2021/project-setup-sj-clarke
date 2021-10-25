@@ -8,8 +8,11 @@ import {useState} from 'react'
 import * as ReactBootStrap from "react-bootstrap"; 
 import  ExpenseAction from './addExpenseModal';
 import SettleUp from './settleUpModal';
+<<<<<<< HEAD
 import './friends.js';
 import Friends from './friends.js'
+=======
+>>>>>>> 79472807a2ea6ee6306c536e658f86b2346579e9
 
 function Title() {
   const [showAddExpense, setAddExpense] = useState(false);
