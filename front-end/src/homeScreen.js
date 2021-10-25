@@ -1,7 +1,8 @@
 import './header.css';
 import React from 'react'
-import Title from './header.js'
 import './homeScreen.css'
+
+
 import * as ReactBootStrap from "react-bootstrap"; 
 
 function Home(){
@@ -27,7 +28,6 @@ function Home(){
     // use map to loop through all transactions and render a row for each one and display on home screen
       return (
         <div className= "Home">
-        <Title/>
         <title className ="CurrentTripTitle">Mexico 2021
         <button type="button" class="btn btn-secondary btn-sm">More info</button>
         </title>  

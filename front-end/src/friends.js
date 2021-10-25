@@ -55,7 +55,6 @@ return (
 }
     return(
         <div className= "Friends">
-          <Title/>
           <title className ="CurrentTripTitle">Friends
           <button onClick ={() => setModalisOpen(true)} type="button" className="btn btn-secondary btn-sm">Add Friend</button>
           <Modal isOpen = {modalIsOpen} dialogClassName = "modal-design">
