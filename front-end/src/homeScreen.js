@@ -1,14 +1,7 @@
-
-
-
 import './header.css';
-
 import React from 'react'
-
 import Title from './header.js'
 import './homeScreen.css'
-
-
 import * as ReactBootStrap from "react-bootstrap"; 
 
 function Home(){
