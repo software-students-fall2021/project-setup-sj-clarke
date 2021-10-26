@@ -2,16 +2,7 @@
 import React from 'react';
 import './App.css';
 import './homeScreen.js'
-<<<<<<< HEAD
 import './createGroup.js'
-
-//import Home from './homeScreen.js'
-import CreateGroup from './createGroup'
-function App() {
-  return (
-    <div className="App">
-      <CreateGroup/>
-=======
 import './friends.js';
 import Friends from './friends.js'
 import Home from './homeScreen.js'
