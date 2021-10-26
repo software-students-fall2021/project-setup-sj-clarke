@@ -36,10 +36,6 @@ function AllGroups(){
     }
     return (
 
-          </tbody>
-        </ReactBootStrap.Table>
-      </div>
-      </Container>
 
     )
 }

@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Title from './header.js'
 import * as ReactBootStrap from "react-bootstrap"; 
-import './modalForm.js'
 import Modal from 'react-modal'
 import "./friends.css"
-import modalForm from "./modalForm.js";
+
 
 function Friends(){
 // dummy data for list of friends
-// later we will be getting data from an API call 
+// later we will be getting data from an API call in Json format 
 const friend =  [
     {username: "sjclarke10"},
     {username: "jDoe1"}
@@ -30,6 +29,18 @@ const inputAddGroup = [
 const [expmodalIsOpen, setexpModalisOpen] = useState(false)
 const [addGroupmodalIsOpen, setaddGroupModal] = useState(false)
 const [modalIsOpen, setModalisOpen] = useState(false)
+
+const [addFriend, handleAddFriend] = useState(false)
+
+
+// if handle add friend becomes true
+// add the username to th econst friends 
+
+useEffect(() => {
+    if (addFriend == true){
+      console.log("Friend added"); 
+    }
+})
 
 const [user, setUser] = useState(" ")
 
@@ -57,11 +68,15 @@ return (
         <div className= "Friends">
           <title className ="CurrentTripTitle">Friends
           <button onClick ={() => setModalisOpen(true)} type="button" className="btn btn-secondary btn-sm">Add Friend</button>
-          <Modal isOpen = {modalIsOpen} dialogClassName = "modal-design">
-              <h className = "modal-title">Add friend</h>
-              {inputAddFriend.map(modalForm)}
-              <button onClick ={() => setModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
-          </Modal>
+        <Modal isOpen = {modalIsOpen} dialogClassName = "modal-design">
+        <h className = "modal-title">Add friend</h>
+        <form>
+          <label>Add Friend: 
+           <input type="text" placeholder = "Enter username" />
+           <button onClick ={() => {setModalisOpen(false); handleAddFriend(true)}} type="button" className="btn btn-secondary btn-sm">Save</button>
+          </label>
+          </form>
+      </Modal>
           </title>  
           <ReactBootStrap.Table striped bordered hover>
               <thead>
@@ -77,15 +92,22 @@ return (
           <Modal isOpen = {expmodalIsOpen}>
               <h className = "modal-title">Charge Friend</h>
               <p>Username: {user}</p>
-              {inputChargeFriend.map(modalForm)}
+              <form>
+              <label>Charge: 
+              <input type="text" placeholder = "Enter expense amount" />
+              </label>
+              </form>
               <button onClick ={() => setexpModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
           </Modal>
           <Modal isOpen = {addGroupmodalIsOpen}>
               <h className = "modal-title">Add to Group</h>
               <p>Username: {user}</p>
-              {inputAddGroup.map(modalForm)}
+              <form>
+                <label>Add to Group: 
+                <input type="text" placeholder = "Enter group name" />
+                </label>
+                </form>
               <button onClick ={() => setaddGroupModal(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
-              
           </Modal>
         </div>
 

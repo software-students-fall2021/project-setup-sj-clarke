@@ -35,9 +35,6 @@ function App() {
           <Route path="/Friends" component={Friends}>
             <Friends/>
           </Route>
-          <Route path="/AllGroups" component={AllGroups}>
-            <AllGroups/>
-          </Route>
         </Switch>
     </Router>
     </div>
