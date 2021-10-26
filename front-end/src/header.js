@@ -1,7 +1,5 @@
-
-
-
 import './header.css';
+
 
 import React from 'react'
 import * as ReactBootStrap from "react-bootstrap"; 
@@ -9,6 +7,8 @@ import * as ReactBootStrap from "react-bootstrap";
 function Title() {
   return (
       <div className="Title">
+        
+        
       <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light">
   <ReactBootStrap.Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
