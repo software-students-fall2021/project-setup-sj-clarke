@@ -1,6 +1,4 @@
 
-
-
 import './header.css';
 
 import React from 'react'
@@ -20,14 +18,9 @@ function Title() {
   <ReactBootStrap.Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
     <ReactBootStrap.Nav className="me-auto">
-<<<<<<< HEAD
-      <ReactBootStrap.Nav.Link href="/createGroup.js">Create A Group</ReactBootStrap.Nav.Link>
-      <ReactBootStrap.Nav.Link href="#AllGroups">All Groups</ReactBootStrap.Nav.Link>
-=======
-      <ReactBootStrap.Nav.Link href="#CreateAGroup">Create A Group</ReactBootStrap.Nav.Link>
+      <ReactBootStrap.Nav.Link href="/CreateGroup">Create A Group</ReactBootStrap.Nav.Link>
       <ReactBootStrap.Nav.Link href="/allGroups">All Groups</ReactBootStrap.Nav.Link>
       <ReactBootStrap.Nav.Link href="/Friends">Friends</ReactBootStrap.Nav.Link>
->>>>>>> 7cb21a1d370e2625466706c3c2d34b6e0d80f13c
       <ReactBootStrap.NavDropdown title="Current Group" id="collasible-nav-dropdown">
         <ReactBootStrap.NavDropdown.Item href="#action/AddExpense" onClick={() => setAddExpense(true)}>Add Expense</ReactBootStrap.NavDropdown.Item>
         <ReactBootStrap.NavDropdown.Item href="#action/SettleUp" onClick={() => setSettleUp(true)}>  Settle up</ReactBootStrap.NavDropdown.Item>
