@@ -9,6 +9,7 @@ import Home from './homeScreen.js'
 import Title from './header'
 import AllGroups from './allGroups.js'
 import CurrentGroupMembers from './currentGroupMembers';
+import MoreInfo from './moreInfo'
 import {
   BrowserRouter as Router,
   Switch,
@@ -28,6 +29,9 @@ function App() {
           <Route  path="/CurrentGroupMembers" component={CurrentGroupMembers}>
             <CurrentGroupMembers tripName={"Mexico 2021"}/>
           </Route>
+          <Route  path="/MoreInfo" component={MoreInfo}>
+            <MoreInfo/>
+            </Route>
           <Route path="/Friends" component={Friends}>
             <Friends/>
           </Route>
@@ -36,7 +40,6 @@ function App() {
           </Route>
         </Switch>
     </Router>
-
     </div>
    
   );

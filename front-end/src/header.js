@@ -14,7 +14,7 @@ function Title() {
   const [showSettleUp, setSettleUp] = useState(false);
   return (
       <div className="Title">
-      <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light">
+      <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light" href="/#home">
   <ReactBootStrap.Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
     <ReactBootStrap.Nav className="me-auto">

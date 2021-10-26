@@ -1,7 +1,7 @@
 import './header.css';
 import React from 'react'
 import './homeScreen.css'
-
+import {Link} from 'react-router-dom'
 
 import * as ReactBootStrap from "react-bootstrap"; 
 
@@ -29,7 +29,8 @@ function Home(){
       return (
         <div className= "Home">
         <title className ="CurrentTripTitle">Mexico 2021
-        <button type="button" class="btn btn-secondary btn-sm">More info</button>
+        <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
+        
         </title>  
         <ReactBootStrap.Table striped bordered hover>
             <thead>
