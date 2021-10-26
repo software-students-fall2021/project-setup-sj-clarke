@@ -14,7 +14,7 @@ function Title() {
   const [showSettleUp, setSettleUp] = useState(false);
   return (
       <div className="Title">
-      <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light">
+      <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light" href="/#home">
   <ReactBootStrap.Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
     <ReactBootStrap.Nav className="me-auto">
@@ -30,7 +30,7 @@ function Title() {
     <ReactBootStrap.Nav>
     </ReactBootStrap.Nav>
   </ReactBootStrap.Navbar.Collapse>
-  <ReactBootStrap.Navbar.Brand href="#home">TripSplit</ReactBootStrap.Navbar.Brand>
+  <ReactBootStrap.Navbar.Brand href="/">TripSplit</ReactBootStrap.Navbar.Brand>
 </ReactBootStrap.Navbar>
 <ExpenseAction show={showAddExpense} setModal={setAddExpense}/>
 <SettleUp show={showSettleUp} setModal={setSettleUp}/>
