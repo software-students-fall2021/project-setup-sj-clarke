@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import './allGroups.css'
 import * as ReactBootStrap from "react-bootstrap";
 import Title from './header.js'
+import data from "./mockGroups.json"
 
 function AllGroups(){
     
@@ -35,7 +36,79 @@ function AllGroups(){
       setExpandedRows(newExpandedRows);
     }
     return (
-
+      <Container>
+      <Row>
+        <Col>
+          <h1> All Groups({ data.length })</h1>
+        </Col>
+       </Row>
+       <div className= "AllGroups">
+       <ReactBootStrap.Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Group</th>
+            </tr>
+          </thead>
+          <tbody>
+            {groups.map(()=> group)}
+            <tr>
+              <td>{groups.date}</td>
+              <td>{groups.groupName}</td>
+              <td>
+                <Button 
+                  variant="link"
+                  onClick={event => handleExpandRow(event, groups.id)}>
+                    {
+                      expandState[user.id] ?
+                        'Hide' : 'Show'
+                    }
+                 </Button>
+               </td>
+            </tr>
+            {/* {
+               expandedRows.includes(user.id) ?
+                  <tr>
+                    <td colspan="6">
+                      <div style={{backgroundColor: '#343A40', color: '#FFF', padding: '10px'}}>
+                        <h2> Details </h2>
+                        <ul>
+                          <li>
+                            <span><b>Full Name:</b></span> {' '}
+                            <span> { user['first_name'] } {' '} { user['last_name'] } </span>
+                          </li>
+                          <li>
+                            <span><b>Company:</b></span> {' '}
+                            <span> { user.company } </span>
+                          </li>
+                          <li>
+                            <span><b>Department:</b></span> {' '}
+                            <span> { user.department } </span>
+                          </li>
+                          <li>
+                            <span><b>Ip:</b></span> {' '}
+                            <span> { user['ip_address'] } </span>
+                          </li>
+                          <li>
+                            <span><b>Best Movie:</b></span> {' '}
+                            <span> { user.movies } </span>
+                          </li>
+                          <li>
+                            <span><b>About:</b></span> {' '}
+                            <span> { user.about } </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr> : null
+                }
+                </>
+              </> 
+              )} */}
+          </tbody>
+        </ReactBootStrap.Table>
+      </div>
+      </Container>
 
     )
 }
