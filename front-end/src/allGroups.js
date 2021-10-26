@@ -1,43 +1,45 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './allGroups.css'
-import { Form, Button, NavLink} from 'react-bootstrap';
+import * as ReactBootStrap from "react-bootstrap";
 import Title from './header.js'
-import * as ReactBootStrap from "react-bootstrap"; 
 
 function AllGroups(){
-     // dummy data for summary of current trip transactions
-     const groups =  [
+    
+    // Data in table that will be used and can be updated dynamically
+    const [groups, setGroups] = useState(data)
+
+    // State variable to keep track of all the expanded rows
+    // By default, nothing expanded. Hence initialized with empty array.
+    const [expandedRows, setExpandedRows] = useState([]);
+
+    // State variable to keep track which row is currently expanded.
+    const [expandState, setExpandState] = useState({});
+    
+    /**
+     * This function gets called when show/hide link is clicked.
+    */
+    const handleExpandRow = (event, userId) => {
+      const currentExpandedRows = expandedRows;
+      const isRowExpanded = currentExpandedRows.includes(userId);
   
-        {date: "Sep 2021", trip:  "Mexico"},
-        {date: "Aug 2019", trip:  "Paris"}
-        ]
-        
-    // creating a row for each instance within JSON file holding all of the transactions
-    const renderRow = (group, index) => {
-        return (
-            <tr key = {index}>
-              <td>{group.date}</td>
-              <td>{group.trip}</td>
-            </tr>
-            )
+      let obj = {};
+      isRowExpanded ? (obj[userId] = false) :  (obj[userId] = true);
+      setExpandState(obj);
+  
+      // If the row is expanded, we are here to hide it. Hence remove
+      // it from the state variable. Otherwise add to it.
+      const newExpandedRows = isRowExpanded ?
+            currentExpandedRows.filter(id => id !== userId) :
+            currentExpandedRows.concat(userId);
+  
+      setExpandedRows(newExpandedRows);
     }
     return (
-        <div className= "AllGroups">
-        <title>All Groups
-        <button type="button" class="btn btn-secondary btn-sm">More info</button>
-        </title>  
-        <ReactBootStrap.Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Group</th>
-              </tr>
-          </thead>
-          <tbody>
-            {groups.map(renderRow)}
+
           </tbody>
         </ReactBootStrap.Table>
       </div>
+      </Container>
 
     )
 }
