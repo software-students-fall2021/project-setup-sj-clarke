@@ -36,7 +36,7 @@ function App() {
           </Route>
         </Switch>
     </Router>
->>>>>>> 7cb21a1d370e2625466706c3c2d34b6e0d80f13c
+
     </div>
    
   );
