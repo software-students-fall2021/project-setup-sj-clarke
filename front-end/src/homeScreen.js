@@ -1,13 +1,7 @@
-
-
-
 import './header.css';
-
 import React from 'react'
-
-import Title from './header.js'
 import './homeScreen.css'
-
+import {Link} from 'react-router-dom'
 
 import * as ReactBootStrap from "react-bootstrap"; 
 
@@ -34,9 +28,9 @@ function Home(){
     // use map to loop through all transactions and render a row for each one and display on home screen
       return (
         <div className= "Home">
-        <Title/>
         <title className ="CurrentTripTitle">Mexico 2021
-        <button type="button" class="btn btn-secondary btn-sm">More info</button>
+        <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
+        
         </title>  
         <ReactBootStrap.Table striped bordered hover>
             <thead>

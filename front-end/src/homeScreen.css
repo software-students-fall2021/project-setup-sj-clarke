@@ -1,29 +1,20 @@
-
-
-.CurrentTripTitle{
-    display: block;
-    text-align: left;
-    font-size: 20px; 
-    padding: 10px;
-    margin-right: 10px;
-    word-spacing: 2px;
-    font-weight: bold
-
+.CurrentTripTitle {
+  display: block;
+  text-align: left;
+  font-size: 20px;
+  padding: 10px;
+  margin-right: 10px;
+  word-spacing: 2px;
+  font-weight: bold;
 }
 
-
-.Home{
-    text-align: left; 
+.Home {
+  text-align: left;
 }
 
 .btn {
-    margin-left: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: lowercase;
+  margin-left: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: lowercase;
 }
-
-
-
-
-
