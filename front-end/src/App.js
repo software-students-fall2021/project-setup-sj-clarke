@@ -4,6 +4,7 @@ import './App.css';
 import './homeScreen.js'
 import './createGroup.js'
 import './friends.js';
+import CreateGroup from './createGroup.js'; 
 import Friends from './friends.js'
 import Home from './homeScreen.js'
 import Title from './header'
