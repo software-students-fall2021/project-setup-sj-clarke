@@ -10,6 +10,7 @@ import Title from './header'
 import AllGroups from './allGroups.js'
 import CurrentGroupMembers from './currentGroupMembers';
 import MoreInfo from './moreInfo'
+import Account from './accountInfo.js';
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,6 +38,9 @@ function App() {
           </Route>
           <Route path="/AllGroups" component={AllGroups}>
             <AllGroups/>
+          </Route>
+          <Route path="/Account" component={Account}>
+            <Account/>
           </Route>
         </Switch>
     </Router>
