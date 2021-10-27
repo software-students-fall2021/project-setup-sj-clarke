@@ -6,7 +6,7 @@ import Modal from 'react-modal'
 import "./friends.css"
 
 
-function Friends(){
+function Friends() {
 // dummy data for list of friends
 // later we will be getting data from an API call in Json format 
 const friend =  [
@@ -30,17 +30,9 @@ const [expmodalIsOpen, setexpModalisOpen] = useState(false)
 const [addGroupmodalIsOpen, setaddGroupModal] = useState(false)
 const [modalIsOpen, setModalisOpen] = useState(false)
 
-const [addFriend, handleAddFriend] = useState(false)
 
 
-// if handle add friend becomes true
-// add the username to th econst friends 
 
-useEffect(() => {
-    if (addFriend == true){
-      console.log("Friend added"); 
-    }
-})
 
 const [user, setUser] = useState(" ")
 
@@ -73,7 +65,7 @@ return (
         <form>
           <label>Add Friend: 
            <input type="text" placeholder = "Enter username" />
-           <button onClick ={() => {setModalisOpen(false); handleAddFriend(true)}} type="button" className="btn btn-secondary btn-sm">Save</button>
+           <button onClick ={() => setModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
           </label>
           </form>
       </Modal>
@@ -110,12 +102,8 @@ return (
               <button onClick ={() => setaddGroupModal(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
           </Modal>
         </div>
-
-
     )
-
-
-
 }
+
 
 export default Friends;

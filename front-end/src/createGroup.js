@@ -7,7 +7,6 @@ function CreateGroup(){
     return(
         
         <div className="CreateGroup">
-        <Title/>
         <header>TripSplit</header>
         <Form>
             <Form.Group className="mb-3" controlId="formBasicUsername">
