@@ -53,21 +53,23 @@ function AllGroups(){
             </tr>
           </thead>
           <tbody>
-            {groups.map(()=> group)}
-            <tr>
-              <td>{group.date}</td>
-              <td>{group.groupName}</td>
-              <td>
+            {groups.map((group)=> (
+               <tr key={group.id}>
+                <td>{group.date}</td>
+                <td>{group.groupName}</td>
+                <td>
                 <Button 
                   variant="link"
                   onClick={event => handleExpandRow(event, group.id)}>
                     {
-                      expandState[group.id] ?
+                      expandState[groups.id] ?
                         'Hide' : 'Show'
                     }
                  </Button>
-               </td>
-            </tr>
+                </td>
+               </tr>
+            ))
+            }
             {/* {
                expandedRows.includes(user.id) ?
                   <tr>
