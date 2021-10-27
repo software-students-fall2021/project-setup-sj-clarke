@@ -4,39 +4,26 @@ import * as ReactBootStrap from "react-bootstrap"
 import { Container, Row, Col } from 'react-bootstrap'
 import { Button} from 'react-bootstrap';
 import Title from './header.js'
+import Modal from 'react-modal'
 import data from "./mockGroups.json"
+import groupData from "./mockGroupData.json"
+import memData from "./mockMembers.json"
 
 function AllGroups(){
     
-    // Data in table that will be used and can be updated dynamically
+    // Data of all groups in table
     const [groups, setGroups] = useState(data)
 
-    // State variable to keep track of all the expanded rows
-    // By default, nothing expanded. Hence initialized with empty array.
-    const [expandedRows, setExpandedRows] = useState([]);
+    // Data of specific group info 
+    const [indivGroups, setIndivGroups] = useState(groupData)
 
-    // State variable to keep track which row is currently expanded.
-    const [expandState, setExpandState] = useState({});
+    // Data of members in table
+    const [members, setMembers] = useState(memData)
+
+    // variables to control various modals' open/close
+    const [infoOpen, setModalOpen] = useState(false)
+    const [seeMemModal, setMemModal] = useState(false)
     
-    /**
-     * This function gets called when show/hide link is clicked.
-    */
-    const handleExpandRow = (event, userId) => {
-      const currentExpandedRows = expandedRows;
-      const isRowExpanded = currentExpandedRows.includes(userId);
-  
-      let obj = {};
-      isRowExpanded ? (obj[userId] = false) :  (obj[userId] = true);
-      setExpandState(obj);
-  
-      // If the row is expanded, we are here to hide it. Hence remove
-      // it from the state variable. Otherwise add to it.
-      const newExpandedRows = isRowExpanded ?
-            currentExpandedRows.filter(id => id !== userId) :
-            currentExpandedRows.concat(userId);
-  
-      setExpandedRows(newExpandedRows);
-    }
     return (
       <Container>
       <Row>
@@ -58,62 +45,69 @@ function AllGroups(){
                 <td>{group.date}</td>
                 <td>{group.groupName}</td>
                 <td>
-                <Button 
-                  variant="link"
-                  onClick={event => handleExpandRow(event, group.id)}>
-                    {
-                      expandState[groups.id] ?
-                        'Hide' : 'Show'
-                    }
-                 </Button>
+                <button type="button" className="btn btn-secondary btn-sm" 
+                    onClick ={() => {setModalOpen(true)}}>more info
+                </button>
+                <Modal isOpen = {infoOpen}>
+                  <h1 className = "modal-title">{group.groupName}</h1>
+                  <h3>{group.date}</h3>
+                  <button type="button" className="btn btn-secondary btn-sm" 
+                    onClick ={() => {setMemModal(true)}}>See Members
+                  </button>
+                  <Modal isOpen = {seeMemModal}>
+                  <h className = "modal-title">Members({ memData.length })</h>  
+                  <ReactBootStrap.Table striped bordered hover>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {members.map((member)=> (
+                    <tr key={member.id}>
+                      <td>{member.memberName}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                </ReactBootStrap.Table>
+                  <button onClick ={() => setMemModal(false)} type="button" 
+                    className="btn btn-secondary btn-sm">exit
+                  </button>
+                </Modal>
+                  <ReactBootStrap.Table striped bordered hover>
+                  <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Charger</th>
+                    <th>Chargee</th>
+                    <th>Expense Amount</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {indivGroups.map((indivGroup)=> (
+                    <tr key={indivGroup.id}>
+                      <td>{indivGroup.date}</td>
+                      <td>{indivGroup.charger}</td>
+                      <td>{indivGroup.chargee}</td>
+                      <td>{indivGroup.expenseAmount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                </ReactBootStrap.Table>
+                <button onClick ={() => setModalOpen(false)} type="button" 
+                  className="btn btn-secondary btn-sm">exit
+                </button>
+                </Modal>
+                
                 </td>
                </tr>
             ))
             }
-            {/* {
-               expandedRows.includes(user.id) ?
-                  <tr>
-                    <td colspan="6">
-                      <div style={{backgroundColor: '#343A40', color: '#FFF', padding: '10px'}}>
-                        <h2> Details </h2>
-                        <ul>
-                          <li>
-                            <span><b>Full Name:</b></span> {' '}
-                            <span> { user['first_name'] } {' '} { user['last_name'] } </span>
-                          </li>
-                          <li>
-                            <span><b>Company:</b></span> {' '}
-                            <span> { user.company } </span>
-                          </li>
-                          <li>
-                            <span><b>Department:</b></span> {' '}
-                            <span> { user.department } </span>
-                          </li>
-                          <li>
-                            <span><b>Ip:</b></span> {' '}
-                            <span> { user['ip_address'] } </span>
-                          </li>
-                          <li>
-                            <span><b>Best Movie:</b></span> {' '}
-                            <span> { user.movies } </span>
-                          </li>
-                          <li>
-                            <span><b>About:</b></span> {' '}
-                            <span> { user.about } </span>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr> : null
-                }
-                </>
-              </> 
-              )} */}
           </tbody>
         </ReactBootStrap.Table>
+       
       </div>
       </Container>
 
-    )
-}
-export default AllGroups;
+    )      
+}export default AllGroups;

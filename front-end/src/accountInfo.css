@@ -1,0 +1,15 @@
+header{
+    font-size: 30px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 1px;
+}
+
+p{
+    text-align: center;
+    padding-top: 1px;
+}
+label{
+    padding-bottom: 20px;
+}
+

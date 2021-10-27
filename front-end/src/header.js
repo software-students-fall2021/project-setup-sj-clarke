@@ -8,6 +8,7 @@ import  ExpenseAction from './addExpenseModal';
 import SettleUp from './settleUpModal';
 import './friends.js';
 import Friends from './friends.js'
+import './accountInfo.js'
 
 function Title() {
   const [showAddExpense, setAddExpense] = useState(false);
@@ -26,7 +27,7 @@ function Title() {
         <ReactBootStrap.NavDropdown.Item href="#action/SettleUp" onClick={() => setSettleUp(true)}>  Settle up</ReactBootStrap.NavDropdown.Item>
         <ReactBootStrap.NavDropdown.Item href="/CurrentGroupMembers">Group members</ReactBootStrap.NavDropdown.Item>
       </ReactBootStrap.NavDropdown>
-    <ReactBootStrap.Nav.Link href="#AllGroups">Account</ReactBootStrap.Nav.Link>
+    <ReactBootStrap.Nav.Link href="/Account">Account</ReactBootStrap.Nav.Link>
     </ReactBootStrap.Nav>
     <ReactBootStrap.Nav>
     </ReactBootStrap.Nav>
