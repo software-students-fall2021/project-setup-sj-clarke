@@ -11,17 +11,26 @@ import AllGroups from './allGroups.js'
 import CurrentGroupMembers from './currentGroupMembers';
 import MoreInfo from './moreInfo'
 import Account from './accountInfo.js';
+import Login from './Login.js'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
+import Assist from './Router.js'
 
 
 function App() {
+
   return (
     <div className="App">
         <Router>
+          <Route path="/Login">
+            <Login/>
+          </Route>
+        </Router>
+        
+        {/* <Router>
         <Title />
         <Switch>
         <Route exact path="/" component={Home}>
@@ -43,7 +52,7 @@ function App() {
             <Account/>
           </Route>
         </Switch>
-    </Router>
+    </Router> */}
     </div>
    
   );
