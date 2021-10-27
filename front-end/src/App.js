@@ -10,12 +10,9 @@ import Title from './header'
 import AllGroups from './allGroups.js'
 import CurrentGroupMembers from './currentGroupMembers';
 import MoreInfo from './moreInfo'
-<<<<<<< HEAD
 import CreateGroup from './createGroup.js'
-import './createGroup.js'
-=======
-import Account from './accountInfo.js';
->>>>>>> 64c58c4e06c56a5d8c1274d8ea4c8e638967c331
+import Account from './accountInfo.js'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -44,13 +41,11 @@ function App() {
           <Route path="/allGroups" component={AllGroups}>
             <AllGroups/>
           </Route>
-<<<<<<< HEAD
-          <Route path="/createGroup" component={CreateGroup}>
-            <CreateGroup/>
-=======
           <Route path="/Account" component={Account}>
             <Account/>
->>>>>>> 64c58c4e06c56a5d8c1274d8ea4c8e638967c331
+          </Route>
+          <Route path="/CreateGroup" component={CreateGroup}>
+            <CreateGroup/>
           </Route>
         </Switch>
     </Router>
