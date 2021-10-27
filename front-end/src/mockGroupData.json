@@ -1,0 +1,16 @@
+[
+    {
+        "id": "1",
+        "date": "July 5",
+        "charger": "Sarah-Jane", 
+        "chargee": "Sam",
+        "expenseAmount": "$50"
+    },
+    {
+        "id": "2",
+        "date": "July 4",
+        "charger": "Sarah", 
+        "chargee": "Liv",
+        "expenseAmount": "$190"
+    }
+]
