@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import './allGroups.css'
-import * as ReactBootStrap from "react-bootstrap";
+import * as ReactBootStrap from "react-bootstrap"
+import { Container, Row, Col } from 'react-bootstrap'
+import { Button} from 'react-bootstrap';
 import Title from './header.js'
 import data from "./mockGroups.json"
 
@@ -51,7 +53,7 @@ function AllGroups(){
             </tr>
           </thead>
           <tbody>
-            {groups.map(()=> group)}
+            {groups.map(()=> groups)}
             <tr>
               <td>{groups.date}</td>
               <td>{groups.groupName}</td>
@@ -60,7 +62,7 @@ function AllGroups(){
                   variant="link"
                   onClick={event => handleExpandRow(event, groups.id)}>
                     {
-                      expandState[user.id] ?
+                      expandState[groups.id] ?
                         'Hide' : 'Show'
                     }
                  </Button>
