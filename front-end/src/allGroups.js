@@ -7,19 +7,24 @@ import Title from './header.js'
 import Modal from 'react-modal'
 import data from "./mockGroups.json"
 import groupData from "./mockGroupData.json"
+import memData from "./mockMembers.json"
 
 function AllGroups(){
     
-    // Data in table that will be used and can be updated dynamically
+    // Data of all groups in table
     const [groups, setGroups] = useState(data)
+
+    // Data of specific group info 
     const [indivGroups, setIndivGroups] = useState(groupData)
+
+    // Data of members in table
+    const [members, setMembers] = useState(memData)
+
+    // variables to control various modals' open/close
     const [infoOpen, setModalOpen] = useState(false)
     const [seeMemModal, setMemModal] = useState(false)
-    const [showModal, setShowModal] = useState(false)
-
-    const [show, setShow] = useState(false)
     
-      return (
+    return (
       <Container>
       <Row>
         <Col>
@@ -46,6 +51,29 @@ function AllGroups(){
                 <Modal isOpen = {infoOpen}>
                   <h1 className = "modal-title">{group.groupName}</h1>
                   <h3>{group.date}</h3>
+                  <button type="button" className="btn btn-secondary btn-sm" 
+                    onClick ={() => {setMemModal(true)}}>See Members
+                  </button>
+                  <Modal isOpen = {seeMemModal}>
+                  <h className = "modal-title">Members({ memData.length })</h>  
+                  <ReactBootStrap.Table striped bordered hover>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {members.map((member)=> (
+                    <tr key={member.id}>
+                      <td>{member.memberName}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                </ReactBootStrap.Table>
+                  <button onClick ={() => setMemModal(false)} type="button" 
+                    className="btn btn-secondary btn-sm">exit
+                  </button>
+                </Modal>
                   <ReactBootStrap.Table striped bordered hover>
                   <thead>
                   <tr>
@@ -81,12 +109,5 @@ function AllGroups(){
       </div>
       </Container>
 
-    )
-    
-  
-  
-        
-      
-}
-
-export default AllGroups;
+    )      
+}export default AllGroups;
