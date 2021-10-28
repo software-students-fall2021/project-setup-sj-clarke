@@ -11,7 +11,6 @@ function Friends() {
 // later we will be getting data from an API call in Json format 
 const [friends, setFriends] = useState(friendsData)
 
-
 const [expmodalIsOpen, setexpModalisOpen] = useState(false)
 const [addGroupmodalIsOpen, setaddGroupModal] = useState(false)
 const [modalIsOpen, setModalisOpen] = useState(false)

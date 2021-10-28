@@ -7,10 +7,7 @@ import * as ReactBootStrap from "react-bootstrap";
 
 function Home(){
     // dummy data for summary of current trip transactions
-    const [transactions, setTransactions] = useState(mockTransactions)
-
-  
-        
+    const [transactions, setTransactions] = useState(mockTransactions);  
     // creating a row for each instance within JSON file holding all of the transactions
     const renderRow = (transaction, index) => {
     // 1 row instance within a table 
@@ -45,7 +42,7 @@ function Home(){
           </tbody>
         </ReactBootStrap.Table>
       </div>
-
-    )
+      )
+  // creating a row for each instance within JSON file holding all of the transactions
 }
-export default Home; 
+export default Home;
