@@ -1,37 +1,20 @@
 
-import React, { useEffect, useState } from "react";
-import Title from './header.js'
+import React, {useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
 import Modal from 'react-modal'
 import "./friends.css"
+import friendsData from "./mockFriends.json"
 
 
 function Friends() {
 // dummy data for list of friends
 // later we will be getting data from an API call in Json format 
-const friend =  [
-    {username: "sjclarke10"},
-    {username: "jDoe1"}
-    ]
+const [friends, setFriends] = useState(friendsData)
 
-const inputAddFriend = [
-  "Username "
-]
-
-const inputChargeFriend = [
-  "Expense Amount "
-]
-
-const inputAddGroup = [
-  "Group name "
-]
 
 const [expmodalIsOpen, setexpModalisOpen] = useState(false)
 const [addGroupmodalIsOpen, setaddGroupModal] = useState(false)
 const [modalIsOpen, setModalisOpen] = useState(false)
-
-
-
 
 
 const [user, setUser] = useState(" ")
@@ -43,8 +26,8 @@ const renderRow = (friend, index) => {
 // need to add the buttons to row 
 // add modals for each button 
 return (
-<tr key = {index}>
-  <td>{friend.username}</td>
+<tr key = {friend.id}>
+  <td>{friend.memberName}</td>
   <td>
     <button type="button" className="btn btn-secondary btn-sm" 
         onClick ={() => {setexpModalisOpen(true); setUser(friend.username)}}>
@@ -78,7 +61,7 @@ return (
                 </tr>
             </thead>
             <tbody>
-              {friend.map(renderRow)}
+              {friends.map(renderRow)}
             </tbody>
           </ReactBootStrap.Table>
           <Modal isOpen = {expmodalIsOpen}>

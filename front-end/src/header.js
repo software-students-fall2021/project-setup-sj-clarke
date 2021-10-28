@@ -7,7 +7,6 @@ import * as ReactBootStrap from "react-bootstrap";
 import  ExpenseAction from './addExpenseModal';
 import SettleUp from './settleUpModal';
 import './friends.js';
-import Friends from './friends.js'
 import './accountInfo.js'
 
 function Title() {

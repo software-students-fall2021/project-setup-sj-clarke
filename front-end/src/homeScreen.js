@@ -1,26 +1,25 @@
 import './header.css';
-import React from 'react'
 import './homeScreen.css'
 import {Link} from 'react-router-dom'
-
+import mockTransactions from './mockGroupData.json'
+import React, { useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
 
 function Home(){
     // dummy data for summary of current trip transactions
-    const transactions =  [
+    const [transactions, setTransactions] = useState(mockTransactions)
+
   
-        {charger: "Sarah-Jane", chargee:  "Sam", expense: "$50"},
-        {charger: "Sarah", chargee:  "Liv", expense: "190"}
-        ]
         
     // creating a row for each instance within JSON file holding all of the transactions
     const renderRow = (transaction, index) => {
     // 1 row instance within a table 
     return (
-    <tr key = {index}>
+    <tr key = {transaction.id}>
+      <td>{transaction.date}</td>
       <td>{transaction.charger}</td>
       <td>{transaction.chargee}</td>
-      <td>{transaction.expense}</td>
+      <td>{transaction.expenseAmount}</td>
     </tr>
     )
     }
@@ -35,6 +34,7 @@ function Home(){
         <ReactBootStrap.Table striped bordered hover>
             <thead>
               <tr>
+                <th>Date</th>
                 <th>Charger</th>
                 <th>Chargee</th>
                 <th>Expense Amount</th>
