@@ -37,7 +37,6 @@ function App() {
           <Route path="/Account" component={Account}>
             <Account />
           </Route>
-
           <Route path="/CreateGroup" component={CreateGroup}>
             <CreateGroup />
           </Route>
