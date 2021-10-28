@@ -7,7 +7,7 @@ import friendsData from "./mockFriends.json"
 
 
 function Friends() {
-// dummy data for list of friends
+// dummy data for list of friends from json file 
 // later we will be getting data from an API call in Json format 
 const [friends, setFriends] = useState(friendsData)
 
@@ -21,23 +21,21 @@ const [user, setUser] = useState(" ")
 
 // creating a row for each instance within JSON file holding all of the transactions
 const renderRow = (friend, index) => {
-// 1 row instance within a table 
-// need to add the buttons to row 
-// add modals for each button 
-return (
-<tr key = {friend.id}>
-  <td>{friend.memberName}</td>
-  <td>
-    <button type="button" className="btn btn-secondary btn-sm" 
-        onClick ={() => {setexpModalisOpen(true); setUser(friend.username)}}>
-        Charge</button>
-    <button  type="button" className="btn btn-secondary btn-sm"
-        onClick ={() => {setaddGroupModal(true); setUser(friend.username)}}
-        >Add to Group</button>
-  </td>
-</tr>
-)
-}
+    // 1 row instance within a table 
+    return (
+    <tr key = {friend.id}>
+      <td>{friend.memberName}</td>
+      <td>
+        <button type="button" className="btn btn-secondary btn-sm" 
+            onClick ={() => {setexpModalisOpen(true); setUser(friend.memberName)}}>
+            Charge</button>
+        <button  type="button" className="btn btn-secondary btn-sm"
+            onClick ={() => {setaddGroupModal(true); setUser(friend.memberName)}}
+            >Add to Group</button>
+      </td>
+    </tr>
+    )
+    }
     return(
         <div className= "Friends">
           <title className ="CurrentTripTitle">Friends

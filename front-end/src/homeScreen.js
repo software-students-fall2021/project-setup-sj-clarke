@@ -26,7 +26,6 @@ function Home(){
         <div className= "Home">
         <title className ="CurrentTripTitle">Mexico 2021
         <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
-        
         </title>  
         <ReactBootStrap.Table striped bordered hover>
             <thead>
