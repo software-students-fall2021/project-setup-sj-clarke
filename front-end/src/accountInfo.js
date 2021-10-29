@@ -27,6 +27,7 @@ function Account() {
           Password<input type="password" name="password"></input>
         </label>
       </form>
+      <Button>Save</Button>
     </div>
   );
 }
