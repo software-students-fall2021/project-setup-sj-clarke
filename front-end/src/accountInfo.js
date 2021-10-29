@@ -1,5 +1,6 @@
 import React from "react";
 import "./accountInfo.css";
+import {Button} from "react-bootstrap";
 
 function Account() {
   const user = {
