@@ -12,7 +12,7 @@ function MoreInfo() {
       return (
         <div key={index}>
           <ReactBootStrap.Alert variant="success">
-            {transaction.chargee} owes you ${transaction.expense} dollars
+            {transaction.chargee} owes you ${transaction.expenseAmount} dollars
           </ReactBootStrap.Alert>
         </div>
       );
@@ -25,7 +25,7 @@ function MoreInfo() {
       return (
         <div key={index}>
           <ReactBootStrap.Alert variant="danger">
-            You owe ${transaction.expense} to {transaction.charger}
+            You owe ${transaction.expenseAmount} to {transaction.charger}
           </ReactBootStrap.Alert>
         </div>
       );
