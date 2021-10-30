@@ -3,7 +3,6 @@ import React, {useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
 import Modal from 'react-modal'
 import "./friends.css"
-
 import axios from 'axios';
 
 
