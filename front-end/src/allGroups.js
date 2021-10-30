@@ -34,11 +34,11 @@ function AllGroups(){
       <Container>
       <Row>
         <Col>
-          <h1> All Groups({ data.length })</h1>
+          <h1> All Groups({data.length})</h1>
         </Col>
-       </Row>
-       <div className= "AllGroups">
-       <ReactBootStrap.Table striped bordered hover>
+      </Row>
+      <div className="AllGroups">
+        <ReactBootStrap.Table striped bordered hover>
           <thead>
             <tr>
               <th>Date</th>
@@ -46,8 +46,8 @@ function AllGroups(){
             </tr>
           </thead>
           <tbody>
-            {groups.map((group)=> (
-               <tr key={group.id}>
+            {groups.map((group) => (
+              <tr key={group.id}>
                 <td>{group.date}</td>
                 <td>{group.groupName}</td>
                 <td>
@@ -130,14 +130,12 @@ function AllGroups(){
                 </Modal>
                 
                 </td>
-               </tr>
-            ))
-            }
+              </tr>
+            ))}
           </tbody>
         </ReactBootStrap.Table>
-       
       </div>
-      </Container>
-
-    )      
-}export default AllGroups;
+    </Container>
+  );
+}
+export default AllGroups;

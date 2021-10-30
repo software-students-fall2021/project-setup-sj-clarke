@@ -1,16 +1,37 @@
 [
-    {
-        "id": "1",
-        "date": "July 5",
-        "charger": "Sarah-Jane", 
-        "chargee": "Sam",
-        "expenseAmount": "$50"
-    },
-    {
-        "id": "2",
-        "date": "July 4",
-        "charger": "Sarah", 
-        "chargee": "Liv",
-        "expenseAmount": "$190"
-    }
+  {
+    "id": "1",
+    "date": "July 5",
+    "charger": "Sarah-Jane",
+    "chargee": "Sam",
+    "expenseAmount": "$50"
+  },
+  {
+    "id": "2",
+    "date": "July 4",
+    "charger": "Sarah",
+    "chargee": "Liv",
+    "expenseAmount": "$190"
+  },
+  {
+    "id": "3",
+    "date": "July 5",
+    "charger": "Sarah-Jane",
+    "chargee": "Gal",
+    "expenseAmount": "$50"
+  },
+  {
+    "id": "5",
+    "date": "July 4",
+    "charger": "Gal",
+    "chargee": "Sara-Jane",
+    "expenseAmount": "$190"
+  },
+  {
+    "id": "6",
+    "date": "July 4",
+    "charger": "Sara",
+    "chargee": "Gal",
+    "expenseAmount": "$190"
+  }
 ]

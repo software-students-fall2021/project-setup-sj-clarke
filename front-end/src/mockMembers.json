@@ -1,18 +1,18 @@
 [
-    {
-        "id": "1",
-        "memberName": "Sarah-Jane"
-    },
-    {
-        "id": "2",
-        "memberName": "Sarah"
-    },
-    {
-        "id": "3",
-        "memberName": "Sam"
-    },
-    {
-        "id": "4",
-        "memberName": "Liv"
-    }
+  {
+    "id": "1",
+    "memberName": "Sarah-Jane"
+  },
+  {
+    "id": "2",
+    "memberName": "Sarah"
+  },
+  {
+    "id": "3",
+    "memberName": "Sam"
+  },
+  {
+    "id": "4",
+    "memberName": "Liv"
+  }
 ]
