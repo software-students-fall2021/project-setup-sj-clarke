@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import './allGroups.css'
+import './modal.css'
 import * as ReactBootStrap from "react-bootstrap"
 import { Container, Row, Col } from 'react-bootstrap'
-import { Button} from 'react-bootstrap';
-import Title from './header.js'
-import Modal from 'react-modal'
+import Modal from "react-bootstrap/Modal";
+import "bootstrap/dist/css/bootstrap.min.css";
 import data from "./mockGroups.json"
 import groupData from "./mockGroupData.json"
 import memData from "./mockMembers.json"
@@ -12,17 +12,23 @@ import memData from "./mockMembers.json"
 function AllGroups(){
     
     // Data of all groups in table
-    const [groups, setGroups] = useState(data)
+    const [groups] = useState(data)
 
     // Data of specific group info 
-    const [indivGroups, setIndivGroups] = useState(groupData)
+    const [indivGroups] = useState(groupData)
 
     // Data of members in table
-    const [members, setMembers] = useState(memData)
+    const [members] = useState(memData)
 
     // variables to control various modals' open/close
     const [infoOpen, setModalOpen] = useState(false)
     const [seeMemModal, setMemModal] = useState(false)
+    
+    const handleInfoClose = () => {setModalOpen(false)};
+    const handleInfoShow = () => {setModalOpen(true)};
+
+    const handleMemClose = () => {setMemModal(false)};
+    const handleMemShow = () => {setMemModal(true)};
     
     return (
       <Container>
@@ -45,35 +51,56 @@ function AllGroups(){
                 <td>{group.date}</td>
                 <td>{group.groupName}</td>
                 <td>
-                <button type="button" className="btn btn-secondary btn-sm" 
-                    onClick ={() => {setModalOpen(true)}}>more info
+                <button className="btn btn-secondary btn-sm" 
+                    onClick={handleInfoShow}>more info
                 </button>
-                <Modal isOpen = {infoOpen}>
-                  <h1 className = "modal-title">{group.groupName}</h1>
-                  <h3>{group.date}</h3>
-                  <button type="button" className="btn btn-secondary btn-sm" 
-                    onClick ={() => {setMemModal(true)}}>See Members
-                  </button>
-                  <Modal isOpen = {seeMemModal}>
-                  <h className = "modal-title">Members({ memData.length })</h>  
-                  <ReactBootStrap.Table striped bordered hover>
-                  <thead>
-                  <tr>
-                    <th>Name</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {members.map((member)=> (
-                    <tr key={member.id}>
-                      <td>{member.memberName}</td>
-                    </tr>
-                  ))}
-                </tbody>
-                </ReactBootStrap.Table>
-                  <button onClick ={() => setMemModal(false)} type="button" 
-                    className="btn btn-secondary btn-sm">exit
-                  </button>
-                </Modal>
+                <Modal 
+                  show={infoOpen}
+                  onHide={handleInfoClose}
+                  aria-labelledby="example-modal-sizes-title-lg"
+                  >
+                  <Modal.Header closeButton className="Modal">
+                    <Modal.Title id="example-modal-sizes-title-lg" >
+                   
+                     {group.groupName}   ({group.date})
+                      <button className="btn btn-secondary btn-sm" 
+                        onClick={handleMemShow}>See Members
+                      </button>
+                      <Modal 
+                        show={seeMemModal}
+                        onHide={handleMemClose}
+                        backdrop="static"
+                        keyboard={false}>
+                        <Modal.Header closeButton className="Modal">
+                          <Modal.Title id="example-modal-sizes-title-lg" >
+                            Members({ memData.length })
+                          </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                        <ReactBootStrap.Table striped bordered hover>
+                        <thead>
+                        <tr>
+                          <th>Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {members.map((member)=> (
+                          <tr key={member.id}>
+                            <td>{member.memberName}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      </ReactBootStrap.Table>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <button onClick={handleMemClose}
+                          className="btn btn-secondary btn-sm">exit
+                        </button>
+                      </Modal.Footer>
+                      </Modal>
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
                   <ReactBootStrap.Table striped bordered hover>
                   <thead>
                   <tr>
@@ -94,9 +121,12 @@ function AllGroups(){
                   ))}
                 </tbody>
                 </ReactBootStrap.Table>
-                <button onClick ={() => setModalOpen(false)} type="button" 
+                </Modal.Body>
+                <Modal.Footer>
+                <button onClick={handleInfoClose} type="button" 
                   className="btn btn-secondary btn-sm">exit
                 </button>
+                </Modal.Footer>
                 </Modal>
                 
                 </td>
