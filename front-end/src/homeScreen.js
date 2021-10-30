@@ -1,13 +1,38 @@
 import './header.css';
 import './homeScreen.css'
 import {Link} from 'react-router-dom'
-import mockTransactions from './mockGroupData.json'
+
 import React, { useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
+import axios from 'axios';
+
 
 function Home(){
-    // dummy data for summary of current trip transactions
-    const [transactions, setTransactions] = useState(mockTransactions);  
+    
+    
+    // creating a row for each instance within JSON file holding all of the transactions
+    const [transactions, setTransactions] = useState([]);  
+    useEffect(() => {
+      // a nested function that fetches the data
+    
+      async function fetchData() {
+        // axios is a 3rd-party module for fetching data from servers
+        // Mockaroo data for summary of current trip transactions
+        const response = await axios(
+          "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
+        ); 
+        // extract the data from the server response
+        setTransactions(response.data); 
+        }
+      // fetch the data
+      fetchData();
+      
+      
+      // the blank array below causes this callback to be executed only once on component load
+    }, []);
+
+
+   
     // creating a row for each instance within JSON file holding all of the transactions
     const renderRow = (transaction, index) => {
     // 1 row instance within a table 
@@ -16,7 +41,7 @@ function Home(){
       <td>{transaction.date}</td>
       <td>{transaction.charger}</td>
       <td>{transaction.chargee}</td>
-      <td>{transaction.expenseAmount}</td>
+      <td>${transaction.expenseAmount}</td>
     </tr>
     )
     }
@@ -42,6 +67,5 @@ function Home(){
         </ReactBootStrap.Table>
       </div>
       )
-  // creating a row for each instance within JSON file holding all of the transactions
 }
 export default Home;

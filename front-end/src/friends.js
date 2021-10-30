@@ -3,34 +3,50 @@ import React, {useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
 import Modal from 'react-modal'
 import "./friends.css"
-import friendsData from "./mockFriends.json"
+
+import axios from 'axios';
 
 
 function Friends() {
-// dummy data for list of friends from json file 
-// later we will be getting data from an API call in Json format 
-const [friends, setFriends] = useState(friendsData)
+const [friends, setFriends] = useState([])
+const [transactions, setTransactions] = useState([]);  
+    useEffect(() => {
+      // a nested function that fetches the data
+    
+      async function fetchData() {
+        // axios is a 3rd-party module for fetching data from servers
+        // mockaroo api call for list of friends in json file format 
+        const response = await axios(
+          "https://my.api.mockaroo.com/friends.json?key=bd7c3ef0"
+        ); 
+        // extract the data from the server response
+        setFriends(response.data); 
+        }
+      // fetch the data
+      fetchData();
+      
+      // the blank array below causes this callback to be executed only once on component load
+    }, []);
 
+// modal use states
 const [expmodalIsOpen, setexpModalisOpen] = useState(false)
 const [addGroupmodalIsOpen, setaddGroupModal] = useState(false)
 const [modalIsOpen, setModalisOpen] = useState(false)
-
-
 const [user, setUser] = useState(" ")
 
 
-// creating a row for each instance within JSON file holding all of the transactions
+// creating a row for each instance within JSON file holding all of the friends
 const renderRow = (friend, index) => {
     // 1 row instance within a table 
     return (
     <tr key = {friend.id}>
-      <td>{friend.memberName}</td>
+      <td>{friend.friendAdded}</td>
       <td>
         <button type="button" className="btn btn-secondary btn-sm" 
-            onClick ={() => {setexpModalisOpen(true); setUser(friend.memberName)}}>
+            onClick ={() => {setexpModalisOpen(true); setUser(friend.friendAdded)}}>
             Charge</button>
         <button  type="button" className="btn btn-secondary btn-sm"
-            onClick ={() => {setaddGroupModal(true); setUser(friend.memberName)}}
+            onClick ={() => {setaddGroupModal(true); setUser(friend.friendAdded)}}
             >Add to Group</button>
       </td>
     </tr>
