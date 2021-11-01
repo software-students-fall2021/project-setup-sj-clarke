@@ -1,40 +1,66 @@
-import React, {useState} from 'react'
-import './allGroups.css'
-import './modal.css'
-import * as ReactBootStrap from "react-bootstrap"
-import { Container, Row, Col } from 'react-bootstrap'
-import Modal from "react-bootstrap/Modal";
-import "bootstrap/dist/css/bootstrap.min.css";
-import data from "./mockGroups.json"
-import groupData from "./mockGroupData.json"
-import memData from "./mockMembers.json"
+import React, { useState, useEffect } from "react";
+import "./allGroups.css";
+import * as ReactBootStrap from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
+import Modal from "react-modal";
+import data from "./mockGroups.json";
+import groupData from "./mockGroupData.json";
+import memData from "./mockMembers.json";
+import axios from 'axios';
 
-function AllGroups(){
-    
-    // Data of all groups in table
-    const [groups] = useState(data)
+function AllGroups() {
+  // variables needed for all groups page and modals 
+  const [groups, setGroups] = useState([]);
+  const [transactions, setTransactions] = useState([]);  
+  const [members, setMembers] = useState([]);
+ useEffect(() => {
+   // a nested function that fetches the data
 
-    // Data of specific group info 
-    const [indivGroups] = useState(groupData)
+   async function fetchData() {
+     // Extract Mockaroo data
+     // get all groups 
+     const response_groups = await axios(
+       "https://my.api.mockaroo.com/groups.json?key=bd7c3ef0"
+       
+     ); 
+     // set groups with the data retrieved from mockaroo 
+     setGroups(response_groups.data); 
+      // get all transactions for a group
+      // currently mock data from mockaroo 
+     const response_groupData = await axios(
+      "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
+    ); 
+    // set transactions
+    setTransactions(response_groupData.data); 
 
-    // Data of members in table
-    const [members] = useState(memData)
+     // get all of the members for a group from mockaroo 
+     const response_members = await axios(
+      "https://my.api.mockaroo.com/members.json?key=bd7c3ef0"
+    ); 
+    // set members
+    setMembers(response_members.data); 
 
-    // variables to control various modals' open/close
-    const [infoOpen, setModalOpen] = useState(false)
-    const [seeMemModal, setMemModal] = useState(false)
-    
-    const handleInfoClose = () => {setModalOpen(false)};
-    const handleInfoShow = () => {setModalOpen(true)};
 
-    const handleMemClose = () => {setMemModal(false)};
-    const handleMemShow = () => {setMemModal(true)};
-    
-    return (
-      <Container>
+     }
+   // fetch the data
+   fetchData();
+   
+   
+   // the blank array below causes this callback to be executed only once on component load
+ }, []);
+  
+  const [groupName, setGroupName] = useState(" ");
+  const [groupDate, setGroupDate] = useState(" ");
+
+  // variables to control various modals' open/close
+  const [infoOpen, setModalOpen] = useState(false);
+  const [seeMemModal, setMemModal] = useState(false);
+
+  return (
+    <Container>
       <Row>
         <Col>
-          <h1> All Groups({data.length})</h1>
+          <h1> All Groups({groups.length})</h1>
         </Col>
       </Row>
       <div className="AllGroups">
@@ -48,87 +74,81 @@ function AllGroups(){
           <tbody>
             {groups.map((group) => (
               <tr key={group.id}>
-                <td>{group.date}</td>
-                <td>{group.groupName}</td>
+                <td>{group.year}</td>
+                <td>{group.name}</td>
                 <td>
-                <button className="btn btn-secondary btn-sm" 
-                    onClick={handleInfoShow}>more info
-                </button>
-                <Modal 
-                  show={infoOpen}
-                  onHide={handleInfoClose}
-                  aria-labelledby="example-modal-sizes-title-lg"
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      {setModalOpen(true); setGroupName(group.name); setGroupDate(group.year)}
+                    }}
                   >
-                  <Modal.Header closeButton className="Modal">
-                    <Modal.Title id="example-modal-sizes-title-lg" >
-                   
-                     {group.groupName}   ({group.date})
-                      <button className="btn btn-secondary btn-sm" 
-                        onClick={handleMemShow}>See Members
-                      </button>
-                      <Modal 
-                        show={seeMemModal}
-                        onHide={handleMemClose}
-                        backdrop="static"
-                        keyboard={false}>
-                        <Modal.Header closeButton className="Modal">
-                          <Modal.Title id="example-modal-sizes-title-lg" >
-                            Members({ memData.length })
-                          </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                        <ReactBootStrap.Table striped bordered hover>
+                    more info
+                  </button>
+                  <Modal isOpen={infoOpen}>
+                    <h1 className="modal-title">{groupName}</h1>
+                    <h3>{groupDate}</h3>
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => {
+                        setMemModal(true);
+                      }}
+                    >
+                      See Members
+                    </button>
+                    <Modal isOpen={seeMemModal}>
+                      <h className="modal-title">Members({members.length})</h>
+                      <ReactBootStrap.Table striped bordered hover>
                         <thead>
-                        <tr>
-                          <th>Name</th>
-                        </tr>
+                          <tr>
+                            <th>Name</th>
+                          </tr>
                         </thead>
                         <tbody>
-                        {members.map((member)=> (
-                          <tr key={member.id}>
-                            <td>{member.memberName}</td>
+                          {members.map((member) => (
+                            <tr key={member.id}>
+                              <td>{member.username}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </ReactBootStrap.Table>
+                      <button
+                        onClick={() => setMemModal(false)}
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                      >
+                        exit
+                      </button>
+                    </Modal>
+                    <ReactBootStrap.Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Charger</th>
+                          <th>Chargee</th>
+                          <th>Expense Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transactions.map((transaction) => (
+                          <tr key={transaction.id}>
+                            <td>{transaction.date}</td>
+                            <td>{transaction.charger}</td>
+                            <td>{transaction.chargee}</td>
+                            <td>${transaction.expenseAmount}</td>
                           </tr>
                         ))}
                       </tbody>
-                      </ReactBootStrap.Table>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <button onClick={handleMemClose}
-                          className="btn btn-secondary btn-sm">exit
-                        </button>
-                      </Modal.Footer>
-                      </Modal>
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                  <ReactBootStrap.Table striped bordered hover>
-                  <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Charger</th>
-                    <th>Chargee</th>
-                    <th>Expense Amount</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {indivGroups.map((indivGroup)=> (
-                    <tr key={indivGroup.id}>
-                      <td>{indivGroup.date}</td>
-                      <td>{indivGroup.charger}</td>
-                      <td>{indivGroup.chargee}</td>
-                      <td>{indivGroup.expenseAmount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-                </ReactBootStrap.Table>
-                </Modal.Body>
-                <Modal.Footer>
-                <button onClick={handleInfoClose} type="button" 
-                  className="btn btn-secondary btn-sm">exit
-                </button>
-                </Modal.Footer>
-                </Modal>
-                
+                    </ReactBootStrap.Table>
+                    <button
+                      onClick={() => setModalOpen(false)}
+                      type="button"
+                      className="btn btn-secondary btn-sm">
+                      exit
+                    </button>
+                  </Modal>
                 </td>
               </tr>
             ))}
