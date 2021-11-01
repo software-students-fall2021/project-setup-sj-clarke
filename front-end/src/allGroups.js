@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./allGroups.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
@@ -6,16 +6,49 @@ import Modal from "react-modal";
 import data from "./mockGroups.json";
 import groupData from "./mockGroupData.json";
 import memData from "./mockMembers.json";
+import axios from 'axios';
 
 function AllGroups() {
   // Data of all groups in table
-  const [groups, setGroups] = useState(data);
+  const [groups, setGroups] = useState([]);
+  const [transactions, setTransactions] = useState([]);  
+  const [members, setMembers] = useState([]);
+ useEffect(() => {
+   // a nested function that fetches the data
 
-  // Data of specific group info
-  const [indivGroups, setIndivGroups] = useState(groupData);
+   async function fetchData() {
+     // axios is a 3rd-party module for fetching data from servers
+     // Mockaroo data for summary of current trip transactions
+     // get all groups 
+     const response_groups = await axios(
+       "https://my.api.mockaroo.com/groups.json?key=bd7c3ef0"
+       
+     ); 
+     setGroups(response_groups.data); 
+      // get group data 
+      // get all transactions for a group
+     const response_groupData = await axios(
+      "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
+    ); 
+    setTransactions(response_groupData.data); 
+     // extract the data from the server response
+     // get all of the members for a group 
+     const response_members = await axios(
+      "https://my.api.mockaroo.com/members.json?key=bd7c3ef0"
+    ); 
+    setMembers(response_members.data); 
 
-  // Data of members in table
-  const [members, setMembers] = useState(memData);
+
+     }
+   // fetch the data
+   fetchData();
+   
+   
+   // the blank array below causes this callback to be executed only once on component load
+ }, []);
+  
+  const [groupName, setGroupName] = useState(" ");
+  const [groupDate, setGroupDate] = useState(" ");
 
   // variables to control various modals' open/close
   const [infoOpen, setModalOpen] = useState(false);
@@ -25,7 +58,7 @@ function AllGroups() {
     <Container>
       <Row>
         <Col>
-          <h1> All Groups({data.length})</h1>
+          <h1> All Groups({groups.length})</h1>
         </Col>
       </Row>
       <div className="AllGroups">
@@ -39,21 +72,21 @@ function AllGroups() {
           <tbody>
             {groups.map((group) => (
               <tr key={group.id}>
-                <td>{group.date}</td>
-                <td>{group.groupName}</td>
+                <td>{group.year}</td>
+                <td>{group.name}</td>
                 <td>
                   <button
                     type="button"
                     className="btn btn-secondary btn-sm"
                     onClick={() => {
-                      setModalOpen(true);
+                      {setModalOpen(true); setGroupName(group.name); setGroupDate(group.year)}
                     }}
                   >
                     more info
                   </button>
                   <Modal isOpen={infoOpen}>
-                    <h1 className="modal-title">{group.groupName}</h1>
-                    <h3>{group.date}</h3>
+                    <h1 className="modal-title">{groupName}</h1>
+                    <h3>{groupDate}</h3>
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm"
@@ -64,7 +97,7 @@ function AllGroups() {
                       See Members
                     </button>
                     <Modal isOpen={seeMemModal}>
-                      <h className="modal-title">Members({memData.length})</h>
+                      <h className="modal-title">Members({members.length})</h>
                       <ReactBootStrap.Table striped bordered hover>
                         <thead>
                           <tr>
@@ -74,7 +107,7 @@ function AllGroups() {
                         <tbody>
                           {members.map((member) => (
                             <tr key={member.id}>
-                              <td>{member.memberName}</td>
+                              <td>{member.username}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -97,12 +130,12 @@ function AllGroups() {
                         </tr>
                       </thead>
                       <tbody>
-                        {indivGroups.map((indivGroup) => (
-                          <tr key={indivGroup.id}>
-                            <td>{indivGroup.date}</td>
-                            <td>{indivGroup.charger}</td>
-                            <td>{indivGroup.chargee}</td>
-                            <td>{indivGroup.expenseAmount}</td>
+                        {transactions.map((transaction) => (
+                          <tr key={transaction.id}>
+                            <td>{transaction.date}</td>
+                            <td>{transaction.charger}</td>
+                            <td>{transaction.chargee}</td>
+                            <td>${transaction.expenseAmount}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -5,7 +5,6 @@ import Modal from 'react-modal'
 import "./friends.css"
 import axios from 'axios';
 
-
 function Friends() {
 const [friends, setFriends] = useState([])
 const [transactions, setTransactions] = useState([]);  

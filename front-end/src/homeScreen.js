@@ -41,7 +41,7 @@ function Home(){
       <td>{transaction.date}</td>
       <td>{transaction.charger}</td>
       <td>{transaction.chargee}</td>
-      <td>${transaction.expenseAmount}</td>
+      <td className = "expenseColumn">${transaction.expenseAmount}</td>
     </tr>
     )
     }
@@ -53,15 +53,15 @@ function Home(){
         <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
         </title>  
         <ReactBootStrap.Table striped bordered hover>
-            <thead>
+            <thead className = "headers">
               <tr>
                 <th>Date</th>
                 <th>Charger</th>
                 <th>Chargee</th>
-                <th>Expense Amount</th>
+                <th>Amount</th>
               </tr>
           </thead>
-          <tbody>
+          <tbody className = "table">
             {transactions.map(renderRow)}
           </tbody>
         </ReactBootStrap.Table>
