@@ -9,7 +9,7 @@ import memData from "./mockMembers.json";
 import axios from 'axios';
 
 function AllGroups() {
-  // Data of all groups in table
+  // variables needed for all groups page and modals 
   const [groups, setGroups] = useState([]);
   const [transactions, setTransactions] = useState([]);  
   const [members, setMembers] = useState([]);
@@ -17,25 +17,27 @@ function AllGroups() {
    // a nested function that fetches the data
 
    async function fetchData() {
-     // axios is a 3rd-party module for fetching data from servers
-     // Mockaroo data for summary of current trip transactions
+     // Extract Mockaroo data
      // get all groups 
      const response_groups = await axios(
        "https://my.api.mockaroo.com/groups.json?key=bd7c3ef0"
        
      ); 
+     // set groups with the data retrieved from mockaroo 
      setGroups(response_groups.data); 
-      // get group data 
       // get all transactions for a group
+      // currently mock data from mockaroo 
      const response_groupData = await axios(
       "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
     ); 
+    // set transactions
     setTransactions(response_groupData.data); 
-     // extract the data from the server response
-     // get all of the members for a group 
+
+     // get all of the members for a group from mockaroo 
      const response_members = await axios(
       "https://my.api.mockaroo.com/members.json?key=bd7c3ef0"
     ); 
+    // set members
     setMembers(response_members.data); 
 
 
@@ -143,8 +145,7 @@ function AllGroups() {
                     <button
                       onClick={() => setModalOpen(false)}
                       type="button"
-                      className="btn btn-secondary btn-sm"
-                    >
+                      className="btn btn-secondary btn-sm">
                       exit
                     </button>
                   </Modal>
