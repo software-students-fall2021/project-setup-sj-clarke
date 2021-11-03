@@ -11,7 +11,7 @@ app.use(express.json()) // decode JSON-formatted incoming POST data
 app.get("/Friends", (req, res,next) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
     axios
-    .get("https://my.api.mockaroo.com/friends.json?key=56f355b0")
+    .get("https://my.api.mockaroo.com/friends.json?key=18ab8670")
     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
   })
@@ -49,6 +49,16 @@ app.post("/Transactions", (req, res) => {
   res.json(data)
 
 })
+
+app.get("/CurrentGroupMembers", (req, res, next) => {
+    // aquire Friends from database (for now we are calling mockaroo)
+    axios
+    .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
+    // @TODO change the .chargee below when working on database 
+    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+    .catch(err => next(err)) // pass any errors to express
+    
+  })
 
 
 // we will put some server logic here later...
