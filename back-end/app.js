@@ -11,18 +11,17 @@ app.use(express.json()) // decode JSON-formatted incoming POST data
 app.get("/Friends", (req, res,next) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
     axios
-    .get("https://my.api.mockaroo.com/friends.json?key=11bfbc80")
-    .then(apiResponse => res.json(apiResponse.data)) // pass data along directly to client
+    .get("https://my.api.mockaroo.com/friends.json?key=56f355b0")
+    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
-
   })
-  
+
 // POST a new friend
 // Add it to the list of friends for the specific user that is currently logged in
 app.post("/Friends", (req, res) => {
   const data = {
     status: "Posted", 
-    friend: req.body.friendAdded
+    friendAdded: req.body.friendAdded
   }
   res.json(data)
 })
@@ -30,10 +29,10 @@ app.post("/Friends", (req, res) => {
 app.get("/Transactions", (req, res, next) => {
     // aquire Friends from database (for now we are calling mockaroo)
     axios
-    .get("https://my.api.mockaroo.com/transactions.json?key=11bfbc80")
-    .then(apiResponse => res.json(apiResponse.data)) // pass data along directly to client
+    .get("https://my.api.mockaroo.com/transactions.json?key=56f355b0")
+    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
-
+    
   })
 
 // POST new transaction (when user clicks expense)
