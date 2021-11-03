@@ -4,10 +4,9 @@ const app = express() // instantiate an Express object
 const axios = require('axios')
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
+
 // GET all Friends
-
 // route for HTTP GET requests to /json-example
-
 app.get("/Friends", (req, res,next) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
     axios
