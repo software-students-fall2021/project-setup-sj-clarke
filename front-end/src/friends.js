@@ -136,16 +136,6 @@ const renderRow = (friend, index) => {
               {friends.map(renderRow)}
             </tbody>
           </ReactBootStrap.Table>
-          <Modal isOpen = {expmodalIsOpen}>
-              <h className = "Modal-title">Charge Friend</h>
-              <p>Username: {user}</p>
-              <form>
-              <label>Charge: 
-              <input type="text" placeholder = "Enter expense amount" />
-              </label>
-              </form>
-              <button onClick ={() => setexpModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
-          </Modal>
           <Modal isOpen = {addGroupmodalIsOpen}>
               <h className = "Modal-title">Add to Group</h>
               <p>Friend name: {user}</p>
