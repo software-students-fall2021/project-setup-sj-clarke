@@ -1,14 +1,12 @@
 import React from 'react'
 import './createGroup.css'
-import { Form, Button, NavLink} from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import Title from './header.js'
 function CreateGroup(){
 
     return(
         
         <div className="CreateGroup">
-        <Title/>
-        <header>TripSplit</header>
         <Form>
             <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Label>Group Name:</Form.Label>

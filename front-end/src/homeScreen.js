@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 import * as ReactBootStrap from "react-bootstrap"; 
 
 function Home(){
+
     // dummy data for summary of current trip transactions
     const transactions =  [
   
