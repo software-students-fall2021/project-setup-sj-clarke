@@ -2,46 +2,46 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
-
-
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
-
 // GET all Friends
-app.get("/friends", (req, res, next) => {
+
+// route for HTTP GET requests to /json-example
+
+app.get("/Friends", (req, res,next) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
     axios
-    .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
+    .get("https://my.api.mockaroo.com/friends.json?key=11bfbc80")
     .then(apiResponse => res.json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
 
   })
-
+  
 // POST a new friend
 // Add it to the list of friends for the specific user that is currently logged in
-app.post("/friends", (req, res) => {
+app.post("/Friends", (req, res) => {
   const data = {
     status: "Posted", 
-    friend: req.body.friend
+    friend: req.body.friendAdded
   }
   res.json(data)
-
 })
 // GET all transactions
-app.get("/transactions", (req, res, next) => {
+app.get("/Transactions", (req, res, next) => {
     // aquire Friends from database (for now we are calling mockaroo)
     axios
-    .get("https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0")
+    .get("https://my.api.mockaroo.com/transactions.json?key=11bfbc80")
     .then(apiResponse => res.json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
 
   })
 
 // POST new transaction (when user clicks expense)
-app.post("/transactions", (req, res) => {
+app.post("/Transactions", (req, res) => {
   const data = {
     status: "Posted", 
     date: req.body.date, 
+    group: req.body.group,
     charger: req.body.charger,
     chargee: req.body.chargee,
     amount: req.body.amount
