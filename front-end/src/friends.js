@@ -1,13 +1,16 @@
-
 import React, {useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
 import Modal from 'react-modal'
 import "./friends.css"
 import axios from 'axios';
+import { render } from "@testing-library/react";
+import { useForm } from 'react-hook-form'
+Modal.setAppElement('#root');
+
 
 function Friends() {
 const [friends, setFriends] = useState([])
-const [transactions, setTransactions] = useState([]);  
+const {register, handleSubmit, errors} = useForm()
     useEffect(() => {
       // a nested function that fetches the data
     
@@ -15,7 +18,7 @@ const [transactions, setTransactions] = useState([]);
         // axios is a 3rd-party module for fetching data from servers
         // mockaroo api call for list of friends in json file format 
         const response = await axios(
-          "https://my.api.mockaroo.com/friends.json?key=bd7c3ef0"
+          "http://localhost:3000/Friends"
         ); 
         // extract the data from the server response
         setFriends(response.data); 
@@ -31,7 +34,6 @@ const [expmodalIsOpen, setexpModalisOpen] = useState(false)
 const [addGroupmodalIsOpen, setaddGroupModal] = useState(false)
 const [modalIsOpen, setModalisOpen] = useState(false)
 const [user, setUser] = useState(" ")
-
 
 // creating a row for each instance within JSON file holding all of the friends
 const renderRow = (friend, index) => {
@@ -50,18 +52,77 @@ const renderRow = (friend, index) => {
     </tr>
     )
     }
+    
+    const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
+      {
+        friend: "",
+        groupName: ""
+      }
+    )
+
+
+    const handleAddToGroupChange = (event) => {
+      const newdata = {...newGroupAdditionValues}
+      newdata[event.target.id] = event.target.value
+      setNewGroupAdditionValues(newdata)
+      console.log(newdata)
+    }
+
+    const handleGroupSubmit = (event) => {
+      event.preventDefault(); 
+      setModalisOpen(false)
+      // newGroupAdditionalValues is the added group we will send to back end to post. 
+      console.log(newGroupAdditionValues)
+      // post request to backend here 
+
+      // clear the input line 
+      setNewGroupAdditionValues(
+        {friend: "", 
+        groupName: ""})
+    }
+
+    const [newFriendValues, setNewFriendValues] = useState(
+      {friendAdded: ""}
+      )
+
+    const handleAddFriendChange = (event) => {
+      const newdata = {...newFriendValues}
+      newdata[event.target.id] = event.target.value
+      setNewFriendValues(newdata)
+      console.log(newdata)
+    }
+
+    const handleFriendSubmit = (event) => {
+      event.preventDefault(); 
+      setModalisOpen(false)
+      console.log(newFriendValues.friendAdded)
+      // post request to backend here 
+
+      // clear the input line 
+      setNewFriendValues({friendAdded: ""})
+    }
+
+
     return(
         <div className= "Friends">
           <title className ="CurrentTripTitle">Friends
           <button onClick ={() => setModalisOpen(true)} type="button" className="btn btn-secondary btn-sm">Add Friend</button>
         <Modal isOpen = {modalIsOpen} dialogClassName = "modal-design">
-        <h className = "modal-title">Add friend</h>
-        <form>
+        <h1 className = "modal-title">Add friend</h1>
+         <form onSubmit = {(e) => handleFriendSubmit(e)}className = "addFriend">
           <label>Add Friend: 
-           <input type="text" placeholder = "Enter username" />
-           <button onClick ={() => setModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
+           <input 
+           id = "friendAdded"
+           type= "text" 
+           placeholder = "Enter username" 
+           name= "friendAdded" 
+           value = {newFriendValues.friendAdded}
+           onChange = {(e) => handleAddFriendChange(e)}
+           />
+           <input type="submit"/>
+           <button onClick ={() => setModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Cancel</button>
           </label>
-          </form>
+          </form> 
       </Modal>
           </title>  
           <ReactBootStrap.Table striped bordered hover>
@@ -76,7 +137,7 @@ const renderRow = (friend, index) => {
             </tbody>
           </ReactBootStrap.Table>
           <Modal isOpen = {expmodalIsOpen}>
-              <h className = "modal-title">Charge Friend</h>
+              <h className = "Modal-title">Charge Friend</h>
               <p>Username: {user}</p>
               <form>
               <label>Charge: 
@@ -86,18 +147,37 @@ const renderRow = (friend, index) => {
               <button onClick ={() => setexpModalisOpen(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
           </Modal>
           <Modal isOpen = {addGroupmodalIsOpen}>
-              <h className = "modal-title">Add to Group</h>
-              <p>Username: {user}</p>
-              <form>
-                <label>Add to Group: 
-                <input type="text" placeholder = "Enter group name" />
-                </label>
-                </form>
-              <button onClick ={() => setaddGroupModal(false)} type="button" className="btn btn-secondary btn-sm">Save</button>
+              <h className = "Modal-title">Add to Group</h>
+              <p>Friend name: {user}</p>
+              <form onSubmit = {(e) => handleGroupSubmit(e)}className = "addGroupMember">
+                <div>
+                <label>Friend name: </label>
+                <input 
+                      id = "friend"
+                      type= "text" 
+                      name= "friend" 
+                      placeholder = "Friend name"
+                      value = {newGroupAdditionValues.friend}
+                      onChange = {(e) => handleAddToGroupChange(e)}
+                  />
+                  <label>Group name: </label>
+                  <input 
+                      id = "groupName"
+                      type= "text" 
+                      placeholder = "Enter group name" 
+                      name= "groupName" 
+                      value = {newGroupAdditionValues.group}
+                      onChange = {(e) => handleAddToGroupChange(e)}
+                  />
+                </div>
+                  <input type="submit"/>
+                  <button onClick ={() => setaddGroupModal(false)} type="button" className="btn btn-secondary btn-sm">Cancel</button>
+                </form> 
           </Modal>
         </div>
     )
 }
+
 
 
 export default Friends;
