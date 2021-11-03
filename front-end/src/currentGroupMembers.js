@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as ReactBootStrap from "react-bootstrap";
-
+import axios from "axios";
 function CurrentGroupMembers({ tripName }) {
   // dummy data for summary of current trip transactions
-  const names = [{ name: "Sarah-Jane" }, { name: "Sarah" }, { name: "Gal" }];
+  const [names, setNames] = useState([]);
+
+  useEffect(() => {
+    // a nested function that fetches the data
+
+    async function fetchData() {
+      // axios is a 3rd-party module for fetching data from servers
+      // mockaroo api call for list of friends in json file format
+      const response = await axios("/CurrentGroupMembers");
+      // extract the data from the server response
+      setNames(response.data);
+    }
+    // fetch the data
+    fetchData();
+
+    // the blank array below causes this callback to be executed only once on component load
+  }, []);
 
   // creating a row for each instance within JSON file holding all of the transactions
   const renderRow = (member, index) => {
