@@ -60,6 +60,16 @@ app.get("/CurrentGroupMembers", (req, res, next) => {
    })
 
 
+app.get("/CurrentGroupMembers", (req, res, next) => {
+    // aquire Friends from database (for now we are calling mockaroo)
+    axios
+    .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
+    // @TODO change the .chargee below when working on database 
+    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+    .catch(err => next(err)) // pass any errors to express
+    
+  })
+
 
 // we will put some server logic here later...
 // export the express app we created to make it available to other modules
