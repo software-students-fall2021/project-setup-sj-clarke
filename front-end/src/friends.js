@@ -5,29 +5,30 @@ import "./friends.css"
 import axios from 'axios';
 import { render } from "@testing-library/react";
 import { useForm } from 'react-hook-form'
+import mockFriends from './mockFriends.json'
 Modal.setAppElement('#root');
 
 
 function Friends() {
 const [friends, setFriends] = useState([])
 const {register, handleSubmit, errors} = useForm()
-    useEffect(() => {
-      // a nested function that fetches the data
-    
-      async function fetchData() {
-        // axios is a 3rd-party module for fetching data from servers
-        // mockaroo api call for list of friends in json file format 
-        const response = await axios(
-          "http://localhost:3000/Friends"
-        ); 
-        // extract the data from the server response
-        setFriends(response.data); 
-        }
-      // fetch the data
-      fetchData();
-      
-      // the blank array below causes this callback to be executed only once on component load
-    }, []);
+useEffect(() => {
+  // a nested function that fetches the data
+  async function fetchData() {
+    // axios is a 3rd-party module for fetching data from servers
+    // mockaroo api call for list of friends in json file format 
+    const response = await axios(
+      "/Friends"
+    ); 
+    // extract the data from the server response
+    setFriends(response.data); 
+    }
+  // fetch the data
+  fetchData();
+  
+  // the blank array below causes this callback to be executed only once on component load
+}, []); 
+
 
 // modal use states
 const [expmodalIsOpen, setexpModalisOpen] = useState(false)
@@ -59,7 +60,6 @@ const renderRow = (friend, index) => {
         groupName: ""
       }
     )
-
 
     const handleAddToGroupChange = (event) => {
       const newdata = {...newGroupAdditionValues}
