@@ -10,7 +10,7 @@ const { response } = require("express");
 // Testing to see that the mockaroo sends back 10 friends
 describe('GET /Friends', () => {
   
-  it('PASS, getting friends has 10 notes', (done) => {
+  it('PASS, getting friends has 10 Friends returned', (done) => {
     request(app).get('/Friends')
       .then((res) => {
         const body = res.body;
