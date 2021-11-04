@@ -17,12 +17,15 @@ app.get("/Friends", (req, res,next) => {
 
 // POST a new friend
 // Add it to the list of friends for the specific user that is currently logged in
+// data coming through will be friend added (for the user)
+// add that friend to the user we are on friend list 
 app.post("/Friends", (req, res) => {
   const data = {
     status: "Posted", 
     friendAdded: req.body.friendAdded
   }
-  res.json(data)
+  // send info to database once we make database connection 
+  res.status(200).json(data)
 })
 // GET all transactions
 app.get("/Transactions", (req, res, next) => {
@@ -35,6 +38,7 @@ app.get("/Transactions", (req, res, next) => {
   })
 
 // POST new transaction (when user clicks expense)
+// Add this transaction to the groups list of transactions
 app.post("/Transactions", (req, res) => {
   const data = {
     status: "Posted", 
@@ -45,7 +49,8 @@ app.post("/Transactions", (req, res) => {
     amount: req.body.amount
 
   }
-  res.json(data)
+  // send information to database here 
+  res.status(200).json(data)
 
 })
 // GET current group members
@@ -70,6 +75,15 @@ app.get("/CurrentGroupMembers", (req, res, next) => {
     
   })
 
+
+  // still need: 
+
+
+  // POST group (set as current user current group in database)
+
+
+
+  // GET all groups 
 
 // we will put some server logic here later...
 // export the express app we created to make it available to other modules
