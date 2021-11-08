@@ -2,6 +2,9 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+
+
+
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
 //CORS stuff 
@@ -45,6 +48,21 @@ app.post("/Friends", (req, res) => {
   res.status(200).json(data)
 })
 
+
+// POST (adding friend to a group)
+// json { username: group: friend: }
+
+// send back a JSOn with the group and the friend you are adding to it. 
+app.post("/AddToGroup", (req, res) => {
+  const data = {
+    status: "Posted", 
+    friend: req.body.friendAdded, 
+    groupName: req.body.groupName, 
+  }
+  // send info to database once we make database connection 
+  res.status(200).json(data)
+})
+
 //GET
 app.get("/CreateGroup", (req, res,next) => {
   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
@@ -66,6 +84,8 @@ app.get("/Transactions", (req, res, next) => {
     .catch(err => next(err)) // pass any errors to express
     
   })
+
+
 
 // POST new transaction (when user clicks expense)
 // Add this transaction to the groups list of transactions
@@ -105,21 +125,9 @@ app.get("/CurrentGroupMembers", (req, res, next) => {
     
   })
 
-// GET all groups
-// route for HTTP GET requests to /json-example
-// app.get("/AllGroups", (req, res,next) => {
-//   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-//   axios
-//   .get("https://my.api.mockaroo.com/friends.json?key=56f355b0")
-//   .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-//   .catch(err => next(err)) // pass any errors to express
-// })
-// // we will put some server logic here later...
-// // export the express app we created to make it available to other modules
-// module.exports = app
 
 
-// GET all members of a group 
+
 
 
 
