@@ -43,16 +43,6 @@ function Friends() {
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={() => {
-              setexpModalisOpen(true);
-              setUser(friend.friendAdded);
-            }}
-          >
-            Charge
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary btn-sm"
-            onClick={() => {
               setaddGroupModal(true);
               setUser(friend.friendAdded);
             }}
@@ -78,7 +68,7 @@ function Friends() {
 
   const handleGroupSubmit = (event) => {
     event.preventDefault();
-    setModalisOpen(false);
+    setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
     console.log(newGroupAdditionValues);
     // post request to backend here
@@ -151,25 +141,8 @@ function Friends() {
         </thead>
         <tbody>{friends.map(renderRow)}</tbody>
       </ReactBootStrap.Table>
-      <Modal isOpen={expmodalIsOpen}>
-        <h className="Modal-title">Charge Friend</h>
-        <p>Username: {user}</p>
-        <form>
-          <label>
-            Charge:
-            <input type="text" placeholder="Enter expense amount" />
-          </label>
-        </form>
-        <button
-          onClick={() => setexpModalisOpen(false)}
-          type="button"
-          className="btn btn-secondary btn-sm"
-        >
-          Save
-        </button>
-      </Modal>
       <Modal isOpen={addGroupmodalIsOpen}>
-        <h className="Modal-title">Add to Group</h>
+        <h1 className="Modal-title">Add to Group</h1>
         <p>Friend name: {user}</p>
         <form onSubmit={(e) => handleGroupSubmit(e)} className="addGroupMember">
           <div>
