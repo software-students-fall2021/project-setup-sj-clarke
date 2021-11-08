@@ -56,7 +56,16 @@ app.post("/AddToGroup", (req, res) => {
   res.status(200).json(data)
 })
 
-//GET all Groups
+// GET all Groups
+app.get("/AllGroups", (req, res,next) => {
+  // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
+  axios
+  .get("https://my.api.mockaroo.com/groups.json?key=bd7c3ef0")
+  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  .catch(err => next(err)) // pass any errors to express
+})
+
+//GET a Group
 app.get("/CreateGroup", (req, res,next) => {
   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
   axios
