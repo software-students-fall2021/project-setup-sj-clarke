@@ -18,7 +18,6 @@ function CreateGroup() {
   
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
-      // mockaroo api call for list of friends in json file format 
       const group_response = await axios(
         //`http://localhost:5000/CreateGroup?groupName=${newGroupAdditionValues.group}&friendAdded=${newGroupAdditionValues.friend}`
         "https://my.api.mockaroo.com/test.json?key=34e7d950"

@@ -68,7 +68,7 @@ function Friends() {
 
   const handleGroupSubmit = (event) => {
     event.preventDefault();
-    setModalisOpen(false);
+    setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
     console.log(newGroupAdditionValues);
     // post request to backend here
