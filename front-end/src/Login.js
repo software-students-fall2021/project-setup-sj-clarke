@@ -30,7 +30,7 @@ function Login(props){
     try {
         const response = await axios({
             method: "post",
-            url: "https://my.api.mockaroo.com/users.json?key=aa763330",
+            url: "https://my.api.mockaroo.com/Users.json?key=aa763330",
             data: formData,
             headers: {"Content-Type" : "multipart/form-data"},
         })

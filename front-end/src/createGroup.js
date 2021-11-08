@@ -124,8 +124,4 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
     </div>
   );
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 7cce7824b58e3f277879c8adfda52f13e72f7134
 export default CreateGroup;
