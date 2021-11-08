@@ -142,7 +142,7 @@ function Friends() {
         <tbody>{friends.map(renderRow)}</tbody>
       </ReactBootStrap.Table>
       <Modal isOpen={addGroupmodalIsOpen}>
-        <h className="Modal-title">Add to Group</h>
+        <h1 className="Modal-title">Add to Group</h1>
         <p>Friend name: {user}</p>
         <form onSubmit={(e) => handleGroupSubmit(e)} className="addGroupMember">
           <div>
