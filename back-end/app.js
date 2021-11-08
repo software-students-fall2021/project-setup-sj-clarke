@@ -45,6 +45,17 @@ app.post("/Friends", (req, res) => {
   res.status(200).json(data)
 })
 
+// send back a JSOn with the group and the friend you are adding to it. 
+app.post("/AddToGroup", (req, res) => {
+  const data = {
+    status: "Posted", 
+    friend: req.body.friend, 
+    groupName: req.body.groupName, 
+  }
+  // send info to database once we make database connection 
+  res.status(200).json(data)
+})
+
 //GET all Groups
 app.get("/CreateGroup", (req, res,next) => {
   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
