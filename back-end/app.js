@@ -52,7 +52,13 @@ app.get("/CreateGroup", (req, res,next) => {
 })
 
 app.post("/CreateGroup", (req, res)=>{
+  const data = {
+    status: "Posted", 
+    groupName: req.body.groupName
+  }
+  res.json(data)
   console.log("Create Group got called")
+  console.log(req.body.groupName)
 })
 // GET all transactions
 app.get("/Transactions", (req, res, next) => {
