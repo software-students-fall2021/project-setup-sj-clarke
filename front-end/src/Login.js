@@ -18,23 +18,17 @@ function Login(props){
     const handleSubmit = async e => {
         e.preventDefault()
 
-        const username = e.target.username.value
-        const password = e.target.password.value
+        try{
+            const requestData = {
+                username: e.target.username.value,
+                password: e.target.password.value
+            }
+            const response = await axios.post(
+                "https://my.api.mockaroo.com/Users.json?key=aa763330",
+                requestData
 
-        const formData = new FormData()
-
-        formData.append("username", username)
-        formData.append("password", password)
-    
-
-    try {
-        const response = await axios({
-            method: "post",
-            url: "https://my.api.mockaroo.com/Users.json?key=aa763330",
-            data: formData,
-            headers: {"Content-Type" : "multipart/form-data"},
-        })
-
+            )
+            
         console.log(response.data)
         setStatus(response.data)
     }catch(err){
