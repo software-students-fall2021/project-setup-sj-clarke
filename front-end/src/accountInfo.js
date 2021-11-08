@@ -15,7 +15,7 @@ function Account(props){
             <header>Account Information</header>
             <p>Change your account information</p>
             <form>
-                <label>First Name<input type="text" name="fName" placeholder={user.fName}></input></label>
+                <label>First Name<input type="text" name="fName"></input></label>
                 <label>Last Name<input type="text" name="lName"></input></label>
                 <label>Username<input type="text" name="username"></input></label>
                 <label>Password<input type="password" name="password"></input></label>

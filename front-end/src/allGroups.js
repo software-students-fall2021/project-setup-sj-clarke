@@ -1,51 +1,70 @@
-import React, {useState} from 'react'
-import './allGroups.css'
-import * as ReactBootStrap from "react-bootstrap"
-import { Container, Row, Col } from 'react-bootstrap'
-import { Button} from 'react-bootstrap';
-import Title from './header.js'
-import data from "./mockGroups.json"
+import React, { useState, useEffect } from "react";
+import "./allGroups.css";
+import * as ReactBootStrap from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
+import Modal from "react-modal";
+import data from "./mockGroups.json";
+import groupData from "./mockGroupData.json";
+import memData from "./mockMembers.json";
+import axios from 'axios';
 
-function AllGroups(){
-    
-    // Data in table that will be used and can be updated dynamically
-    const [groups, setGroups] = useState(data)
+function AllGroups() {
+  // variables needed for all groups page and modals 
+  const [groups, setGroups] = useState([]);
+  const [transactions, setTransactions] = useState([]);  
+  const [members, setMembers] = useState([]);
+ useEffect(() => {
+   // a nested function that fetches the data
 
-    // State variable to keep track of all the expanded rows
-    // By default, nothing expanded. Hence initialized with empty array.
-    const [expandedRows, setExpandedRows] = useState([]);
+   async function fetchData() {
+     // Extract Mockaroo data
+     // get all groups 
+     const response_groups = await axios(
+       "https://my.api.mockaroo.com/groups.json?key=bd7c3ef0"
+       
+     ); 
+     // set groups with the data retrieved from mockaroo 
+     setGroups(response_groups.data); 
+      // get all transactions for a group
+      // currently mock data from mockaroo 
+     const response_groupData = await axios(
+      "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
+    ); 
+    // set transactions
+    setTransactions(response_groupData.data); 
 
-    // State variable to keep track which row is currently expanded.
-    const [expandState, setExpandState] = useState({});
-    
-    /**
-     * This function gets called when show/hide link is clicked.
-    */
-    const handleExpandRow = (event, userId) => {
-      const currentExpandedRows = expandedRows;
-      const isRowExpanded = currentExpandedRows.includes(userId);
+     // get all of the members for a group from mockaroo 
+     const response_members = await axios(
+      "https://my.api.mockaroo.com/members.json?key=bd7c3ef0"
+    ); 
+    // set members
+    setMembers(response_members.data); 
+
+
+     }
+   // fetch the data
+   fetchData();
+   
+   
+   // the blank array below causes this callback to be executed only once on component load
+ }, []);
   
-      let obj = {};
-      isRowExpanded ? (obj[userId] = false) :  (obj[userId] = true);
-      setExpandState(obj);
-  
-      // If the row is expanded, we are here to hide it. Hence remove
-      // it from the state variable. Otherwise add to it.
-      const newExpandedRows = isRowExpanded ?
-            currentExpandedRows.filter(id => id !== userId) :
-            currentExpandedRows.concat(userId);
-  
-      setExpandedRows(newExpandedRows);
-    }
-    return (
-      <Container>
+  const [groupName, setGroupName] = useState(" ");
+  const [groupDate, setGroupDate] = useState(" ");
+
+  // variables to control various modals' open/close
+  const [infoOpen, setModalOpen] = useState(false);
+  const [seeMemModal, setMemModal] = useState(false);
+
+  return (
+    <Container>
       <Row>
         <Col>
-          <h1> All Groups({ data.length })</h1>
+          <h1> All Groups({groups.length})</h1>
         </Col>
-       </Row>
-       <div className= "AllGroups">
-       <ReactBootStrap.Table striped bordered hover>
+      </Row>
+      <div className="AllGroups">
+        <ReactBootStrap.Table striped bordered hover>
           <thead>
             <tr>
               <th>Date</th>
@@ -53,67 +72,90 @@ function AllGroups(){
             </tr>
           </thead>
           <tbody>
-            {groups.map((group)=> (
-               <tr key={group.id}>
-                <td>{group.date}</td>
-                <td>{group.groupName}</td>
+            {groups.map((group) => (
+              <tr key={group.id}>
+                <td>{group.year}</td>
+                <td>{group.name}</td>
                 <td>
-                <Button 
-                  variant="link"
-                  onClick={event => handleExpandRow(event, group.id)}>
-                    {
-                      expandState[groups.id] ?
-                        'Hide' : 'Show'
-                    }
-                 </Button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      {setModalOpen(true); setGroupName(group.name); setGroupDate(group.year)}
+                    }}
+                  >
+                    more info
+                  </button>
+                  <Modal isOpen={infoOpen}>
+                    <h1 className="modal-title">{groupName}</h1>
+                    <h3>{groupDate}</h3>
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => {
+                        setMemModal(true);
+                      }}
+                    >
+                      See Members
+                    </button>
+                    <Modal isOpen={seeMemModal}>
+                      <h className="modal-title">Members({members.length})</h>
+                      <ReactBootStrap.Table striped bordered hover>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((member) => (
+                            <tr key={member.id}>
+                              <td>{member.username}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </ReactBootStrap.Table>
+                      <button
+                        onClick={() => setMemModal(false)}
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                      >
+                        exit
+                      </button>
+                    </Modal>
+                    <ReactBootStrap.Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Charger</th>
+                          <th>Chargee</th>
+                          <th>Expense Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transactions.map((transaction) => (
+                          <tr key={transaction.id}>
+                            <td>{transaction.date}</td>
+                            <td>{transaction.charger}</td>
+                            <td>{transaction.chargee}</td>
+                            <td>${transaction.expenseAmount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </ReactBootStrap.Table>
+                    <button
+                      onClick={() => setModalOpen(false)}
+                      type="button"
+                      className="btn btn-secondary btn-sm">
+                      exit
+                    </button>
+                  </Modal>
                 </td>
-               </tr>
-            ))
-            }
-            {/* {
-               expandedRows.includes(user.id) ?
-                  <tr>
-                    <td colspan="6">
-                      <div style={{backgroundColor: '#343A40', color: '#FFF', padding: '10px'}}>
-                        <h2> Details </h2>
-                        <ul>
-                          <li>
-                            <span><b>Full Name:</b></span> {' '}
-                            <span> { user['first_name'] } {' '} { user['last_name'] } </span>
-                          </li>
-                          <li>
-                            <span><b>Company:</b></span> {' '}
-                            <span> { user.company } </span>
-                          </li>
-                          <li>
-                            <span><b>Department:</b></span> {' '}
-                            <span> { user.department } </span>
-                          </li>
-                          <li>
-                            <span><b>Ip:</b></span> {' '}
-                            <span> { user['ip_address'] } </span>
-                          </li>
-                          <li>
-                            <span><b>Best Movie:</b></span> {' '}
-                            <span> { user.movies } </span>
-                          </li>
-                          <li>
-                            <span><b>About:</b></span> {' '}
-                            <span> { user.about } </span>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr> : null
-                }
-                </>
-              </> 
-              )} */}
+              </tr>
+            ))}
           </tbody>
         </ReactBootStrap.Table>
       </div>
-      </Container>
-
-    )
+    </Container>
+  );
 }
 export default AllGroups;
