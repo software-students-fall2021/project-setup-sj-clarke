@@ -1,49 +1,61 @@
-import React from "react";
-import "./App.css";
-import "./homeScreen.js";
-import "./createGroup.js";
-import "./friends.js";
-import CreateGroup from "./createGroup.js";
-import Friends from "./friends.js";
-import Home from "./homeScreen.js";
-import Title from "./header";
-import AllGroups from "./allGroups.js";
-import CurrentGroupMembers from "./currentGroupMembers";
-import MoreInfo from "./moreInfo";
-import Account from "./accountInfo.js";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, {useState} from 'react';
+import './App.css';
+import './homeScreen.js'
+import './createGroup.js'
+import './friends.js';
+import Friends from './friends.js'
+import Home from './homeScreen.js'
+import Title from './header'
+import AllGroups from './allGroups.js'
+import CurrentGroupMembers from './currentGroupMembers';
+import MoreInfo from './moreInfo'
+import Account from './accountInfo.js';
+import Login from './Login.js'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import CreateGroup from './createGroup.js';
+import PrimaryNav from './primaryNav.js'
 
-function App() {
+
+
+const App = props => {
+  const [user, setUser] = useState({})
+
   return (
     <div className="App">
-      <Router>
-        <Title />
-        <Switch>
-          <Route exact path="/" component={Home}>
-            <Home />
-          </Route>
-          <Route path="/CurrentGroupMembers" component={CurrentGroupMembers}>
-            <CurrentGroupMembers tripName={"Mexico 2021"} />
-          </Route>
-          <Route path="/MoreInfo" component={MoreInfo}>
-            <MoreInfo />
-          </Route>
-          <Route path="/Friends" component={Friends}>
-            <Friends />
-          </Route>
-          <Route path="/AllGroups" component={AllGroups}>
-            <AllGroups />
-          </Route>
-          <Route path="/Account" component={Account}>
-            <Account />
-          </Route>
-          <Route path="/CreateGroup" component={CreateGroup}>
-            <CreateGroup />
-          </Route>
-        </Switch>
-      </Router>
+    <Router>
+      <PrimaryNav user={user} setuser={setUser}/>
+      <Switch>
+        <Route path="/Home">
+          <Home/>
+        </Route>
+        <Route path="/CreateGroup">
+          <CreateGroup/>
+        </Route>
+        <Route path="/Friends">
+          <Friends/>
+        </Route>
+        <Route path="/CurrentGroupMembers">
+          <CurrentGroupMembers />
+        </Route>
+        <Route path="/Account">
+          <Account />
+        </Route>
+        <Route path="/AllGroups">
+          <AllGroups />
+        </Route>
+        <Route path="/">
+          <Login user={user} setuser={setUser}/>
+        </Route>
+      </Switch>
+    </Router>
     </div>
-  );
+
+  )
 }
+
 
 export default App;

@@ -7,7 +7,7 @@ import SettleUp from "./settleUpModal";
 import "./friends.js";
 import "./accountInfo.js";
 
-function Title() {
+function Title(props) {
   const [showAddExpense, setAddExpense] = useState(false);
   const [showSettleUp, setSettleUp] = useState(false);
   return (

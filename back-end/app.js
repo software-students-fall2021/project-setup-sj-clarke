@@ -34,12 +34,15 @@ app.get("/Friends", (req, res,next) => {
 
 // POST a new friend
 // Add it to the list of friends for the specific user that is currently logged in
+// data coming through will be friend added (for the user)
+// add that friend to the user we are on friend list 
 app.post("/Friends", (req, res) => {
   const data = {
     status: "Posted", 
     friendAdded: req.body.friendAdded
   }
-  res.json(data)
+  // send info to database once we make database connection 
+  res.status(200).json(data)
 })
 
 //GET all Groups
@@ -71,6 +74,7 @@ app.get("/Transactions", (req, res, next) => {
   })
 
 // POST new transaction (when user clicks expense)
+// Add this transaction to the groups list of transactions
 app.post("/Transactions", (req, res) => {
   const data = {
     status: "Posted", 
@@ -81,7 +85,8 @@ app.post("/Transactions", (req, res) => {
     amount: req.body.amount
 
   }
-  res.json(data)
+  // send information to database here 
+  res.status(200).json(data)
 
 })
 // GET current group members
@@ -106,6 +111,40 @@ app.get("/CurrentGroupMembers", (req, res, next) => {
     
   })
 
+  // GET User
+// route for HTTP GET requests to /json-example
+app.get("/Users", (req, res,next) => {
+  // aquire Users from database (for now we are calling mockaroo which gives us a random JSON array of users) 
+  axios
+  .get("https://my.api.mockaroo.com/Users.json?key=aa763330")
+  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  .catch(err => next(err)) // pass any errors to express
+})
+
+// POST a new User
+// data coming through will be the user
+// add the User
+app.post("/Users", (req, res) => {
+const data = {
+  status: "Posted", 
+  first_name: req.body.first_name,
+  last_name: req.body.last_name,
+  password: req.body.password,
+  username: req.body.username
+}
+// send info to database once we make database connection 
+res.status(200).json(data)
+})
+
+
+  // still need: 
+
+
+  // POST group (set as current user current group in database)
+
+
+
+  // GET all groups 
 
 // we will put some server logic here later...
 // export the express app we created to make it available to other modules
