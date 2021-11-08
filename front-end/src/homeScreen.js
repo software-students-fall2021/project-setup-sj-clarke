@@ -9,7 +9,7 @@ import axios from 'axios';
 
 function Home(){
     
-    
+  
     // creating a row for each instance within JSON file holding all of the transactions
     const [transactions, setTransactions] = useState([]);  
     useEffect(() => {
@@ -19,7 +19,7 @@ function Home(){
         // axios is a 3rd-party module for fetching data from servers
         // Mockaroo data for summary of current trip transactions
         const response = await axios(
-          "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
+          "/Transactions"
         ); 
         // extract the data from the server response
         setTransactions(response.data); 
@@ -41,7 +41,7 @@ function Home(){
       <td>{transaction.date}</td>
       <td>{transaction.charger}</td>
       <td>{transaction.chargee}</td>
-      <td className = "expenseColumn">${transaction.expenseAmount}</td>
+      <td className = "expenseColumn">${transaction.amount}</td>
     </tr>
     )
     }

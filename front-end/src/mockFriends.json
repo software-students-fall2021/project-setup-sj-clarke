@@ -1,33 +1,33 @@
 [
     {
         "id": "1",
-        "memberName": "Sarah-Jane"
+        "friendAdded": "Sarah-Jane"
     },
     {
         "id": "2",
-        "memberName": "Sarah"
+        "friendAdded": "Sarah"
     },
     {
         "id": "3",
-        "memberName": "Sam"
+        "friendAdded": "Sam"
     },
     {
         "id": "4",
-        "memberName": "Liv"
+        "friendAdded": "Liv"
     },
     {
         "id": "5", 
-        "memberName": "Julia"
+        "friendAdded": "Julia"
 
     }, 
     {
         "id": "6", 
-        "memberName": "Isabelle"
+        "friendAdded": "Isabelle"
 
     }, 
     {
         "id": "7", 
-        "memberName": "Zach"
+        "friendAdded": "Zach"
 
     }
 ]
