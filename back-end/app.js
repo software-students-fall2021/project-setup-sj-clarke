@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 app.get("/Friends", (req, res,next) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
     axios
-    .get("https://my.api.mockaroo.com/friends.json?key=56f355b0")
+    .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
   })
@@ -87,7 +87,7 @@ app.post("/CreateGroup", (req, res)=>{
 app.get("/Transactions", (req, res, next) => {
     // aquire Friends from database (for now we are calling mockaroo)
     axios
-    .get("https://my.api.mockaroo.com/transactions.json?key=56f355b0")
+    .get("https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0")
     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
     
