@@ -20,7 +20,7 @@ function AllGroups() {
      // Extract Mockaroo data
      // get all groups 
      const response_groups = await axios(
-       "https://my.api.mockaroo.com/groups.json?key=bd7c3ef0"
+       "/AllGroups"
        
      ); 
      // set groups with the data retrieved from mockaroo 
@@ -28,14 +28,14 @@ function AllGroups() {
       // get all transactions for a group
       // currently mock data from mockaroo 
      const response_groupData = await axios(
-      "https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0"
+      "/Transactions"
     ); 
     // set transactions
     setTransactions(response_groupData.data); 
 
      // get all of the members for a group from mockaroo 
      const response_members = await axios(
-      "https://my.api.mockaroo.com/members.json?key=bd7c3ef0"
+      "/Members"
     ); 
     // set members
     setMembers(response_members.data); 
@@ -137,7 +137,7 @@ function AllGroups() {
                             <td>{transaction.date}</td>
                             <td>{transaction.charger}</td>
                             <td>{transaction.chargee}</td>
-                            <td>${transaction.expenseAmount}</td>
+                            <td>${transaction.amount}</td>
                           </tr>
                         ))}
                       </tbody>
