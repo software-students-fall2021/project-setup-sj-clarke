@@ -47,6 +47,9 @@ const App = props => {
         <Route path="/AllGroups">
           <AllGroups />
         </Route>
+        <Route path="/MoreInfo">
+            <MoreInfo />
+          </Route>
         <Route path="/">
           <Login user={user} setuser={setUser}/>
         </Route>
