@@ -1,5 +1,4 @@
 // import and instantiate express
-
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
@@ -179,7 +178,8 @@ app.post("/CreateGroup", (req, res)=>{
   console.log("Create Group got called")
   console.log(req.body.groupName)
 })
-// GET all transactions
+
+// GET all transactions for any group
 app.get("/Transactions", (req, res, next) => {
     // aquire Friends from database (for now we are calling mockaroo)
     axios
@@ -188,6 +188,16 @@ app.get("/Transactions", (req, res, next) => {
     .catch(err => next(err)) // pass any errors to express
     
   })
+
+  // GET all members of any group 
+app.get("/Members", (req, res, next) => {
+  // aquire Friends from database (for now we are calling mockaroo)
+  axios
+  .get("https://my.api.mockaroo.com/members.json?key=bd7c3ef0")
+  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  .catch(err => next(err)) // pass any errors to express
+  
+})
 
 // POST new transaction (when user clicks expense)
 // Add this transaction to the groups list of transactions
