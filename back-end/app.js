@@ -22,7 +22,7 @@ const user_schema = new Schema ({
 // initializing Group schema 
 const group_schema = new Schema({
   name:  String, 
-  date: String,
+  date: Date,
   members: [String],
   transactions:  [ 
     {
@@ -39,13 +39,13 @@ const group = mongoose.model('group', group_schema)
 // example posting a user
 
 
-const user_practice = new user({username: 'sjclarke', 
+const user_practice = new user({username: 'clarkeAndrew', 
     password: '123',
-    fName:   "sarah-jane",
-    lName: "clarke",
-    currentGroup: "mexico 2021",
-    allGroups: ["mexico 2021", "paris 2019"],
-    friends: ["clarkeAndrew", "clarkeAmy"]
+    fName:   "Andrew",
+    lName: "Clarke",
+    currentGroup: "",
+    allGroups: [],
+    friends: ["sjclarke"] 
 
   })
 // example posting a group 
@@ -84,18 +84,18 @@ const user_practice = new user({username: 'sjclarke',
 
 // get all users from DB
   async function getAllUsers(){
-    const all = await user.find({});
-    console.log(all)
+    const data = await user.find({});
+      console.log(data)
   }
   // query group for specific user  
   
 getAllUsers(); 
 
-async function getGroupBydate(){
-  const all = await group.find({date: "2019"});
-  console.log(all)
-}
-getGroupBydate(); 
+// async function getGroupBydate(){
+//   const all = await group.find({date: "2019"});
+//   console.log(all)
+// }
+// getGroupBydate(); 
 
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -117,38 +117,105 @@ app.use((req, res, next) => {
   next()
 })
 
-// GET all Friends
-// route for HTTP GET requests to /json-example
-app.get("/Friends", (req, res,next) => {
+user_schema.query.byName = function(username) {
+  return this.where({ username: username})
+};
+
+// GET all Friends of a specific user 
+// for now just choosing 1 user 
+app.get("/Friends/:usernameInput", async (req, res) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-    axios
-    .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
-    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    .catch(err => next(err)) // pass any errors to express
+    // axios
+    // .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
+    // .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+    // .catch(err => next(err)) // pass any errors to express
+    // Getting all friends for a user from database 
+    let username_query = req.params.usernameInput; 
+    
+    try{
+      // find user in database 
+      const response = await user.find({username: username_query});
+      // send the data in the response
+      res.json(response)
+    }
+    catch(err){
+      // if unable to retrieve the information
+      res.json(err)
+    }
+   
   })
 
 // POST a new friend
 // Add it to the list of friends for the specific user that is currently logged in
 // data coming through will be friend added (for the user)
 // add that friend to the user we are on friend list 
-app.post("/Friends", (req, res) => {
-  const data = {
-    status: "Posted", 
-    friendAdded: req.body.friendAdded
+app.post("/Friends/:usernameInput", async (req, res) => {
+  let username_query = req.params.usernameInput; 
+
+  try{
+    // find user and update friends list with this added user 
+    await user.findOneAndUpdate({username: username_query}, {
+      $push: {
+        friends: req.body.friendAdded
+      }
+    })
+    const data = {
+      status: "posted", 
+      friendAdded: req.body.friendAdded
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
   }
   // send info to database once we make database connection 
-  res.status(200).json(data)
+  //res.status(200).json(data)
 })
 
-// send back a JSOn with the group and the friend you are adding to it. 
-app.post("/AddToGroup", (req, res) => {
-  const data = {
-    status: "Posted", 
-    friend: req.body.friend, 
-    groupName: req.body.groupName, 
+// send back a Json with the group and the friend you are adding to it. 
+app.post("/AddToGroup/:usernameInput", async (req, res) => {
+  let username_query = req.params.usernameInput;  
+  try{
+
+    // if: the friend or groupName passed through is not in the users friend list --> error 
+   //  const response = await user.find({username: username_query})
+// go to tutor for this. 
+    // otherwise: 
+    // find group and update current members list with this added user 
+    await group.findOneAndUpdate({name: req.body.groupName}, {
+      $push: {
+        members: req.body.friend
+      }
+    })
+    
+    
+    // find friend user and set current group this group 
+    await user.findOneAndUpdate({username: req.body.friend}, {
+      $set: {
+        currentGroup: req.body.groupName
+  
+      }, 
+      $push:{
+        allGroups: req.body.groupName
+      }
+    })
+
+
+    const data = {
+      status: "posted", 
+      friend: req.body.friend,
+      groupName: req.body.groupName
+    }
+    res.status(200).json(data)
+
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
   }
   // send info to database once we make database connection 
-  res.status(200).json(data)
+  
 })
 
 // GET all Groups
@@ -181,7 +248,7 @@ app.post("/CreateGroup", (req, res)=>{
 
 // GET all transactions for any group
 app.get("/Transactions", (req, res, next) => {
-    // aquire Friends from database (for now we are calling mockaroo)
+    // aquire from database (for now we are calling mockaroo)
     axios
     .get("https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0")
     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client

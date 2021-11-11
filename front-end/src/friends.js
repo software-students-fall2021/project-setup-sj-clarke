@@ -16,9 +16,12 @@ function Friends() {
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-      const response = await axios("/Friends");
+      const response = await axios("/Friends/sjclarke");
       // extract the data from the server response
-      setFriends(response.data);
+      //const data_friends = response.data.friends 
+      const data_friends = (response.data[0].friends)
+      setFriends(data_friends);
+      
     }
     // fetch the data
     fetchData();
@@ -27,24 +30,23 @@ function Friends() {
   }, []);
 
   // modal use states
-  const [expmodalIsOpen, setexpModalisOpen] = useState(false);
   const [addGroupmodalIsOpen, setaddGroupModal] = useState(false);
   const [modalIsOpen, setModalisOpen] = useState(false);
   const [user, setUser] = useState(" ");
-
+  const index = 0; 
   // creating a row for each instance within JSON file holding all of the friends
   const renderRow = (friend, index) => {
     // 1 row instance within a table
     return (
-      <tr key={friend.id}>
-        <td>{friend.friendAdded}</td>
+      <tr key={index}>
+        <td>{friend}</td>
         <td>
           <button
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={() => {
               setaddGroupModal(true);
-              setUser(friend.friendAdded);
+              setUser(friend);
             }}
           >
             Add to Group
@@ -72,7 +74,7 @@ function Friends() {
     // newGroupAdditionalValues is the added group we will send to back end to post.
     console.log(newGroupAdditionValues);
     // post request to backend here
-
+    axios.post("AddToGroup/sjclarke", newGroupAdditionValues)
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });
   };
@@ -89,11 +91,10 @@ function Friends() {
   const handleFriendSubmit = (event) => {
     event.preventDefault();
     setModalisOpen(false);
-    console.log(newFriendValues.friendAdded);
-    // post request to backend here
-
+    // post request to backend with new data 
+    axios.post("Friends/sjclarke", newFriendValues)
     // clear the input line
-    setNewFriendValues({ friendAdded: "" });
+    setNewFriendValues({friendAdded: "" });
   };
 
   return (
@@ -139,7 +140,7 @@ function Friends() {
             <th> </th>
           </tr>
         </thead>
-        <tbody>{friends.map(renderRow)}</tbody>
+        <tbody>{friends.map(renderRow, index)}</tbody>
       </ReactBootStrap.Table>
       <Modal isOpen={addGroupmodalIsOpen}>
         <h1 className="Modal-title">Add to Group</h1>
