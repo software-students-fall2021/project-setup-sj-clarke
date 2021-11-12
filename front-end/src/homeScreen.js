@@ -8,21 +8,37 @@ import axios from 'axios';
 
 
 function Home(){
-    
-  
-    // creating a row for each instance within JSON file holding all of the transactions
+    // Hold all transactions for current group to display on home screen 
     const [transactions, setTransactions] = useState([]);  
+
+    // we will need to get the current user from the login and set it here
+    // for now I am using 1 current user. 
+    const [currentUser, setCurrentUser] = useState(); 
+    const [currentGroup, setCurrentGroup] = useState(); 
+    
     useEffect(() => {
       // a nested function that fetches the data
-    
       async function fetchData() {
-        // axios is a 3rd-party module for fetching data from servers
-        // Mockaroo data for summary of current trip transactions
+    
+
+        // GET curent user's current group
+        const response_current_group = await axios(
+          "/Friends/sjclarke"
+          ); 
+
+        // Extract current group from the response from backend 
+        const currentGroupQuery = response_current_group.data[0].currentGroup; 
+        setCurrentGroup(currentGroupQuery)
+        // Query all transactions for the current group  
+        let query = `/Transactions/${currentGroupQuery}`
         const response = await axios(
-          "/Transactions"
+          query
         ); 
-        // extract the data from the server response
-        setTransactions(response.data); 
+
+        // Extract the data from the server response
+        const data_transactions = response.data[0].transactions
+        // Set transactions to this data so we can render the rows of the home screen table with the transactions
+        setTransactions(data_transactions); 
         }
       // fetch the data
       fetchData();
@@ -31,14 +47,15 @@ function Home(){
       // the blank array below causes this callback to be executed only once on component load
     }, []);
 
+    const index = 1; 
 
-   
+
     // creating a row for each instance within JSON file holding all of the transactions
     const renderRow = (transaction, index) => {
     // 1 row instance within a table 
     return (
-    <tr key = {transaction.id}>
-      <td>{transaction.date}</td>
+    <tr key = {index}>
+      <td>{transaction.date.split("T")[0]}</td>
       <td>{transaction.charger}</td>
       <td>{transaction.chargee}</td>
       <td className = "expenseColumn">${transaction.amount}</td>
@@ -46,10 +63,9 @@ function Home(){
     )
     }
     // general layout of home screen 
-    // use map to loop through all transactions and render a row for each one and display on home screen
       return (
         <div className= "Home">
-        <title className ="CurrentTripTitle">Mexico 2021
+        <title className ="CurrentTripTitle">{currentGroup}
         <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
         </title>  
         <ReactBootStrap.Table striped bordered hover>

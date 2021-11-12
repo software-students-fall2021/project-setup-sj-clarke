@@ -3,23 +3,23 @@ import * as ReactBootStrap from "react-bootstrap";
 import Modal from "react-modal";
 import "./friends.css";
 import axios from "axios";
-import { render } from "@testing-library/react";
-import { useForm } from "react-hook-form";
 Modal.setAppElement("#root");
 
 function Friends() {
   const [friends, setFriends] = useState([]);
-  const { register, handleSubmit, errors } = useForm();
+  // will hold the current user from login page (for now just user in database we have)
+  const [currentUser, setCurrentUser] = useState(); 
+
   useEffect(() => {
     // a nested function that fetches the data
 
     async function fetchData() {
-      // axios is a 3rd-party module for fetching data from servers
-      // mockaroo api call for list of friends in json file format
+      // fetch object for current user. 
       const response = await axios("/Friends/sjclarke");
-      // extract the data from the server response
-      //const data_friends = response.data.friends 
+      // extract the friends list from the server respons
       const data_friends = (response.data[0].friends)
+
+      // set friends 
       setFriends(data_friends);
       
     }
@@ -34,6 +34,7 @@ function Friends() {
   const [modalIsOpen, setModalisOpen] = useState(false);
   const [user, setUser] = useState(" ");
   const index = 0; 
+
   // creating a row for each instance within JSON file holding all of the friends
   const renderRow = (friend, index) => {
     // 1 row instance within a table
@@ -56,31 +57,34 @@ function Friends() {
     );
   };
 
+  // hook JSON to hold the data of a new group addition
   const [newGroupAdditionValues, setNewGroupAdditionValues] = useState({
     friend: "",
     groupName: "",
   });
 
+  // Handling changes to adding friend to group form
   const handleAddToGroupChange = (event) => {
     const newdata = { ...newGroupAdditionValues };
     newdata[event.target.id] = event.target.value;
     setNewGroupAdditionValues(newdata);
-    console.log(newdata);
   };
 
+  // Handling submission of adding friend to a group
+  // Calls a post request to the back end sending back the JSON of the group addition. 
   const handleGroupSubmit = (event) => {
     event.preventDefault();
     setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
-    console.log(newGroupAdditionValues);
-    // post request to backend here
     axios.post("AddToGroup/sjclarke", newGroupAdditionValues)
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });
   };
 
+  // hook JSON to hold the data of a new friend addition
   const [newFriendValues, setNewFriendValues] = useState({ friendAdded: "" });
 
+  // handles changes to the add friend form within "add friend" modal 
   const handleAddFriendChange = (event) => {
     const newdata = { ...newFriendValues };
     newdata[event.target.id] = event.target.value;
@@ -88,6 +92,8 @@ function Friends() {
     console.log(newdata);
   };
 
+   // Handling submission of adding a new friend 
+  // Calls a post request to the back end sending back the JSON of the friend addition. 
   const handleFriendSubmit = (event) => {
     event.preventDefault();
     setModalisOpen(false);
@@ -97,6 +103,7 @@ function Friends() {
     setNewFriendValues({friendAdded: "" });
   };
 
+  // General friends page layout 
   return (
     <div className="Friends">
       <title className="CurrentTripTitle">

@@ -39,13 +39,13 @@ const group = mongoose.model('group', group_schema)
 // example posting a user
 
 
-const user_practice = new user({username: 'clarkeAndrew', 
-    password: '123',
-    fName:   "Andrew",
-    lName: "Clarke",
-    currentGroup: "",
-    allGroups: [],
-    friends: ["sjclarke"] 
+const user_practice = new user({username: 'GalBenShushan', 
+    password: '1234',
+    fName:   "Gal",
+    lName: "Ben-Shushan",
+    currentGroup: "Paris",
+    allGroups: ["Paris"],
+    friends: ["sjclarke", "DanielleZhao", "ElizabethJiranek", "EmilyHerschmann"] 
 
   })
 // example posting a group 
@@ -64,23 +64,41 @@ const user_practice = new user({username: 'clarkeAndrew',
   }
   )
   const group_practice_2 = new group({
-    name:  "Paris", 
-    date: "2019",
-    members: ["sjclarke", "clarkeAmy"], 
+    name:  "Mexico", 
+    date: "2021",
+    members: ["EmilyHerschmann", "ElizabethJiranek", "DanielleZhao", "GalBenShushan", "sjclarke"], 
     transactions:  [ 
       {
-          charger: "clarkeAmy", 
+          charger: "EmilyHerschmann", 
+          chargee: "ElizabethJiranek", 
+          amount: "200", 
+          date: "12/11/2021"
+        }, 
+        {
+          charger: "GalBenShushan", 
           chargee: "sjclarke", 
-          amount: "90", 
-          date: "09/20/2019"
+          amount: "50", 
+          date: "12/11/2021"
+        }, 
+        {
+          charger: "GalBenShushan", 
+          chargee: "EmilyHerschmann", 
+          amount: "50", 
+          date: "12/11/2021"
+        }, 
+        {
+          charger: "DanielleZhao", 
+          chargee: "GalBenShushan", 
+          amount: "40", 
+          date: "12/10/2021"
         }
-    ],
+    ]
   }
   )
 
   // user_practice.save().then(() => console.log("POSTED USER")); 
 
-  // group_practice_2.save().then(() => console.log("POSTED GROUP")); 
+  group_practice_2.save().then(() => console.log("POSTED GROUP")); 
 
 // get all users from DB
   async function getAllUsers(){
@@ -247,16 +265,50 @@ app.post("/CreateGroup", (req, res)=>{
 })
 
 // GET all transactions for any group
-app.get("/Transactions", (req, res, next) => {
+// send back json of the group, then front end retracts the list of transactions
+app.get("/Transactions/:groupInput", async (req, res) => {
     // aquire from database (for now we are calling mockaroo)
-    axios
-    .get("https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0")
-    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    .catch(err => next(err)) // pass any errors to express
-    
+    let group_query = req.params.groupInput; 
+    try{
+      // find user in database 
+      const response = await group.find({name: group_query});
+      // send the data in the response
+
+      console.log(response)
+      res.json(response)
+    }
+    catch(err){
+      // if unable to retrieve the information
+      res.json(err)
+    }
   })
 
-  // GET all members of any group 
+// POST new transaction (when user clicks add expense)
+// Add this transaction to the groups list of transactions
+app.post("/Transactions/:groupInput", async (req, res) => {
+  let group_query = req.params.groupInput; 
+  await group.findOneAndUpdate({name: group_query}, {
+    $push: {
+      transactions: [{
+        charger: req.body.charger,
+        chargee: req.body.chargee,
+        amount: req.body.amount,
+        date: req.body.date, 
+      }]
+    }
+  })
+  const data = {
+    status: "Posted", 
+    date: req.body.date, 
+    charger: req.body.charger,
+    chargee: req.body.chargee,
+    amount: req.body.amount
+
+  }
+  // send information to database here 
+  res.status(200).json(data)
+})
+    // GET all members of any group 
 app.get("/Members", (req, res, next) => {
   // aquire Friends from database (for now we are calling mockaroo)
   axios
@@ -266,22 +318,8 @@ app.get("/Members", (req, res, next) => {
   
 })
 
-// POST new transaction (when user clicks expense)
-// Add this transaction to the groups list of transactions
-app.post("/Transactions", (req, res) => {
-  const data = {
-    status: "Posted", 
-    date: req.body.date, 
-    group: req.body.group,
-    charger: req.body.charger,
-    chargee: req.body.chargee,
-    amount: req.body.amount
 
-  }
-  // send information to database here 
-  res.status(200).json(data)
 
-})
 // GET current group members
 app.get("/CurrentGroupMembers", (req, res, next) => {
      // aquire Friends from database (for now we are calling mockaroo)
