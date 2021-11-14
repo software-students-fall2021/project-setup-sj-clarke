@@ -2,6 +2,101 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+// connection to mongoose
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
+const { Schema } = mongoose;
+
+// initializing User schema 
+const user_schema = new Schema ({
+  username:  String, // String is shorthand for {type: String}
+  password: String,
+  fName:   String,
+  lName: String,
+  currentGroup: String,
+  allGroups: [String],
+  friends: [String]
+  
+});
+
+// initializing Group schema 
+const group_schema = new Schema({
+  name:  String, 
+  date: String,
+  members: [String],
+  transactions:  [ 
+    {
+        charger: String, 
+        chargee: String, 
+        amount: String, 
+        date: Date
+      }
+  ],
+});
+// initializing mongoose models 
+const user = mongoose.model('user', user_schema)
+const group = mongoose.model('group', group_schema)
+// example posting a user
+
+
+const user_practice = new user({username: 'sjclarke', 
+    password: '123',
+    fName:   "sarah-jane",
+    lName: "clarke",
+    currentGroup: "mexico 2021",
+    allGroups: ["mexico 2021", "paris 2019"],
+    friends: ["clarkeAndrew", "clarkeAmy"]
+
+  })
+// example posting a group 
+  const group_practice = new group({
+    name:  "Mexico", 
+    date: "2021",
+    members: ["sjclarke", "clarkeAndrew"], 
+    transactions:  [ 
+      {
+          charger: "sjclarke", 
+          chargee: "clarkeAndrew", 
+          amount: "500", 
+          date: "12/20/2021"
+        }
+    ],
+  }
+  )
+  const group_practice_2 = new group({
+    name:  "Paris", 
+    date: "2019",
+    members: ["sjclarke", "clarkeAmy"], 
+    transactions:  [ 
+      {
+          charger: "clarkeAmy", 
+          chargee: "sjclarke", 
+          amount: "90", 
+          date: "09/20/2019"
+        }
+    ],
+  }
+  )
+
+  // user_practice.save().then(() => console.log("POSTED USER")); 
+
+  // group_practice_2.save().then(() => console.log("POSTED GROUP")); 
+
+// get all users from DB
+//   async function getAllUsers(){
+//     const all = await user.find({});
+//     console.log(all)
+//   }
+//   // query group for specific user  
+  
+// getAllUsers(); 
+
+// async function getGroupBydate(){
+//   const all = await group.find({date: "2019"});
+//   console.log(all)
+// }
+// getGroupBydate(); 
+
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
 //CORS stuff 
@@ -27,7 +122,7 @@ app.use((req, res, next) => {
 app.get("/Friends", (req, res,next) => {
     // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
     axios
-    .get("https://my.api.mockaroo.com/friends.json?key=56f355b0")
+    .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
   })
@@ -45,7 +140,27 @@ app.post("/Friends", (req, res) => {
   res.status(200).json(data)
 })
 
-//GET all Groups
+// send back a JSOn with the group and the friend you are adding to it. 
+app.post("/AddToGroup", (req, res) => {
+  const data = {
+    status: "Posted", 
+    friend: req.body.friend, 
+    groupName: req.body.groupName, 
+  }
+  // send info to database once we make database connection 
+  res.status(200).json(data)
+})
+
+// GET all Groups
+app.get("/AllGroups", (req, res,next) => {
+  // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
+  axios
+  .get("https://my.api.mockaroo.com/groups.json?key=56f355b0")
+  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  .catch(err => next(err)) // pass any errors to express
+})
+
+//GET a Group
 app.get("/CreateGroup", (req, res,next) => {
   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
   axios
@@ -63,15 +178,26 @@ app.post("/CreateGroup", (req, res)=>{
   console.log("Create Group got called")
   console.log(req.body.groupName)
 })
-// GET all transactions
+
+// GET all transactions for any group
 app.get("/Transactions", (req, res, next) => {
     // aquire Friends from database (for now we are calling mockaroo)
     axios
-    .get("https://my.api.mockaroo.com/transactions.json?key=56f355b0")
+    .get("https://my.api.mockaroo.com/transactions.json?key=bd7c3ef0")
     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
     .catch(err => next(err)) // pass any errors to express
     
   })
+
+  // GET all members of any group 
+app.get("/Members", (req, res, next) => {
+  // aquire Friends from database (for now we are calling mockaroo)
+  axios
+  .get("https://my.api.mockaroo.com/members.json?key=bd7c3ef0")
+  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  .catch(err => next(err)) // pass any errors to express
+  
+})
 
 // POST new transaction (when user clicks expense)
 // Add this transaction to the groups list of transactions
@@ -99,7 +225,6 @@ app.get("/CurrentGroupMembers", (req, res, next) => {
      .catch(err => next(err)) // pass any errors to express
 
    })
-
 
 app.get("/CurrentGroupMembers", (req, res, next) => {
     // aquire Friends from database (for now we are calling mockaroo)
@@ -137,14 +262,6 @@ res.status(200).json(data)
 })
 
 
-  // still need: 
-
-
-  // POST group (set as current user current group in database)
-
-
-
-  // GET all groups 
 
 // we will put some server logic here later...
 // export the express app we created to make it available to other modules

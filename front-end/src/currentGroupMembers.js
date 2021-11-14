@@ -36,7 +36,7 @@ function CurrentGroupMembers({ tripName }) {
     <div className="Home">
       <title className="CurrentTripTitle">
         {" "}
-        {`${tripName} Current Group Members `}
+        {`Mexico 2021 Current Group Members `}
       </title>
       <ReactBootStrap.Table striped bordered hover>
         <thead>
