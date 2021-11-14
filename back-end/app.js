@@ -101,13 +101,13 @@ const user_practice = new user({username: 'GalBenShushan',
   group_practice_2.save().then(() => console.log("POSTED GROUP")); 
 
 // get all users from DB
-  async function getAllUsers(){
-    const data = await user.find({});
-      console.log(data)
-  }
-  // query group for specific user  
+//   async function getAllUsers(){
+//     const all = await user.find({});
+//     console.log(all)
+//   }
+//   // query group for specific user  
   
-getAllUsers(); 
+// getAllUsers(); 
 
 // async function getGroupBydate(){
 //   const all = await group.find({date: "2019"});
@@ -240,7 +240,7 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
 app.get("/AllGroups", (req, res,next) => {
   // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
   axios
-  .get("https://my.api.mockaroo.com/groups.json?key=bd7c3ef0")
+  .get("https://my.api.mockaroo.com/groups.json?key=56f355b0")
   .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
   .catch(err => next(err)) // pass any errors to express
 })
