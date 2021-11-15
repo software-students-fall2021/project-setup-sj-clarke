@@ -37,16 +37,7 @@ const group_schema = new Schema({
 // initializing mongoose models 
 const user = mongoose.model('user', user_schema)
 const group = mongoose.model('group', group_schema)
-// example posting a user
-// const user_practice = new user({username: 'GalBenShushan', 
-//     password: '1234',
-//     fName:   "Gal",
-//     lName: "Ben-Shushan",
-//     currentGroup: "Paris",
-//     allGroups: ["Paris"],
-//     friends: ["sjclarke", "DanielleZhao", "ElizabethJiranek", "EmilyHerschmann"] 
 
-//   })
 // // example posting a group 
 //   const group_practice = new group({
 //     name:  "Cannes", 
@@ -340,8 +331,5 @@ const data = {
 res.status(200).json(data)
 })
 
-
-
-// we will put some server logic here later...
 // export the express app we created to make it available to other modules
 module.exports = app
