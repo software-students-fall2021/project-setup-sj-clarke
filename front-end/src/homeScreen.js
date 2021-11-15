@@ -19,26 +19,27 @@ function Home(){
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {
-    
-
+  
         // GET curent user's current group
         const response_current_group = await axios(
-          "/Friends/sjclarke"
+          "/CurrentGroup/sjclarke"
           ); 
+  
 
         // Extract current group from the response from backend 
-        const currentGroupQuery = response_current_group.data[0].currentGroup; 
-        setCurrentGroup(currentGroupQuery)
+        setCurrentGroup(response_current_group.data)
+  
+
         // Query all transactions for the current group  
-        let query = `/Transactions/${currentGroupQuery}`
+        let query = `/Transactions/${response_current_group.data}`
         const response = await axios(
           query
         ); 
 
+
         // Extract the data from the server response
-        const data_transactions = response.data[0].transactions
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(data_transactions); 
+        setTransactions(response.data); 
         }
       // fetch the data
       fetchData();
@@ -65,7 +66,7 @@ function Home(){
     // general layout of home screen 
       return (
         <div className= "Home">
-        <title className ="CurrentTripTitle">{currentGroup}
+        <title className ="CurrentTripTitle">Current Group: {currentGroup}
         <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
         </title>  
         <ReactBootStrap.Table striped bordered hover>

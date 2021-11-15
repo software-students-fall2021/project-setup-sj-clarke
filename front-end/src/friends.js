@@ -16,11 +16,10 @@ function Friends() {
     async function fetchData() {
       // fetch object for current user. 
       const response = await axios("/Friends/sjclarke");
-      // extract the friends list from the server respons
-      const data_friends = (response.data[0].friends)
-
+      // extract the friends list from the server response
       // set friends 
-      setFriends(data_friends);
+
+      setFriends(response.data);
       
     }
     // fetch the data
@@ -32,8 +31,10 @@ function Friends() {
   // modal use states
   const [addGroupmodalIsOpen, setaddGroupModal] = useState(false);
   const [modalIsOpen, setModalisOpen] = useState(false);
-  const [user, setUser] = useState(" ");
+  const [selectedFriend, setSelectedFriend] = useState(" ");
   const index = 0; 
+
+  const [removeFriendModal, setRemoveFriendModal] = useState(false)
 
   // creating a row for each instance within JSON file holding all of the friends
   const renderRow = (friend, index) => {
@@ -47,15 +48,29 @@ function Friends() {
             className="btn btn-secondary btn-sm"
             onClick={() => {
               setaddGroupModal(true);
-              setUser(friend);
+              setSelectedFriend(friend);
             }}
           >
             Add to Group
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={() => {
+              setRemoveFriendModal(true)
+              setSelectedFriend(friend);
+            }}
+          >
+            Remove Friend
           </button>
         </td>
       </tr>
     );
   };
+
+  const handleRemoveFriend = (friendName) => {
+    axios.delete(`Friends/sjclarke/${friendName}`)
+  }
 
   // hook JSON to hold the data of a new group addition
   const [newGroupAdditionValues, setNewGroupAdditionValues] = useState({
@@ -151,7 +166,7 @@ function Friends() {
       </ReactBootStrap.Table>
       <Modal isOpen={addGroupmodalIsOpen}>
         <h1 className="Modal-title">Add to Group</h1>
-        <p>Friend name: {user}</p>
+        <p>Friend name: {selectedFriend}</p>
         <form onSubmit={(e) => handleGroupSubmit(e)} className="addGroupMember">
           <div>
             <label>Friend name: </label>
@@ -183,6 +198,24 @@ function Friends() {
           </button>
         </form>
       </Modal>
+      <Modal isOpen={removeFriendModal} dialogClassName="modal-design">
+          <h1 className="modal-title">Are you sure you want to remove {selectedFriend} as a friend?</h1>
+              <button
+                onClick={() => {setRemoveFriendModal(false); handleRemoveFriend(selectedFriend)}}
+                type="button"
+                className="btn btn-secondary btn-sm"
+              >
+                yes
+              </button>
+              <button
+                onClick={() => setRemoveFriendModal(false)}
+                type="button"
+                className="btn btn-secondary btn-sm"
+              >
+                no
+              </button>
+           
+        </Modal>
     </div>
   );
 }
