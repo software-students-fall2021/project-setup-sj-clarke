@@ -1,7 +1,7 @@
 import './header.css';
 import './homeScreen.css'
 import {Link} from 'react-router-dom'
-
+import Modal from "react-modal";
 import React, { useEffect, useState } from "react";
 import * as ReactBootStrap from "react-bootstrap"; 
 import axios from 'axios';
@@ -10,12 +10,17 @@ import axios from 'axios';
 function Home(){
     // Hold all transactions for current group to display on home screen 
     const [transactions, setTransactions] = useState([]);  
+    const [date, setDate] = useState(); 
+    const [charger, setCharger] = useState(); 
+    const [chargee, setChargee] = useState(); 
+    const [amount, setAmount] = useState(); 
+    const [description, setDescription] = useState(); 
 
     // we will need to get the current user from the login and set it here
     // for now I am using 1 current user. 
     const [currentUser, setCurrentUser] = useState(); 
     const [currentGroup, setCurrentGroup] = useState(); 
-    
+    const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {
@@ -24,11 +29,8 @@ function Home(){
         const response_current_group = await axios(
           "/CurrentGroup/sjclarke"
           ); 
-  
-
         // Extract current group from the response from backend 
         setCurrentGroup(response_current_group.data)
-  
 
         // Query all transactions for the current group  
         let query = `/Transactions/${response_current_group.data}`
@@ -59,6 +61,19 @@ function Home(){
       <td>{transaction.charger}</td>
       <td>{transaction.chargee}</td>
       <td className = "expenseColumn">${transaction.amount}</td>
+      <td><button
+          type="button"
+          className="btn-xs"
+          onClick={() => {setTransactionInfoModal(true); 
+            setDate(transaction.date.split("T")[0]); 
+            setCharger(transaction.charger)
+            setChargee(transaction.chargee)
+            setAmount(transaction.amount)
+            setDescription(transaction.description)
+                }}>
+        info
+      </button>
+      </td>
     </tr>
     )
     }
@@ -80,6 +95,21 @@ function Home(){
           <tbody className = "table">
             {transactions.map(renderRow)}
           </tbody>
+      <Modal isOpen={transactionInfoModal} dialogClassName="modal-design">
+          <h1 className="modal-title">Transaction Information</h1>
+          <p className = "transaction-info">Date: {date}</p>
+          <p className = "transaction-info">Charger: {charger}</p>
+          <p className = "transaction-info">Charge: {chargee}</p>
+          <p className = "transaction-info" >Amount: ${amount}</p>
+          <p className = "transaction-info" >Description: {description}</p>
+              <button
+                onClick={() => setTransactionInfoModal(false)}
+                type="button"
+                className="btn btn-secondary btn-sm"
+              >
+                close
+              </button>
+        </Modal>
         </ReactBootStrap.Table>
       </div>
       )

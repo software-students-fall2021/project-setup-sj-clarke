@@ -12,19 +12,14 @@ function Friends() {
 
   useEffect(() => {
     // a nested function that fetches the data
-
     async function fetchData() {
-      // fetch object for current user. 
-      const response = await axios("/Friends/sjclarke");
       // extract the friends list from the server response
+      const response = await axios("/Friends/sjclarke");
       // set friends 
-
       setFriends(response.data);
-      
     }
     // fetch the data
     fetchData();
-
     // the blank array below causes this callback to be executed only once on component load
   }, []);
 
@@ -35,7 +30,7 @@ function Friends() {
   const index = 0; 
 
   const [removeFriendModal, setRemoveFriendModal] = useState(false)
-
+  const [addedFriend, setAddedFriend] = useState(); 
   // creating a row for each instance within JSON file holding all of the friends
   const renderRow = (friend, index) => {
     // 1 row instance within a table
@@ -74,15 +69,17 @@ function Friends() {
 
   // hook JSON to hold the data of a new group addition
   const [newGroupAdditionValues, setNewGroupAdditionValues] = useState({
-    friend: "",
-    groupName: "",
+    friend: selectedFriend, 
+    groupName: ""
   });
 
   // Handling changes to adding friend to group form
   const handleAddToGroupChange = (event) => {
     const newdata = { ...newGroupAdditionValues };
     newdata[event.target.id] = event.target.value;
+    newdata.friend = selectedFriend
     setNewGroupAdditionValues(newdata);
+
   };
 
   // Handling submission of adding friend to a group
@@ -166,19 +163,17 @@ function Friends() {
       </ReactBootStrap.Table>
       <Modal isOpen={addGroupmodalIsOpen}>
         <h1 className="Modal-title">Add to Group</h1>
-        <p>Friend name: {selectedFriend}</p>
         <form onSubmit={(e) => handleGroupSubmit(e)} className="addGroupMember">
           <div>
-            <label>Friend name: </label>
-            <input
+            <label className = "input-label">Friend name: </label>
+            <input 
               id="friend"
               type="text"
-              name="friend"
-              placeholder="Friend name"
-              value={newGroupAdditionValues.friend}
+              defaultValue = {selectedFriend}
+              // value={newGroupAdditionValues.friend}
               onChange={(e) => handleAddToGroupChange(e)}
             />
-            <label>Group name: </label>
+            <label className = "input-label">Group name: </label>
             <input
               id="groupName"
               type="text"

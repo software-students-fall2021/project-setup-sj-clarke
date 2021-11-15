@@ -29,7 +29,8 @@ const group_schema = new Schema({
         charger: String, 
         chargee: String, 
         amount: String, 
-        date: Date
+        date: Date, 
+        description: String
       }
   ],
 });
@@ -37,29 +38,34 @@ const group_schema = new Schema({
 const user = mongoose.model('user', user_schema)
 const group = mongoose.model('group', group_schema)
 // example posting a user
+// const user_practice = new user({username: 'GalBenShushan', 
+//     password: '1234',
+//     fName:   "Gal",
+//     lName: "Ben-Shushan",
+//     currentGroup: "Paris",
+//     allGroups: ["Paris"],
+//     friends: ["sjclarke", "DanielleZhao", "ElizabethJiranek", "EmilyHerschmann"] 
 
-
-const user_practice = new user({username: 'GalBenShushan', 
-    password: '1234',
-    fName:   "Gal",
-    lName: "Ben-Shushan",
-    currentGroup: "Paris",
-    allGroups: ["Paris"],
-    friends: ["sjclarke", "DanielleZhao", "ElizabethJiranek", "EmilyHerschmann"] 
-
-  })
-// example posting a group 
-  const group_practice = new group({
-    name:  "LA", 
-    date: "2020",
-    members: ["sjclarke", "clarkeAndrew"], 
-    transactions:  [ 
-    ],
-  }
-  )
+//   })
+// // example posting a group 
+//   const group_practice = new group({
+//     name:  "Cannes", 
+//     date: "2018",
+//     members: ["sjclarke", "clarkeAndrew"], 
+//     transactions:  [ 
+//       {
+//         charger: "clarkeAndrew", 
+//         chargee: "sjclarke", 
+//         amount: "90", 
+//         date: "12/04/2018", 
+//         description: "Coffee and breakfast"
+//       }
+//     ]
+//   }
+//   )
   // user_practice.save().then(() => console.log("POSTED USER")); 
 
-  // group_practice.save().then(() => console.log("POSTED GROUP")); 
+ // group_practice.save().then(() => console.log("POSTED GROUP")); 
 
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -169,7 +175,6 @@ app.get("/CurrentGroup/:usernameInput", async (req, res) => {
 })
 
 app.post("/AddToGroup/:usernameInput", async (req, res) => {
-  let username_query = req.params.usernameInput;  
   try{
     // if: the friend or groupName passed through is not in the users friend list --> error 
    //  const response = await user.find({username: username_query})
