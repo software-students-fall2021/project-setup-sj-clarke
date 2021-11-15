@@ -51,7 +51,6 @@ function Home(){
 
     const index = 1; 
 
-
     // creating a row for each instance within JSON file holding all of the transactions
     const renderRow = (transaction, index) => {
     // 1 row instance within a table 
