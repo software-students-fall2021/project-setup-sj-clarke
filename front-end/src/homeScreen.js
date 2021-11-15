@@ -36,7 +36,6 @@ function Home(){
           query
         ); 
 
-
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
         setTransactions(response.data); 
