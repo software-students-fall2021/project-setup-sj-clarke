@@ -14,6 +14,7 @@ import Login from "./Login.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CreateGroup from "./createGroup.js";
 import PrimaryNav from "./primaryNav.js";
+import CreateAccount from "./createAccount.js";
 
 const App = (props) => {
   const [user, setUser] = useState({});
@@ -43,6 +44,9 @@ const App = (props) => {
           </Route>
           <Route path="/MoreInfo">
             <MoreInfo />
+          </Route>
+          <Route path="/createAccount">
+            <CreateAccount />
           </Route>
           <Route path="/">
             <Login user={user} setuser={setUser} />
