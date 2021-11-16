@@ -12,3 +12,7 @@ p {
 label {
   padding-bottom: 20px;
 }
+
+input[type=submit] {
+  background-color: rgb(73, 176, 145);
+}
