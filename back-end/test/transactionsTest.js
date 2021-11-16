@@ -60,5 +60,3 @@ describe('GET /Transactions', () => {
           .catch((err) => done(err));
       });
     })
-
-

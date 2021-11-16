@@ -53,5 +53,3 @@ describe('GET /Friends', () => {
           .catch((err) => done(err));
       });
     })
-
-
