@@ -2,8 +2,14 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+const morgan = require('morgan')
+const bodyParser = require('body-parser')
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use('/users', require('./routes/users'))
+
 //CORS stuff 
 app.use((req, res, next) => {
   const allowedOrigins = [
