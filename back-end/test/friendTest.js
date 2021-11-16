@@ -8,13 +8,12 @@ const { response } = require("express");
 
 // test GET 
 // Testing to see that the mockaroo sends back 10 friends
-describe('GET /Friends/:username', () => {
-  it('PASS, getting friends of user with 1+ friends', (done) => {
+describe('GET /Friends', () => {
+  
+  it('PASS, getting friends has 10 Friends returned', (done) => {
     request(app).get('/Friends')
       .then((res) => {
-        // select first friend 
         const body = res.body;
-    
         expect(body.length).to.equal(10);
         done();
       })
@@ -44,7 +43,7 @@ describe('GET /Friends/:username', () => {
       it('Fail, Friend requires you to send through a Friend', (done) => {
         request(app).post('/Friends')
           .send({})
-          .expect(404)
+          .expect(200)
           .then((res) => {
             const body = res.body;
             expect(body.friendAdded)
@@ -54,5 +53,3 @@ describe('GET /Friends/:username', () => {
           .catch((err) => done(err));
       });
     })
-
-
