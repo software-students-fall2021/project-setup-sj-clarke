@@ -12,70 +12,42 @@ function Home(){
     const [transactions, setTransactions] = useState([]);  
     const [date, setDate] = useState(); 
     const [charger, setCharger] = useState(); 
-    const [chargee, setChargee] = useState(); 
+    const [chargee, setChargee] = useState([]); 
     const [amount, setAmount] = useState(); 
     const [description, setDescription] = useState(); 
-
     // we will need to get the current user from the login and set it here
     // for now I am using 1 current user. 
     const [currentUser, setCurrentUser] = useState(); 
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
+    const [totalExpense, setTotalExpense] = useState(); 
+
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {
-  
         // GET curent user's current group
         const response_current_group = await axios(
           "/CurrentGroup/sjclarke"
           ); 
         // Extract current group from the response from backend 
         setCurrentGroup(response_current_group.data)
-
         // Query all transactions for the current group  
         let query = `/Transactions/${response_current_group.data}`
         const response = await axios(
           query
         ); 
-
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
         setTransactions(response.data); 
         }
       // fetch the data
       fetchData();
-      
-      
       // the blank array below causes this callback to be executed only once on component load
     }, []);
 
-    const index = 1; 
 
-    // creating a row for each instance within JSON file holding all of the transactions
-    const renderRow = (transaction, index) => {
-    // 1 row instance within a table 
-    return (
-    <tr key = {index}>
-      <td>{transaction.date.split("T")[0]}</td>
-      <td>{transaction.charger}</td>
-      <td>{transaction.chargee}</td>
-      <td className = "expenseColumn">${transaction.amount}</td>
-      <td><button
-          type="button"
-          className="btn-xs"
-          onClick={() => {setTransactionInfoModal(true); 
-            setDate(transaction.date.split("T")[0]); 
-            setCharger(transaction.charger)
-            setChargee(transaction.chargee)
-            setAmount(transaction.amount)
-            setDescription(transaction.description)
-                }}>
-        info
-      </button>
-      </td>
-    </tr>
-    )
-    }
+    const index = 1; 
+  
     // general layout of home screen 
       return (
         <div className= "Home">
@@ -92,15 +64,36 @@ function Home(){
               </tr>
           </thead>
           <tbody className = "table">
-            {transactions.map(renderRow)}
+            {transactions.map(outerElement => 
+                    <tr key = {outerElement.id}>
+                    <td>{outerElement.date.split("T")[0]}</td>
+                    <td>{outerElement.charger}</td>
+                    <td>{outerElement.chargee}</td>
+                    <td className = "expenseColumn">${outerElement.amount}</td>
+                    <td><button
+                       className="btn-xx"
+                        onClick={() => {setTransactionInfoModal(true); 
+                          setDate(outerElement.date.split("T")[0]); 
+                          setCharger(outerElement.charger);
+                          setChargee(outerElement.chargee);
+                          setAmount(outerElement.amount);
+                          setDescription(outerElement.description);
+                          setTotalExpense(outerElement.amount)}}    >
+                      info
+                    </button>
+                    </td>
+                  </tr>
+                  )
+      
+                        }
           </tbody>
       <Modal isOpen={transactionInfoModal} dialogClassName="modal-design">
           <h1 className="modal-title">Transaction Information</h1>
           <p className = "transaction-info">Date: {date}</p>
           <p className = "transaction-info">Charger: {charger}</p>
-          <p className = "transaction-info">Charge: {chargee}</p>
-          <p className = "transaction-info" >Amount: ${amount}</p>
+          <p className = "transaction-info">Chargee: {chargee}</p>
           <p className = "transaction-info" >Description: {description}</p>
+          <p className = "transaction-info" >Total Expense: ${totalExpense}</p>
               <button
                 onClick={() => setTransactionInfoModal(false)}
                 type="button"
