@@ -27,7 +27,7 @@ const group_schema = new Schema({
   transactions:  [ 
     {
         charger: String, 
-        chargee: String, 
+        chargee: [String], 
         amount: String, 
         date: Date, 
         description: String
@@ -221,7 +221,7 @@ app.get("/Transactions/:groupInput", async (req, res) => {
 // POST new transaction (when user clicks add expense)
 // Add this transaction to the groups list of transactions
 app.post("/Transactions/:groupInput", async (req, res) => {
-let group_query = req.params.groupInput; 
+let group_query = req.params.groupInput;
 await group.findOneAndUpdate({name: group_query}, {
   $push: {
     transactions: [{
@@ -229,6 +229,7 @@ await group.findOneAndUpdate({name: group_query}, {
       chargee: req.body.chargee,
       amount: req.body.amount,
       date: req.body.date, 
+      description: req.body.description
     }]
   }
 })
@@ -237,10 +238,11 @@ const data = {
   date: req.body.date, 
   charger: req.body.charger,
   chargee: req.body.chargee,
+  description: req.body.description, 
   amount: req.body.amount
 }
 // send information to database here 
-res.status(200).json(data)
+res.json(data)
 })
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
