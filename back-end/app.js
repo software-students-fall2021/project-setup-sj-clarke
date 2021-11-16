@@ -244,6 +244,7 @@ const data = {
 // send information to database here 
 res.json(data)
 })
+
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
 let group_query = req.params.groupInput; 
