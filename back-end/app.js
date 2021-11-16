@@ -2,6 +2,10 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+<<<<<<< HEAD
+const morgan = require('morgan')
+const bodyParser = require('body-parser')
+=======
 // connection to mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
@@ -58,8 +62,13 @@ const group = mongoose.model('group', group_schema)
 
  // group_practice.save().then(() => console.log("POSTED GROUP")); 
 
+>>>>>>> 51aa93b3ce499a11c99ed3e102f0ba02b32889e7
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use('/users', require('./routes/users'))
+
 //CORS stuff 
 app.use((req, res, next) => {
   const allowedOrigins = [

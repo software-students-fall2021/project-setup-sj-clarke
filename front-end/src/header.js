@@ -58,7 +58,7 @@ function Title(props) {
           </ReactBootStrap.Nav>
           <ReactBootStrap.Nav></ReactBootStrap.Nav>
         </ReactBootStrap.Navbar.Collapse>
-        <ReactBootStrap.Navbar.Brand href="/">
+        <ReactBootStrap.Navbar.Brand href="/Home">
           TripSplit
         </ReactBootStrap.Navbar.Brand>
       </ReactBootStrap.Navbar>

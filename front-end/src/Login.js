@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import './Login.css';
 import axios from 'axios';
+import createAccount from './createAccount'
 
 function Login(props){
 
@@ -18,6 +19,8 @@ function Login(props){
     const handleSubmit = async e => {
         e.preventDefault()
 
+        
+
         try{
             const requestData = {
                 username: e.target.username.value,
@@ -26,7 +29,6 @@ function Login(props){
             const response = await axios.post(
                 "https://my.api.mockaroo.com/Users.json?key=aa763330",
                 requestData
-
             )
             
         console.log(response.data)
@@ -49,9 +51,11 @@ function Login(props){
                     <input type="password" name="password" placeholder="Enter Password"></input>
                     <input type="submit" value="Log In"/>
                 </form>
+
+                <Link to="/createAccount" >Sign Up</Link>
             </div>
         )
 
-    else return <Redirect to="/"/>
+    else return <Redirect to="/Home"/>
 }
 export default Login;
