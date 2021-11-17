@@ -287,14 +287,21 @@ app.post("/CreateGroup", (req, res)=>{
 })
 
 // GET current group members
-app.get("/CurrentGroupMembers", (req, res, next) => {
-     // aquire Friends from database (for now we are calling mockaroo)
-     axios
-     .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
-     // @TODO change the .chargee below when working on database 
-     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-     .catch(err => next(err)) // pass any errors to express
+app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
+  let user_query = req.params.user; 
+  console.log(user_query);
+  try{
+    // find user in database 
+    const response = await user.find({username: user_query});
+    // send the data in the response
+    const response2 = await group.find({name: response[0].currentGroup});
+    res.json(response2[0].members);
 
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
    })
 
 app.get("/CurrentGroupMembers", (req, res, next) => {

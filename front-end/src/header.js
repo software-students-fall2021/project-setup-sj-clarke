@@ -36,13 +36,13 @@ function Title(props) {
               id="collasible-nav-dropdown"
             >
               <ReactBootStrap.NavDropdown.Item
-                href="#action/AddExpense"
+                href="/AddExpense"
                 onClick={() => setAddExpense(true)}
               >
                 Add Expense
               </ReactBootStrap.NavDropdown.Item>
               <ReactBootStrap.NavDropdown.Item
-                href="#action/SettleUp"
+                href="/SettleUp"
                 onClick={() => setSettleUp(true)}
               >
                 {" "}
