@@ -18,3 +18,28 @@
   letter-spacing: 1px;
   text-transform: lowercase;
 }
+
+
+.table {
+  font-size: 10px; 
+}
+
+.headers{
+  font-size: 15px; 
+}
+
+.btn-xs {
+  flood-color: rgb(73, 176, 145);
+}
+
+.modal-title {
+  font-size: 20px 
+}
+
+.transaction-info {
+  font-size: 15px; 
+  text-align: left; 
+}
+
+
+

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "date": "July 2021",
+    "groupName": "Mexico"
+  },
+  {
+    "id": "2",
+    "date": "August 2020",
+    "groupName": "Arizona"
+  },
+  {
+    "id": "3",
+    "date": "April 2020",
+    "groupName": "Boston"
+  },
+  {
+    "id": "4",
+    "date": "June 2019",
+    "groupName": "Paris"
+  },
+  {
+    "id": "5",
+    "date": "July 2018",
+    "groupName": "Las Vegas"
+  },
+  {
+    "id": "6",
+    "date": "April 2017",
+    "groupName": "Miami"
+  }
+]

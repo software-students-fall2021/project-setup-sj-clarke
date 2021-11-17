@@ -1,0 +1,19 @@
+
+.Header {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: stretch;
+    padding: 1em;
+    margin-bottom: 2em;
+    background-color: rgb(73, 176, 145);
+    color: #fff;
+    position: sticky; 
+    top: 0; 
+  
+  }
+
+
+  
+  
+  

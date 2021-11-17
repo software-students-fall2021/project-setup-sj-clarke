@@ -1,46 +1,161 @@
-import React, {useState} from 'react'
-import './allGroups.css'
+import React, { useState, useEffect } from "react";
+import "./allGroups.css";
 import * as ReactBootStrap from "react-bootstrap";
-import Title from './header.js'
+import { Container, Row, Col } from "react-bootstrap";
+import Modal from "react-modal";
+import data from "./mockGroups.json";
+import groupData from "./mockGroupData.json";
+import memData from "./mockMembers.json";
+import axios from 'axios';
 
-function AllGroups(){
-    
-    // Data in table that will be used and can be updated dynamically
-    const [groups, setGroups] = useState(data)
+function AllGroups() {
+  // variables needed for all groups page and modals 
+  const [groups, setGroups] = useState([]);
+  const [transactions, setTransactions] = useState([]);  
+  const [members, setMembers] = useState([]);
+ useEffect(() => {
+   // a nested function that fetches the data
 
-    // State variable to keep track of all the expanded rows
-    // By default, nothing expanded. Hence initialized with empty array.
-    const [expandedRows, setExpandedRows] = useState([]);
+   async function fetchData() {
+     // Extract Mockaroo data
+     // get all groups 
+     const response_groups = await axios(
+       "/AllGroups"
+       
+     ); 
+     // set groups with the data retrieved from mockaroo 
+     setGroups(response_groups.data); 
+      // get all transactions for a group
+      // currently mock data from mockaroo 
+     const response_groupData = await axios(
+      "/Transactions"
+    ); 
+    // set transactions
+    setTransactions(response_groupData.data); 
 
-    // State variable to keep track which row is currently expanded.
-    const [expandState, setExpandState] = useState({});
-    
-    /**
-     * This function gets called when show/hide link is clicked.
-    */
-    const handleExpandRow = (event, userId) => {
-      const currentExpandedRows = expandedRows;
-      const isRowExpanded = currentExpandedRows.includes(userId);
+     // get all of the members for a group from mockaroo 
+     const response_members = await axios(
+      "/Members"
+    ); 
+    // set members
+    setMembers(response_members.data); 
+
+
+     }
+   // fetch the data
+   fetchData();
+   
+   
+   // the blank array below causes this callback to be executed only once on component load
+ }, []);
   
-      let obj = {};
-      isRowExpanded ? (obj[userId] = false) :  (obj[userId] = true);
-      setExpandState(obj);
-  
-      // If the row is expanded, we are here to hide it. Hence remove
-      // it from the state variable. Otherwise add to it.
-      const newExpandedRows = isRowExpanded ?
-            currentExpandedRows.filter(id => id !== userId) :
-            currentExpandedRows.concat(userId);
-  
-      setExpandedRows(newExpandedRows);
-    }
-    return (
+  const [groupName, setGroupName] = useState(" ");
+  const [groupDate, setGroupDate] = useState(" ");
 
+  // variables to control various modals' open/close
+  const [infoOpen, setModalOpen] = useState(false);
+  const [seeMemModal, setMemModal] = useState(false);
+
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <h1> All Groups({groups.length})</h1>
+        </Col>
+      </Row>
+      <div className="AllGroups">
+        <ReactBootStrap.Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Group</th>
+            </tr>
+          </thead>
+          <tbody>
+            {groups.map((group) => (
+              <tr key={group.id}>
+                <td>{group.year}</td>
+                <td>{group.name}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      {setModalOpen(true); setGroupName(group.name); setGroupDate(group.year)}
+                    }}
+                  >
+                    more info
+                  </button>
+                  <Modal isOpen={infoOpen}>
+                    <h1 className="modal-title">{groupName}</h1>
+                    <h3>{groupDate}</h3>
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => {
+                        setMemModal(true);
+                      }}
+                    >
+                      See Members
+                    </button>
+                    <Modal isOpen={seeMemModal}>
+                      <h className="modal-title">Members({members.length})</h>
+                      <ReactBootStrap.Table striped bordered hover>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((member) => (
+                            <tr key={member.id}>
+                              <td>{member.username}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </ReactBootStrap.Table>
+                      <button
+                        onClick={() => setMemModal(false)}
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                      >
+                        exit
+                      </button>
+                    </Modal>
+                    <ReactBootStrap.Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Charger</th>
+                          <th>Chargee</th>
+                          <th>Expense Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transactions.map((transaction) => (
+                          <tr key={transaction.id}>
+                            <td>{transaction.date}</td>
+                            <td>{transaction.charger}</td>
+                            <td>{transaction.chargee}</td>
+                            <td>${transaction.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </ReactBootStrap.Table>
+                    <button
+                      onClick={() => setModalOpen(false)}
+                      type="button"
+                      className="btn btn-secondary btn-sm">
+                      exit
+                    </button>
+                  </Modal>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </ReactBootStrap.Table>
       </div>
-      </Container>
-
-    )
+    </Container>
+  );
 }
 export default AllGroups;

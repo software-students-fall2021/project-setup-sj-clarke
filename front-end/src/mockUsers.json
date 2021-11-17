@@ -1,0 +1,18 @@
+[
+    {
+      "id": "1",
+      "fName": "Elizabeth",
+      "lName": "Jiranek",
+      "username": "ejiranek",
+      "password": "Fall2021"
+    },
+    {
+      "id": "2",
+      "fName": "Jane",
+      "lName": "Doe",
+      "username": "jdoe",
+      "password": "NYU2021"
+
+    }
+
+  ]
