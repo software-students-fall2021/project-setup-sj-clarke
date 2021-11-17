@@ -2,10 +2,8 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
-<<<<<<< HEAD
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-=======
 // connection to mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
@@ -31,7 +29,7 @@ const group_schema = new Schema({
   transactions:  [ 
     {
         charger: String, 
-        chargee: [String], 
+        chargee: String, 
         amount: String, 
         date: Date, 
         description: String
@@ -62,7 +60,6 @@ const group = mongoose.model('group', group_schema)
 
  // group_practice.save().then(() => console.log("POSTED GROUP")); 
 
->>>>>>> 51aa93b3ce499a11c99ed3e102f0ba02b32889e7
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(morgan('dev'))
@@ -89,23 +86,18 @@ app.use((req, res, next) => {
 
 // GET all Friends of a specific user 
 app.get("/Friends/:usernameInput", async (req, res) => {
-    // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-    // axios
-    // .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
-    // .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    // .catch(err => next(err)) // pass any errors to express
-    // Getting all friends for a user from database 
     let username_query = req.params.usernameInput; 
     
     try{
       // find user in database 
       const response = await user.find({username: username_query});
       // send the data in the response
-      res.json(response[0].friends)
+      res.status(200).json(response[0].friends)
     }
     catch(err){
       // if unable to retrieve the information
-      res.json(err)
+      // error 
+    res.json(err)
     }
    
   })
@@ -113,7 +105,6 @@ app.get("/Friends/:usernameInput", async (req, res) => {
 // POST a new friend
 app.post("/Friends/:usernameInput", async (req, res) => {
   let username_query = req.params.usernameInput; 
-
   try{
     // find user and update friends list with this added user 
     await user.findOneAndUpdate({username: username_query}, {
@@ -129,10 +120,8 @@ app.post("/Friends/:usernameInput", async (req, res) => {
   }
   catch(err){
     // if unable to retrieve the information
-    res.json(err)
+    res.status(400).json(err)
   }
-  // send info to database once we make database connection 
-  //res.status(200).json(data)
 })
 
 app.delete("/Friends/:usernameInput/:friendInput", async (req, res) => {
