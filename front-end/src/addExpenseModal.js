@@ -17,11 +17,18 @@ function AddExpenseModal({ show, setModal }) {
           </ReactBootStrap.Modal.Title>
         </ReactBootStrap.Modal.Header>
         <ReactBootStrap.Modal.Body>
-          With you and
+          With you and (put a comma between multiple group members)
           <ReactBootStrap.Form.Control
             type="email"
             placeholder="Enter Group Member"
           />
+          How much was the transaction?
+          <ReactBootStrap.Form.Control
+            type="email"
+            placeholder="Enter Amount"
+          />
+          Add a description of the transaction
+          <ReactBootStrap.Form.Control type="email" placeholder="Description" />
         </ReactBootStrap.Modal.Body>
         <ReactBootStrap.Modal.Footer>
           <ReactBootStrap.Button variant="light" onClick={handleClose}>

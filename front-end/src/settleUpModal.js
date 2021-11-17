@@ -19,14 +19,10 @@ function SettleUp({ show, setModal }) {
           </ReactBootStrap.Modal.Title>
         </ReactBootStrap.Modal.Header>
         <ReactBootStrap.Modal.Body>
-          You Paid
+          Who would you like to settle up with?
           <ReactBootStrap.Form.Control
             type="email"
             placeholder="Enter Group Member"
-          />
-          <ReactBootStrap.Form.Control
-            type="email"
-            placeholder="Enter Amount"
           />
         </ReactBootStrap.Modal.Body>
         <ReactBootStrap.Modal.Footer>
