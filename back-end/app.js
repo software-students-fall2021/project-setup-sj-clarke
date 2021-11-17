@@ -263,7 +263,7 @@ let group_query = req.params.groupInput;
   }
 })
 
-// GET all Groups
+// GET all Groups for a sepcific user
 app.get("/AllGroups", (req, res,next) => {
   // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
   axios
