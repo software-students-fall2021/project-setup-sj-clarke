@@ -15,15 +15,10 @@
     "chai": "^4.3.4",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-<<<<<<< HEAD
     "express-promise-router": "^4.1.0",
-    "joi": "^14.3.1",
-    "mongodb": "^4.1.4",
-    "mongoose": "^6.0.13",
-    "morgan": "^1.10.0",
-=======
+    "joi": "^17.4.2",
     "mongoose": "^6.0.12",
->>>>>>> 51aa93b3ce499a11c99ed3e102f0ba02b32889e7
+    "morgan": "^1.10.0",
     "supertest": "^6.1.6"
   },
   "devDependencies": {
