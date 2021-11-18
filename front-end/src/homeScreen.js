@@ -38,7 +38,7 @@ function Home(){
         ); 
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(response.data); 
+        setTransactions(response.data.reverse()); 
         }
       // fetch the data
       fetchData();
@@ -68,7 +68,11 @@ function Home(){
                     <tr key = {outerElement.id}>
                     <td>{outerElement.date.split("T")[0]}</td>
                     <td>{outerElement.charger}</td>
-                    <td>{outerElement.chargee}</td>
+                    <td> {outerElement.chargee.map(oneChargee => 
+                        <tr key = {outerElement.id}>
+                            <td>{oneChargee}</td>
+                          </tr>
+                    )}</td>
                     <td className = "expenseColumn">${outerElement.amount}</td>
                     <td><button
                        className="btn-xx"
