@@ -29,7 +29,7 @@ const group_schema = new Schema({
   transactions:  [ 
     {
         charger: String, 
-        chargee: String, 
+        chargee: [String], 
         amount: String, 
         date: Date, 
         description: String
@@ -225,9 +225,9 @@ await group.findOneAndUpdate({name: group_query}, {
     transactions: [{
       charger: req.body.charger,
       chargee: req.body.chargee,
-      amount: req.body.amount,
+      amount: req.body.amount, 
       date: req.body.date, 
-      description: req.body.description
+      description: req.body.description 
     }]
   }
 })
