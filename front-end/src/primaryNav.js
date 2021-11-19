@@ -51,13 +51,13 @@ const PrimaryNav = (props) => {
               >
                 Add Expense
               </ReactBootStrap.NavDropdown.Item>
-              <ReactBootStrap.NavDropdown.Item
+              {/* <ReactBootStrap.NavDropdown.Item
                 href="#action/SettleUp"
                 onClick={() => setSettleUp(true)}
               >
                 {" "}
                 Settle up
-              </ReactBootStrap.NavDropdown.Item>
+              </ReactBootStrap.NavDropdown.Item> */}
               <ReactBootStrap.NavDropdown.Item href="/CurrentGroupMembers">
                 Group members
               </ReactBootStrap.NavDropdown.Item>
@@ -72,7 +72,7 @@ const PrimaryNav = (props) => {
         </ReactBootStrap.Navbar.Brand>
       </ReactBootStrap.Navbar>
       <ExpenseAction show={showAddExpense} setModal={setAddExpense} />
-      <SettleUp show={showSettleUp} setModal={setSettleUp} />
+      {/* <SettleUp show={showSettleUp} setModal={setSettleUp} /> */}
     </div>
   );
 };

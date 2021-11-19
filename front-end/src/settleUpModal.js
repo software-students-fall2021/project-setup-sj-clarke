@@ -2,7 +2,7 @@ import React from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import "./modal.css";
 
-function SettleUp({ show, setModal }) {
+function SettleUp({ show, setModal, amount, username }) {
   const handleClose = () => setModal(false);
 
   return (
@@ -15,22 +15,15 @@ function SettleUp({ show, setModal }) {
       >
         <ReactBootStrap.Modal.Header closeButton className="Modal">
           <ReactBootStrap.Modal.Title id="example-modal-sizes-title-lg">
-            Settle Up
+            Settle Up {amount} with {username}?
           </ReactBootStrap.Modal.Title>
         </ReactBootStrap.Modal.Header>
-        <ReactBootStrap.Modal.Body>
-          Who would you like to settle up with?
-          <ReactBootStrap.Form.Control
-            type="email"
-            placeholder="Enter Group Member"
-          />
-        </ReactBootStrap.Modal.Body>
         <ReactBootStrap.Modal.Footer>
           <ReactBootStrap.Button variant="light" onClick={handleClose}>
-            Cancel
+            No
           </ReactBootStrap.Button>
           <ReactBootStrap.Button onClick={handleClose}>
-            Save
+            Yes
           </ReactBootStrap.Button>
         </ReactBootStrap.Modal.Footer>
       </ReactBootStrap.Modal>
