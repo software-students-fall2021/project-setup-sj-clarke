@@ -3,19 +3,25 @@ import * as ReactBootStrap from "react-bootstrap";
 import data from "./mockGroupData.json";
 import axios from "axios";
 import { set } from "react-hook-form";
+import SettleUp from "./settleUpModal";
 
-function MoreInfo() {
+function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [groupData, setGroupData] = useState(data);
   const [transactions, setTransactions] = useState({});
   const [youOwe, setYouOwe] = useState({});
   const [oweYou, setOweYou] = useState({});
+  const [showModal, setModal] = useState(false);
+  const [amount, setModalAmount] = useState();
+
   useEffect(() => {
     // a nested function that fetches the data
 
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-      const response_current_group = await axios("/CurrentGroup/sjclarke");
+      const username = process.env.DB_username;
+      const response_current_group = await axios(`/CurrentGroup/${username}`);
+      console.log(response_current_group.data);
       let query = `/Transactions/${response_current_group.data}`;
       //console.log({ response_current_group, query });
       const response = await axios(query);
@@ -23,27 +29,25 @@ function MoreInfo() {
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
       setTransactions(response.data);
       console.log(transactions);
-      getYouOwe(transactions, "sjclarke ");
-      getOweYou(transactions, "sjclarke ");
-      console.log({ oweYou });
-      console.log({ youOwe });
+      getYouOwe(transactions, username);
+      getOweYou(transactions, username);
 
       // setTransactions(response);
     }
 
     // fetch the data
     fetchData();
-
+    // console.log({ oweYou });
+    // console.log({ youOwe });
     // the blank array below causes this callback to be executed only once on component load
   }, []);
 
   function getYouOwe(transactions, username) {
-    console.log(transactions[0]);
     for (var i = 0; i < transactions.length; i++) {
       // if the current user is charged by someone
-      if (transactions[i].chargee.indexOf(username) != -1) {
+      if (transactions[i].chargee.indexOf(username) !== -1) {
         var owe = youOwe;
-        console.log(owe);
+        //console.log(owe);
         if (owe.hasOwnProperty(transactions[i].charger)) {
           console.log("contains");
           var amount_to_add = Number(transactions[i].amount);
@@ -59,9 +63,7 @@ function MoreInfo() {
             amount_to_add / (transactions[i].chargee.length + 1);
           owe[transactions[i].charger] = split_amount_to_add;
         }
-        console.log(owe);
         setYouOwe(owe);
-        console.log(youOwe);
       }
     }
   }
@@ -85,36 +87,61 @@ function MoreInfo() {
     }
   }
 
-  const renderOweYou = (transaction, index) => {
-    return (
-      <div key={index}>
-        <ReactBootStrap.Alert variant="success">
-          {transaction.chargee} owes you {transaction.expenseAmount} dollars
-        </ReactBootStrap.Alert>
-      </div>
-    );
-  };
-  const renderYouOwe = (transaction, index) => {
-    // 1 row instance within a table
-
-    // if (transaction.chargee === "Gal") {
-    return (
-      <div key={index}>
-        <ReactBootStrap.Alert variant="danger">
-          You owe {transaction.expenseAmount} to {transaction.charger}
-        </ReactBootStrap.Alert>
-      </div>
-    );
-    //}
-  };
-
   return (
     <div>
       {console.log(youOwe)}
       <h1>You Owe</h1>
-      {/* {youOwe.map(renderYouOwe)} */}
+      <ReactBootStrap.Table striped bordered hover>
+        <thead className="headers">
+          <tr>
+            <th>Charger</th>
+            <th>Amount</th>
+            <th>Settle Up?</th>
+          </tr>
+        </thead>
+        <tbody className="table">
+          {Object.entries(youOwe).map(([key, value]) => {
+            <tr key={key}>
+              <td>{key}</td>
+              <td>{value.toString()}</td>
+              <td>
+                <button
+                  className="btn-xx"
+                  onClick={() => {
+                    setChargee(key);
+                    setAmount(value.toString());
+                    setSettleUpModal(TextTrackCueList);
+                  }}
+                >
+                  Settle Up
+                </button>
+              </td>
+            </tr>;
+          })}
+        </tbody>
+      </ReactBootStrap.Table>
       <h1>Owe You</h1>
-      {/* {oweYou.map(renderOweYou)} */}
+      <ReactBootStrap.Table striped bordered hover>
+        <thead className="headers">
+          <tr>
+            <th>Chargee</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody className="table">
+          {Object.entries(oweYou).map(([key, value]) => {
+            <tr key={key}>
+              <td>{key}</td>
+              <td>{value.toString()}</td>
+            </tr>;
+          })}
+        </tbody>
+      </ReactBootStrap.Table>
+      <SettleUp
+        show={showModal}
+        setModal={setSettleUpModal}
+        amount={setAmount}
+      />
     </div>
   );
 }

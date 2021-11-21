@@ -2,8 +2,9 @@ import React from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import "./modal.css";
 
-function SettleUp({ show, setModal, amount, username }) {
+function SettleUp({ show, setModal, amount }) {
   const handleClose = () => setModal(false);
+  const username = process.env.DB_username;
 
   return (
     <div>
