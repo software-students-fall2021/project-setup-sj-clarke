@@ -264,12 +264,20 @@ let group_query = req.params.groupInput;
 })
 
 // GET all Groups for a sepcific user
-app.get("/AllGroups", (req, res,next) => {
-  // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-  axios
-  .get("https://my.api.mockaroo.com/groups.json?key=56f355b0")
-  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-  .catch(err => next(err)) // pass any errors to express
+app.get("/AllGroups/:usernameInput", async (req, res) => {
+  let username_query = req.params.usernameInput; 
+  
+  try{
+    // find user in database 
+    const response = await user.find({username: username_query});
+    // send the data in the response
+    res.json(response[0].allGroups)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
+ 
 })
 
 //GET a Group
