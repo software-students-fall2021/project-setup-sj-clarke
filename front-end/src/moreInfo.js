@@ -19,77 +19,79 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-      const username = process.env.DB_username;
-      const response_current_group = await axios(`/CurrentGroup/${username}`);
-      console.log(response_current_group.data);
+      const username = process.env.USERNAME;
+      const response_current_group = await axios(`/CurrentGroup/sjclarke`);
+      console.log({ username });
       let query = `/Transactions/${response_current_group.data}`;
       //console.log({ response_current_group, query });
       const response = await axios(query);
       // Extract the data from the server response
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
       setTransactions(response.data);
-      console.log(transactions);
-      getYouOwe(transactions, username);
-      getOweYou(transactions, username);
-
+      const hold = response.data;
+      console.log({ hold });
+      getYouOwe(response, username); // response.data instead of transaction
+      getOweYou(response, username);
+      console.log(youOwe);
+      console.log(oweYou);
       // setTransactions(response);
+    }
+    async function getYouOwe(response, username) {
+      var transactions = await response.data;
+      for (var i = 0; i < transactions.length; i++) {
+        // if the current user is charged by someone
+        if (transactions[i].chargee.indexOf(username) !== -1) {
+          var owe = youOwe;
+          //console.log(owe);
+          if (owe.hasOwnProperty(transactions[i].charger)) {
+            console.log("contains");
+            var amount_to_add = Number(transactions[i].amount);
+            var split_amount_to_add =
+              amount_to_add / (transactions[i].chargee.length + 1);
+            var amount_before_add = owe[transactions[i].charger];
+            owe[transactions[i].charger] =
+              amount_before_add + split_amount_to_add;
+          } else {
+            console.log("doesnt contain.. adding rn");
+            var amount_to_add = Number(transactions[i].amount);
+            var split_amount_to_add =
+              amount_to_add / (transactions[i].chargee.length + 1);
+            owe[transactions[i].charger] = split_amount_to_add;
+          }
+          setYouOwe(owe);
+        }
+      }
+    }
+    async function getOweYou(response, username) {
+      var transactions = await response.data;
+      for (var i = 0; i < transactions.length; i++) {
+        var willoweyou = oweYou;
+        if (transactions.charger === username) {
+          var chargees = transactions[i].chargee;
+          var amount_before_split = transactions[i].amount;
+          var amount_after_split = amount_before_split / chargees.length + 1;
+          for (var j = 0; i < chargees.length; j++) {
+            if (willoweyou.hasOwnProperty(chargees[j])) {
+              willoweyou[chargees[j]] =
+                willoweyou[chargees[j]] + amount_after_split;
+            } else {
+              willoweyou[chargees[j]] = amount_after_split;
+            }
+          }
+        }
+        setOweYou(willoweyou);
+      }
     }
 
     // fetch the data
     fetchData();
-    // console.log({ oweYou });
+
     // console.log({ youOwe });
     // the blank array below causes this callback to be executed only once on component load
   }, []);
 
-  function getYouOwe(transactions, username) {
-    for (var i = 0; i < transactions.length; i++) {
-      // if the current user is charged by someone
-      if (transactions[i].chargee.indexOf(username) !== -1) {
-        var owe = youOwe;
-        //console.log(owe);
-        if (owe.hasOwnProperty(transactions[i].charger)) {
-          console.log("contains");
-          var amount_to_add = Number(transactions[i].amount);
-          var split_amount_to_add =
-            amount_to_add / (transactions[i].chargee.length + 1);
-          var amount_before_add = owe[transactions[i].charger];
-          owe[transactions[i].charger] =
-            amount_before_add + split_amount_to_add;
-        } else {
-          console.log("doesnt contain.. adding rn");
-          var amount_to_add = Number(transactions[i].amount);
-          var split_amount_to_add =
-            amount_to_add / (transactions[i].chargee.length + 1);
-          owe[transactions[i].charger] = split_amount_to_add;
-        }
-        setYouOwe(owe);
-      }
-    }
-  }
-  function getOweYou(transactions, username) {
-    for (var i = 0; i < transactions.length; i++) {
-      var willoweyou = oweYou;
-      if (transactions.charger == username) {
-        var chargees = transactions[i].chargee;
-        var amount_before_split = transactions[i].amount;
-        var amount_after_split = amount_before_split / chargees.length + 1;
-        for (var j = 0; i < chargees.length; j++) {
-          if (willoweyou.hasOwnProperty(chargees[j])) {
-            willoweyou[chargees[j]] =
-              willoweyou[chargees[j]] + amount_after_split;
-          } else {
-            willoweyou[chargees[j]] = amount_after_split;
-          }
-        }
-      }
-      setOweYou(willoweyou);
-    }
-  }
-
   return (
     <div>
-      {console.log(youOwe)}
       <h1>You Owe</h1>
       <ReactBootStrap.Table striped bordered hover>
         <thead className="headers">
