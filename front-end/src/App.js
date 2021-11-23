@@ -17,7 +17,7 @@ import PrimaryNav from "./primaryNav.js";
 import CreateAccount from "./createAccount.js";
 
 const App = (props) => {
-  const dotenv = require("dotenv").config();
+  require("dotenv").config();
   const [user, setUser] = useState({});
 
   return (

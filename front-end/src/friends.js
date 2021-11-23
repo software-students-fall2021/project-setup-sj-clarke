@@ -14,7 +14,7 @@ function Friends() {
     // a nested function that fetches the data
     async function fetchData() {
       // extract the friends list from the server response
-      const username = process.env.DB_username;
+      const username = process.env.REACT_APP_USERNAME;
       const response = await axios(`/Friends/${username}`);
       // set friends
       setFriends(response.data);
@@ -65,7 +65,7 @@ function Friends() {
   };
 
   const handleRemoveFriend = (friendName) => {
-    const username = process.env.DB_username;
+    const username = process.env.REACT_APP_USERNAME;
     axios.delete(`Friends/${username}/${friendName}`);
   };
 
@@ -89,7 +89,7 @@ function Friends() {
     event.preventDefault();
     setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
-    const username = process.env.DB_username;
+    const username = process.env.REACT_APP_USERNAME;
     axios.post(`AddToGroup/${username}`, newGroupAdditionValues);
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });
@@ -112,7 +112,7 @@ function Friends() {
     event.preventDefault();
     setModalisOpen(false);
     // post request to backend with new data
-    const username = process.env.DB_username;
+    const username = process.env.REACT_APP_USERNAME;
     axios.post(`Friends/${username}`, newFriendValues);
     // clear the input line
     setNewFriendValues({ friendAdded: "" });

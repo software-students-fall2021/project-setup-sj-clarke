@@ -28,7 +28,7 @@ function AddExpenseModal({ show, setModal }) {
     // a nested function that fetches the data
     async function fetchData() {
       // GET curent user's current group
-      const username = process.env.DB_username;
+      const username = process.env.REACT_APP_USERNAME;
       const response_current_group = await axios(`/CurrentGroup/${username}`);
       // Extract current group from the response from backend
       setCurrentGroup(response_current_group.data);
@@ -39,7 +39,7 @@ function AddExpenseModal({ show, setModal }) {
   }, []);
 
   const handleTransactionSubmit = () => {
-    const username = process.env.DB_username;
+    const username = process.env.REACT_APP_USERNAME;
     newExpense.charger = username;
     newExpense.chargee = newTransactionMembers;
     newExpense.amount = newTransactionAmount;

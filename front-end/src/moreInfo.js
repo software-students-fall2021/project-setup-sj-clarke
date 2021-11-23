@@ -12,86 +12,101 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [oweYou, setOweYou] = useState({});
   const [showModal, setModal] = useState(false);
   const [amount, setModalAmount] = useState();
-
+  const [arrOfYouOwe, setarrOfYouOwe] = useState([]);
+  const [arrOfOweYou, setarrOfOweYou] = useState([]);
+  const username = process.env.REACT_APP_USERNAME;
   useEffect(() => {
     // a nested function that fetches the data
 
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-      const username = process.env.USERNAME;
-      const response_current_group = await axios(`/CurrentGroup/sjclarke`);
-      console.log({ username });
+
+      const response_current_group = await axios(`/CurrentGroup/${username}`);
+      //console.log({ username });
       let query = `/Transactions/${response_current_group.data}`;
       //console.log({ response_current_group, query });
       const response = await axios(query);
       // Extract the data from the server response
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
-      setTransactions(response.data);
-      const hold = response.data;
-      console.log({ hold });
-      getYouOwe(response, username); // response.data instead of transaction
-      getOweYou(response, username);
-      console.log(youOwe);
-      console.log(oweYou);
-      // setTransactions(response);
-    }
-    async function getYouOwe(response, username) {
-      var transactions = await response.data;
-      for (var i = 0; i < transactions.length; i++) {
-        // if the current user is charged by someone
-        if (transactions[i].chargee.indexOf(username) !== -1) {
-          var owe = youOwe;
-          //console.log(owe);
-          if (owe.hasOwnProperty(transactions[i].charger)) {
-            console.log("contains");
-            var amount_to_add = Number(transactions[i].amount);
-            var split_amount_to_add =
-              amount_to_add / (transactions[i].chargee.length + 1);
-            var amount_before_add = owe[transactions[i].charger];
-            owe[transactions[i].charger] =
-              amount_before_add + split_amount_to_add;
+
+      for (var i = 0; i < response.data.length; i++) {
+        var transaction = response.data[i];
+        var charger = transaction.charger;
+        //console.log(transaction.chargee);
+
+        if (transaction.chargee.indexOf(username) != -1) {
+          var amount_to_add = Number(transaction.amount);
+          amount_to_add = amount_to_add / (transaction.chargee.length + 1);
+          if (youOwe.hasOwnProperty(charger)) {
+            youOwe[charger] += amount_to_add;
           } else {
-            console.log("doesnt contain.. adding rn");
-            var amount_to_add = Number(transactions[i].amount);
-            var split_amount_to_add =
-              amount_to_add / (transactions[i].chargee.length + 1);
-            owe[transactions[i].charger] = split_amount_to_add;
+            youOwe[charger] = amount_to_add;
           }
-          setYouOwe(owe);
+          setYouOwe(youOwe);
         }
       }
-    }
-    async function getOweYou(response, username) {
-      var transactions = await response.data;
-      for (var i = 0; i < transactions.length; i++) {
-        var willoweyou = oweYou;
-        if (transactions.charger === username) {
-          var chargees = transactions[i].chargee;
-          var amount_before_split = transactions[i].amount;
-          var amount_after_split = amount_before_split / chargees.length + 1;
-          for (var j = 0; i < chargees.length; j++) {
-            if (willoweyou.hasOwnProperty(chargees[j])) {
-              willoweyou[chargees[j]] =
-                willoweyou[chargees[j]] + amount_after_split;
+
+      var res = Object.keys(youOwe).map(function (name) {
+        var obj = {
+          name: "",
+          amount: "",
+        };
+        // console.log({ name });
+        // console.log(youOwe[name]);
+        obj.name = name;
+        obj.amount = youOwe[name];
+        return obj;
+      });
+      setarrOfYouOwe(res);
+      setYouOwe({});
+
+      for (var i = 0; i < response.data.length; i++) {
+        const transaction = response.data[i];
+        const charger = transaction.charger;
+        const chargees = transaction.chargee;
+        if (charger === username) {
+          for (var j = 0; j < chargees.length; j++) {
+            const chargee = chargees[j].trim();
+            var to_add = Number(transaction.amount);
+
+            to_add /= chargees.length + 1;
+            if (oweYou.hasOwnProperty(chargee)) {
+              oweYou[chargee] += to_add;
             } else {
-              willoweyou[chargees[j]] = amount_after_split;
+              oweYou[chargee] = to_add;
             }
+            setOweYou(oweYou);
           }
         }
-        setOweYou(willoweyou);
       }
+      // console.log({ oweYou });
+      var res2 = Object.keys(oweYou).map(function (name2) {
+        var obj = {
+          name: "",
+          amount: "",
+        };
+
+        obj.name = name2;
+        obj.amount = oweYou[name2];
+        const name = obj.name;
+        const amount = obj.amount;
+        return obj;
+      });
+      setarrOfOweYou(res2);
+      setOweYou({});
     }
 
     // fetch the data
     fetchData();
-
-    // console.log({ youOwe });
     // the blank array below causes this callback to be executed only once on component load
-  }, []);
+  }, [transactions]);
+
+  //console.log(youOwe);
 
   return (
     <div>
+      {/* {console.log({ arrOfOweYou })} */}
       <h1>You Owe</h1>
       <ReactBootStrap.Table striped bordered hover>
         <thead className="headers">
@@ -102,24 +117,23 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
           </tr>
         </thead>
         <tbody className="table">
-          {Object.entries(youOwe).map(([key, value]) => {
-            <tr key={key}>
-              <td>{key}</td>
-              <td>{value.toString()}</td>
+          {arrOfYouOwe.map((obj) => (
+            <tr key={obj.name}>
+              <td>{obj.name}</td>
+              <td>${obj.amount}</td>
               <td>
                 <button
                   className="btn-xx"
                   onClick={() => {
-                    setChargee(key);
-                    setAmount(value.toString());
-                    setSettleUpModal(TextTrackCueList);
+                    setModal(true);
+                    setModalAmount(obj.amount);
                   }}
                 >
                   Settle Up
                 </button>
               </td>
-            </tr>;
-          })}
+            </tr>
+          ))}
         </tbody>
       </ReactBootStrap.Table>
       <h1>Owe You</h1>
@@ -131,18 +145,20 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
           </tr>
         </thead>
         <tbody className="table">
-          {Object.entries(oweYou).map(([key, value]) => {
-            <tr key={key}>
-              <td>{key}</td>
-              <td>{value.toString()}</td>
-            </tr>;
-          })}
+          {arrOfOweYou.map((obj) => (
+            <tr key={obj.name}>
+              <td>{obj.name}</td>
+              <td>${obj.amount}</td>
+            </tr>
+          ))}
         </tbody>
       </ReactBootStrap.Table>
+
       <SettleUp
-        show={showModal}
-        setModal={setSettleUpModal}
-        amount={setAmount}
+        showModal={showModal}
+        setModal={setModal}
+        amount={amount}
+        username={username}
       />
     </div>
   );

@@ -12,7 +12,7 @@ function CurrentGroupMembers() {
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-      const username = process.env.DB_username;
+      const username = process.env.REACT_APP_USERNAME;
       const response = await axios(`/CurrentGroupMembers/${username}`);
       // extract the data from the server response
 

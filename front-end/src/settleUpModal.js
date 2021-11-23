@@ -2,15 +2,14 @@ import React from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import "./modal.css";
 
-function SettleUp({ show, setModal, amount }) {
+function SettleUp({ showModal, setModal, amount, username }) {
   const handleClose = () => setModal(false);
-  const username = process.env.DB_username;
 
   return (
     <div>
       <ReactBootStrap.Modal
         size="lg"
-        show={show}
+        show={showModal}
         onHide={() => setModal(false)}
         aria-labelledby="example-modal-sizes-title-lg"
       >
