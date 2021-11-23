@@ -25,7 +25,7 @@ function Home() {
     // a nested function that fetches the data
     async function fetchData() {
       // GET curent user's current group
-      const username = process.env.DB_username;
+      const username = process.env.REACT_APP_USERNAME;
       const response_current_group = await axios(`/CurrentGroup/sjclarke`);
       // Extract current group from the response from backend
       setCurrentGroup(response_current_group.data);
