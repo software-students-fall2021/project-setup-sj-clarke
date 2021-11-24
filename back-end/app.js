@@ -3,10 +3,15 @@ const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
 const morgan = require('morgan')
+<<<<<<< HEAD
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
+=======
+const bodyParser = require('body-parser')
+>>>>>>> bef46fbb6da657fc212f99ae794530ca0d48e9c8
 // connection to mongoose
 const mongoose = require('mongoose');
+const dotenv = require("dotenv").config();
 mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
@@ -109,23 +114,18 @@ app.use((req, res, next) => {
 
 // GET all Friends of a specific user 
 app.get("/Friends/:usernameInput", async (req, res) => {
-    // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-    // axios
-    // .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
-    // .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    // .catch(err => next(err)) // pass any errors to express
-    // Getting all friends for a user from database 
     let username_query = req.params.usernameInput; 
     
     try{
       // find user in database 
       const response = await user.find({username: username_query});
       // send the data in the response
-      res.json(response[0].friends)
+      res.status(200).json(response[0].friends)
     }
     catch(err){
       // if unable to retrieve the information
-      res.json(err)
+      // error 
+    res.json(err)
     }
    
   })
@@ -133,7 +133,6 @@ app.get("/Friends/:usernameInput", async (req, res) => {
 // POST a new friend
 app.post("/Friends/:usernameInput", async (req, res) => {
   let username_query = req.params.usernameInput; 
-
   try{
     // find user and update friends list with this added user 
     await user.findOneAndUpdate({username: username_query}, {
@@ -149,10 +148,8 @@ app.post("/Friends/:usernameInput", async (req, res) => {
   }
   catch(err){
     // if unable to retrieve the information
-    res.json(err)
+    res.status(400).json(err)
   }
-  // send info to database once we make database connection 
-  //res.status(200).json(data)
 })
 
 app.delete("/Friends/:usernameInput/:friendInput", async (req, res) => {
@@ -240,6 +237,7 @@ app.get("/Transactions/:groupInput", async (req, res) => {
     const response = await group.find({name: group_query});
     // send the data in the response
     res.json(response[0].transactions)
+    console.log(response)
   }
   catch(err){
     // if unable to retrieve the information
@@ -256,9 +254,9 @@ await group.findOneAndUpdate({name: group_query}, {
     transactions: [{
       charger: req.body.charger,
       chargee: req.body.chargee,
-      amount: req.body.amount,
+      amount: req.body.amount, 
       date: req.body.date, 
-      description: req.body.description
+      description: req.body.description 
     }]
   }
 })
@@ -273,6 +271,7 @@ const data = {
 // send information to database here 
 res.json(data)
 })
+
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
 let group_query = req.params.groupInput; 
@@ -317,14 +316,21 @@ app.post("/CreateGroup", (req, res)=>{
 })
 
 // GET current group members
-app.get("/CurrentGroupMembers", (req, res, next) => {
-     // aquire Friends from database (for now we are calling mockaroo)
-     axios
-     .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
-     // @TODO change the .chargee below when working on database 
-     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-     .catch(err => next(err)) // pass any errors to express
+app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
+  let user_query = req.params.user; 
+  console.log(user_query);
+  try{
+    // find user in database 
+    const response = await user.find({username: user_query});
+    // send the data in the response
+    const response2 = await group.find({name: response[0].currentGroup});
+    res.json(response2[0].members);
 
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
    })
 
 app.get("/CurrentGroupMembers", (req, res, next) => {

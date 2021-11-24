@@ -21,6 +21,7 @@ import SetLocalStorage from "./setLocalStorage"
 import GetLocalStorage from "./getLocalStorage"
 
 const App = (props) => {
+  require("dotenv").config();
   const [user, setUser] = useState({});
 
   return (

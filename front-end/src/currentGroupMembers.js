@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import axios from "axios";
-function CurrentGroupMembers({ tripName }) {
+function CurrentGroupMembers() {
   // dummy data for summary of current trip transactions
   const [names, setNames] = useState([]);
+  const [tripName, setTripName] = useState([]);
 
   useEffect(() => {
     // a nested function that fetches the data
@@ -11,10 +12,16 @@ function CurrentGroupMembers({ tripName }) {
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-      const response = await axios("/CurrentGroupMembers");
+      const username = process.env.REACT_APP_USERNAME;
+      const response = await axios(`/CurrentGroupMembers/${username}`);
       // extract the data from the server response
+
       setNames(response.data);
+
+      const current = await axios(`/CurrentGroup/${username}`);
+      setTripName(current.data);
     }
+
     // fetch the data
     fetchData();
 
@@ -26,7 +33,7 @@ function CurrentGroupMembers({ tripName }) {
     // 1 row instance within a table
     return (
       <tr key={index}>
-        <td>{member.name}</td>
+        <td>{member}</td>
       </tr>
     );
   };
@@ -36,7 +43,7 @@ function CurrentGroupMembers({ tripName }) {
     <div className="Home">
       <title className="CurrentTripTitle">
         {" "}
-        {`Mexico 2021 Current Group Members `}
+        {`${tripName} Current Group Members `}
       </title>
       <ReactBootStrap.Table striped bordered hover>
         <thead>

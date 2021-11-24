@@ -19,7 +19,12 @@
     "express-promise-router": "^4.1.0",
     "joi": "^17.4.2",
     "mongodb": "^4.1.4",
+<<<<<<< HEAD
     "mongoose": "^6.0.13",
+=======
+    "joi": "^17.4.2",
+    "mongoose": "^6.0.12",
+>>>>>>> bef46fbb6da657fc212f99ae794530ca0d48e9c8
     "morgan": "^1.10.0",
     "supertest": "^6.1.6"
   },

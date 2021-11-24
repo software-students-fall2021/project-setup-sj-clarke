@@ -36,18 +36,18 @@ function Title(props) {
               id="collasible-nav-dropdown"
             >
               <ReactBootStrap.NavDropdown.Item
-                href="#action/AddExpense"
+                href="/AddExpense"
                 onClick={() => setAddExpense(true)}
               >
                 Add Expense
               </ReactBootStrap.NavDropdown.Item>
-              <ReactBootStrap.NavDropdown.Item
-                href="#action/SettleUp"
+              {/* <ReactBootStrap.NavDropdown.Item
+                href="/SettleUp"
                 onClick={() => setSettleUp(true)}
               >
                 {" "}
                 Settle up
-              </ReactBootStrap.NavDropdown.Item>
+              </ReactBootStrap.NavDropdown.Item> */}
               <ReactBootStrap.NavDropdown.Item href="/CurrentGroupMembers">
                 Group members
               </ReactBootStrap.NavDropdown.Item>
@@ -63,7 +63,7 @@ function Title(props) {
         </ReactBootStrap.Navbar.Brand>
       </ReactBootStrap.Navbar>
       <ExpenseAction show={showAddExpense} setModal={setAddExpense} />
-      <SettleUp show={showSettleUp} setModal={setSettleUp} />
+      {/* <SettleUp show={showSettleUp} setModal={setSettleUp} /> */}
     </div>
   );
 }
