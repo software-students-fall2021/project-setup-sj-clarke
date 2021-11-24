@@ -86,23 +86,18 @@ app.use((req, res, next) => {
 
 // GET all Friends of a specific user 
 app.get("/Friends/:usernameInput", async (req, res) => {
-    // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-    // axios
-    // .get("https://my.api.mockaroo.com/friends.json?key=bd7c3ef0")
-    // .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    // .catch(err => next(err)) // pass any errors to express
-    // Getting all friends for a user from database 
     let username_query = req.params.usernameInput; 
     
     try{
       // find user in database 
       const response = await user.find({username: username_query});
       // send the data in the response
-      res.json(response[0].friends)
+      res.status(200).json(response[0].friends)
     }
     catch(err){
       // if unable to retrieve the information
-      res.json(err)
+      // error 
+    res.json(err)
     }
    
   })
@@ -110,7 +105,6 @@ app.get("/Friends/:usernameInput", async (req, res) => {
 // POST a new friend
 app.post("/Friends/:usernameInput", async (req, res) => {
   let username_query = req.params.usernameInput; 
-
   try{
     // find user and update friends list with this added user 
     await user.findOneAndUpdate({username: username_query}, {
@@ -126,10 +120,8 @@ app.post("/Friends/:usernameInput", async (req, res) => {
   }
   catch(err){
     // if unable to retrieve the information
-    res.json(err)
+    res.status(400).json(err)
   }
-  // send info to database once we make database connection 
-  //res.status(200).json(data)
 })
 
 app.delete("/Friends/:usernameInput/:friendInput", async (req, res) => {
@@ -233,9 +225,9 @@ await group.findOneAndUpdate({name: group_query}, {
     transactions: [{
       charger: req.body.charger,
       chargee: req.body.chargee,
-      amount: req.body.amount,
+      amount: req.body.amount, 
       date: req.body.date, 
-      description: req.body.description
+      description: req.body.description 
     }]
   }
 })
@@ -250,6 +242,7 @@ const data = {
 // send information to database here 
 res.json(data)
 })
+
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
 let group_query = req.params.groupInput; 
