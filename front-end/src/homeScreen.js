@@ -7,7 +7,7 @@ import * as ReactBootStrap from "react-bootstrap";
 import axios from 'axios';
 
 
-function Home(){
+function Home(props){
     // Hold all transactions for current group to display on home screen 
     const [transactions, setTransactions] = useState([]);  
     const [date, setDate] = useState(); 

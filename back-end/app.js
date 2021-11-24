@@ -2,14 +2,35 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
-<<<<<<< HEAD
 const morgan = require('morgan')
-const bodyParser = require('body-parser')
-=======
+const cors = require("cors")
+const cookieParser = require("cookie-parser")
 // connection to mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
+require("dotenv").config({ silent: true })
+
+//required for authentication with JSON Web Tokens
+const jwt = require("jsonwebtoken")
+const passport = require("passport")
+app.use(passport.initialize())
+
+//use JWT strategy within passport for authentication and handling
+const { jwtOptions, jwtStrategy } = require("./jwt-config.js") // import setup options for using JWT in passport
+passport.use(jwtStrategy)
+
+// set up some middleware
+app.use(morgan("dev", { skip: (req, res) => process.env.NODE_ENV === "test" })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
+
+// use express's builtin body-parser middleware to parse any data included in a request
+app.use(express.json()) // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+app.use(cookieParser()) // useful middleware for dealing with cookies
+
+// the following cors setup is important when working with cookies on your local machine
+app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
+
 
 // initializing User schema 
 const user_schema = new Schema ({
@@ -62,7 +83,6 @@ const group = mongoose.model('group', group_schema)
 
  // group_practice.save().then(() => console.log("POSTED GROUP")); 
 
->>>>>>> 51aa93b3ce499a11c99ed3e102f0ba02b32889e7
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(morgan('dev'))
@@ -340,6 +360,77 @@ const data = {
 }
 // send info to database once we make database connection 
 res.status(200).json(data)
+})
+
+// sends a response for cookies including the Set-Cookie header
+app.get("/set-cookie", (req, res) => {
+  res
+    .cookie("foo", "bar")
+    .send({
+      success: true,
+      message: "Sent a cookie to the browser... let's hope it's saved.",
+    })
+})
+
+// route that looks for Cookie header in the request and sends it back whatever data was found in it
+app.get("/get-cookie", (req, res) => {
+  const numCookies = Object.keys(req.cookies).length
+
+  console.log(`Incoming cookie data: ${JSON.stringify(req.cookies, null, 0)}`)
+  res.send({
+    success: numCookies ? true : false,
+    message: numCookies
+      ? "thanks for sending cookies to the server"
+      : "no cookies sent to the server",
+      cookieData: req.cookies,
+  })
+})
+
+//route that is protected.. only authenticated users can access it
+app.get(
+  "/Home",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      success: true,
+      user: {
+        id: req.user.id,
+        username: req.user.username,
+      },
+      message: `Congratulations you have has accessed this route.`,
+    })
+  }
+)
+
+app.post("/login", function(req, res) {
+  let username_query = req.params.usernameInput; 
+
+  const username = req.body.username
+  const password = req.body.password
+
+  if (!username || !password){
+    res
+      .status(401)
+      .json({success: false, message: "no username or password supplied."})
+  }
+
+  
+    // find user in database 
+  const response = await user.find({username: username_query});
+
+  if (!response){
+    res
+    .status(401)
+    .json({ success: false, message: `user not found: ${username}`})
+  }else if (req.body.password == response.password){
+
+    const payload = { id: response.id}
+    const token = jwt.sign(payload, jwtOptions.secretOrKey)
+    res.json({ success: true, username:response.username, token: token})
+  }else{
+    res.status(401).json({ success: false, message: "passwords did not match."})
+  }
+
 })
 
 // export the express app we created to make it available to other modules

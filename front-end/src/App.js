@@ -11,10 +11,14 @@ import CurrentGroupMembers from "./currentGroupMembers";
 import MoreInfo from "./moreInfo";
 import Account from "./accountInfo.js";
 import Login from "./Login.js";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreateGroup from "./createGroup.js";
 import PrimaryNav from "./primaryNav.js";
 import CreateAccount from "./createAccount.js";
+import SetCookie from "./setCookie"
+import GetCookie from "./getCookie"
+import SetLocalStorage from "./setLocalStorage"
+import GetLocalStorage from "./getLocalStorage"
 
 const App = (props) => {
   const [user, setUser] = useState({});
@@ -23,7 +27,11 @@ const App = (props) => {
     <div className="App">
       <Router>
         <PrimaryNav user={user} setuser={setUser} />
-        <Switch>
+        <Routes>
+          <Route path="/set-cookie" element={<SetCookie />} />
+          <Route path="/get-cookie" element={<GetCookie />} />
+          <Route path="/set-local-storage" element={<SetLocalStorage />} />
+          <Route path="/get-local-storage" element={<GetLocalStorage />} />
           <Route path="/Home">
             <Home />
           </Route>
@@ -51,7 +59,7 @@ const App = (props) => {
           <Route path="/">
             <Login user={user} setuser={setUser} />
           </Route>
-        </Switch>
+        </Routes>
       </Router>
     </div>
   );
