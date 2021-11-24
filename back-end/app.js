@@ -6,7 +6,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 // connection to mongoose
 const mongoose = require('mongoose');
-const dotenv = require("dotenv").config();
+const users = require("./controllers/users")
 mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 
@@ -270,22 +270,64 @@ app.get("/AllGroups", (req, res,next) => {
 })
 
 //GET a Group
-app.get("/CreateGroup", (req, res,next) => {
+app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-  axios
-  .get("https://my.api.mockaroo.com/test.json?key=34e7d950")
-  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-  .catch(err => next(err)) // pass any errors to express
+ // axios
+  //.get("https://my.api.mockaroo.com/test.json?key=34e7d950")
+  //.then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  //.catch(err => next(err)) // pass any errors to express
+  let groupname_query = req.params.groupnameInput;
+  try{
+    
+    const response = await user.find({groupname: groupname_query});
+    res.json(response[0].CreateGroup)
+  }
+  catch(err){
+   
+    res.json(err)
+  }
 })
 
-app.post("/CreateGroup", (req, res)=>{
-  const data = {
+app.post("/CreateGroup", async (req, res)=>{
+  /*const data = {
     status: "Posted", 
     groupName: req.body.groupName
   }
   res.json(data)
   console.log("Create Group got called")
-  console.log(req.body.groupName)
+  console.log(req.body.groupName) */
+  console.log("Create Group got called")
+ 
+  console.log(req.query.groupName)
+  let groupname_query = req.query.groupName;
+  try{
+    
+    //await user.query("Insert into user(groupName, FriendName)")
+    // find user and update group list with this added user 
+    const newGroup = {
+      name:  req.query.groupName, 
+      date: Date.now(),
+      members: [req.query.friendAdded],
+      transactions:  [],
+    }
+    new group(newGroup).save()
+    /*await group.findOneAndUpdate({groupname: groupname_query}, {
+      $push: newGroup
+       
+    })*/
+    const data = {
+      status: "posted", 
+      groupName: req.query.groupName,
+      friendName: req.query.friendAdded
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    console.log(err)
+    // if unable to retrieve the information
+    res.json(err)
+  }
+
 })
 
 // GET current group members
