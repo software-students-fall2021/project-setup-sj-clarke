@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 // connection to mongoose
 const mongoose = require('mongoose');
+const dotenv = require("dotenv").config();
 mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 
@@ -209,6 +210,7 @@ app.get("/Transactions/:groupInput", async (req, res) => {
     const response = await group.find({name: group_query});
     // send the data in the response
     res.json(response[0].transactions)
+    console.log(response)
   }
   catch(err){
     // if unable to retrieve the information
