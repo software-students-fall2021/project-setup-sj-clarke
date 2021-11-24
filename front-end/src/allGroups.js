@@ -6,49 +6,39 @@ import Modal from "react-modal";
 import data from "./mockGroups.json";
 import groupData from "./mockGroupData.json";
 import memData from "./mockMembers.json";
-import axios from 'axios';
+import axios from "axios";
 
 function AllGroups() {
-  // variables needed for all groups page and modals 
+  // variables needed for all groups page and modals
   const [groups, setGroups] = useState([]);
-  const [transactions, setTransactions] = useState([]);  
+  const [transactions, setTransactions] = useState([]);
   const [members, setMembers] = useState([]);
- useEffect(() => {
-   // a nested function that fetches the data
+  useEffect(() => {
+    // a nested function that fetches the data
 
-   async function fetchData() {
-     // Extract Mockaroo data
-     // get all groups 
-     const response_groups = await axios(
-       "/AllGroups"
-       
-     ); 
-     // set groups with the data retrieved from mockaroo 
-     setGroups(response_groups.data); 
+    async function fetchData() {
+      // Extract Mockaroo data
+      // get all groups
+      const response_groups = await axios("/AllGroups");
+      // set groups with the data retrieved from mockaroo
+      setGroups(response_groups.data);
       // get all transactions for a group
-      // currently mock data from mockaroo 
-     const response_groupData = await axios(
-      "/Transactions"
-    ); 
-    // set transactions
-    setTransactions(response_groupData.data); 
+      // currently mock data from mockaroo
+      const response_groupData = await axios("/Transactions");
+      // set transactions
+      setTransactions(response_groupData.data);
 
-     // get all of the members for a group from mockaroo 
-     const response_members = await axios(
-      "/Members"
-    ); 
-    // set members
-    setMembers(response_members.data); 
+      // get all of the members for a group from mockaroo
+      const response_members = await axios("/Members");
+      // set members
+      setMembers(response_members.data);
+    }
+    // fetch the data
+    fetchData();
 
+    // the blank array below causes this callback to be executed only once on component load
+  }, []);
 
-     }
-   // fetch the data
-   fetchData();
-   
-   
-   // the blank array below causes this callback to be executed only once on component load
- }, []);
-  
   const [groupName, setGroupName] = useState(" ");
   const [groupDate, setGroupDate] = useState(" ");
 
@@ -81,7 +71,11 @@ function AllGroups() {
                     type="button"
                     className="btn btn-secondary btn-sm"
                     onClick={() => {
-                      {setModalOpen(true); setGroupName(group.name); setGroupDate(group.year)}
+                      {
+                        setModalOpen(true);
+                        setGroupName(group.name);
+                        setGroupDate(group.year);
+                      }
                     }}
                   >
                     more info
@@ -145,7 +139,8 @@ function AllGroups() {
                     <button
                       onClick={() => setModalOpen(false)}
                       type="button"
-                      className="btn btn-secondary btn-sm">
+                      className="btn btn-secondary btn-sm"
+                    >
                       exit
                     </button>
                   </Modal>
