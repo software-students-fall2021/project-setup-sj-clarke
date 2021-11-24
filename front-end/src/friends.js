@@ -8,14 +8,15 @@ Modal.setAppElement("#root");
 function Friends() {
   const [friends, setFriends] = useState([]);
   // will hold the current user from login page (for now just user in database we have)
-  const [currentUser, setCurrentUser] = useState(); 
+  const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
     // a nested function that fetches the data
     async function fetchData() {
       // extract the friends list from the server response
-      const response = await axios("/Friends/sjclarke");
-      // set friends 
+      const username = process.env.REACT_APP_USERNAME;
+      const response = await axios(`/Friends/${username}`);
+      // set friends
       setFriends(response.data);
     }
     // fetch the data
@@ -27,10 +28,10 @@ function Friends() {
   const [addGroupmodalIsOpen, setaddGroupModal] = useState(false);
   const [modalIsOpen, setModalisOpen] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(" ");
-  const index = 0; 
+  const index = 0;
 
-  const [removeFriendModal, setRemoveFriendModal] = useState(false)
-  const [addedFriend, setAddedFriend] = useState(); 
+  const [removeFriendModal, setRemoveFriendModal] = useState(false);
+  const [addedFriend, setAddedFriend] = useState();
   // creating a row for each instance within JSON file holding all of the friends
   const renderRow = (friend, index) => {
     // 1 row instance within a table
@@ -52,7 +53,7 @@ function Friends() {
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={() => {
-              setRemoveFriendModal(true)
+              setRemoveFriendModal(true);
               setSelectedFriend(friend);
             }}
           >
@@ -64,31 +65,32 @@ function Friends() {
   };
 
   const handleRemoveFriend = (friendName) => {
-    axios.delete(`Friends/sjclarke/${friendName}`)
-  }
+    const username = process.env.REACT_APP_USERNAME;
+    axios.delete(`Friends/${username}/${friendName}`);
+  };
 
   // hook JSON to hold the data of a new group addition
   const [newGroupAdditionValues, setNewGroupAdditionValues] = useState({
-    friend: selectedFriend, 
-    groupName: ""
+    friend: selectedFriend,
+    groupName: "",
   });
 
   // Handling changes to adding friend to group form
   const handleAddToGroupChange = (event) => {
     const newdata = { ...newGroupAdditionValues };
     newdata[event.target.id] = event.target.value;
-    newdata.friend = selectedFriend
+    newdata.friend = selectedFriend;
     setNewGroupAdditionValues(newdata);
-
   };
 
   // Handling submission of adding friend to a group
-  // Calls a post request to the back end sending back the JSON of the group addition. 
+  // Calls a post request to the back end sending back the JSON of the group addition.
   const handleGroupSubmit = (event) => {
     event.preventDefault();
     setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
-    axios.post("AddToGroup/sjclarke", newGroupAdditionValues)
+    const username = process.env.REACT_APP_USERNAME;
+    axios.post(`AddToGroup/${username}`, newGroupAdditionValues);
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });
   };
@@ -96,7 +98,7 @@ function Friends() {
   // hook JSON to hold the data of a new friend addition
   const [newFriendValues, setNewFriendValues] = useState({ friendAdded: "" });
 
-  // handles changes to the add friend form within "add friend" modal 
+  // handles changes to the add friend form within "add friend" modal
   const handleAddFriendChange = (event) => {
     const newdata = { ...newFriendValues };
     newdata[event.target.id] = event.target.value;
@@ -104,18 +106,19 @@ function Friends() {
     console.log(newdata);
   };
 
-   // Handling submission of adding a new friend 
-  // Calls a post request to the back end sending back the JSON of the friend addition. 
+  // Handling submission of adding a new friend
+  // Calls a post request to the back end sending back the JSON of the friend addition.
   const handleFriendSubmit = (event) => {
     event.preventDefault();
     setModalisOpen(false);
-    // post request to backend with new data 
-    axios.post("Friends/sjclarke", newFriendValues)
+    // post request to backend with new data
+    const username = process.env.REACT_APP_USERNAME;
+    axios.post(`Friends/${username}`, newFriendValues);
     // clear the input line
-    setNewFriendValues({friendAdded: "" });
+    setNewFriendValues({ friendAdded: "" });
   };
 
-  // General friends page layout 
+  // General friends page layout
   return (
     <div className="Friends">
       <title className="CurrentTripTitle">
@@ -165,15 +168,15 @@ function Friends() {
         <h1 className="Modal-title">Add to Group</h1>
         <form onSubmit={(e) => handleGroupSubmit(e)} className="addGroupMember">
           <div>
-            <label className = "input-label">Friend name: </label>
-            <input 
+            <label className="input-label">Friend name: </label>
+            <input
               id="friend"
               type="text"
-              defaultValue = {selectedFriend}
+              defaultValue={selectedFriend}
               // value={newGroupAdditionValues.friend}
               onChange={(e) => handleAddToGroupChange(e)}
             />
-            <label className = "input-label">Group name: </label>
+            <label className="input-label">Group name: </label>
             <input
               id="groupName"
               type="text"
@@ -194,23 +197,27 @@ function Friends() {
         </form>
       </Modal>
       <Modal isOpen={removeFriendModal} dialogClassName="modal-design">
-          <h1 className="modal-title">Are you sure you want to remove {selectedFriend} as a friend?</h1>
-              <button
-                onClick={() => {setRemoveFriendModal(false); handleRemoveFriend(selectedFriend)}}
-                type="button"
-                className="btn btn-secondary btn-sm"
-              >
-                yes
-              </button>
-              <button
-                onClick={() => setRemoveFriendModal(false)}
-                type="button"
-                className="btn btn-secondary btn-sm"
-              >
-                no
-              </button>
-           
-        </Modal>
+        <h1 className="modal-title">
+          Are you sure you want to remove {selectedFriend} as a friend?
+        </h1>
+        <button
+          onClick={() => {
+            setRemoveFriendModal(false);
+            handleRemoveFriend(selectedFriend);
+          }}
+          type="button"
+          className="btn btn-secondary btn-sm"
+        >
+          yes
+        </button>
+        <button
+          onClick={() => setRemoveFriendModal(false)}
+          type="button"
+          className="btn btn-secondary btn-sm"
+        >
+          no
+        </button>
+      </Modal>
     </div>
   );
 }

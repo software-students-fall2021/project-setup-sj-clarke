@@ -210,6 +210,7 @@ app.get("/Transactions/:groupInput", async (req, res) => {
     const response = await group.find({name: group_query});
     // send the data in the response
     res.json(response[0].transactions)
+    console.log(response)
   }
   catch(err){
     // if unable to retrieve the information
