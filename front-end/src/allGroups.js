@@ -16,18 +16,18 @@ function AllGroups() {
     async function fetchData() {
       // Extract Mockaroo data
       // get all groups
-      const response_groups = await axios("/AllGroups");
+      const response_groups = await axios("/AllGroups/sjclarke");
       // set groups with the data retrieved from mockaroo
       setGroups(response_groups.data);
       // get all transactions for a group
       // currently mock data from mockaroo
-      const response_groupData = await axios("/Transactions");
+      const response_groupData = await axios("/Transactions/Mexico");
       // set transactions
       setTransactions(response_groupData.data);
 
      // get all of the members for a group from mockaroo 
      const response_members = await axios(
-      "/Members"
+      "/Members/Mexico"
     ); 
     // set members
     setMembers(response_members.data);
