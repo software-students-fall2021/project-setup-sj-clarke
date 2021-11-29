@@ -3,9 +3,6 @@ import "./allGroups.css";
 import * as ReactBootStrap from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 import Modal from "react-modal";
-import data from "./mockGroups.json";
-import groupData from "./mockGroupData.json";
-import memData from "./mockMembers.json";
 import axios from 'axios';
 
 function AllGroups() {
@@ -13,7 +10,7 @@ function AllGroups() {
   const [groups, setGroups] = useState([]);
   const [transactions, setTransactions] = useState([]);  
   const [members, setMembers] = useState([]);
- useEffect(() => {
+  useEffect(() => {
    // a nested function that fetches the data
 
    async function fetchData() {
@@ -38,13 +35,11 @@ function AllGroups() {
       "/Members"
     ); 
     // set members
-    setMembers(response_members.data); 
-
+    setMembers(response_members.data);
 
      }
    // fetch the data
    fetchData();
-   
    
    // the blank array below causes this callback to be executed only once on component load
  }, []);

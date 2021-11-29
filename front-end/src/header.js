@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> a2fcde0ddd93c3d33fccce272f42e97d9e11503c
 import './header.css';
 
 
@@ -19,13 +15,11 @@ function Title() {
   const [showSettleUp, setSettleUp] = useState(false);
   return (
       <div className="Title">
-<<<<<<< HEAD
-        
         
       <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light">
-=======
+
       <ReactBootStrap.Navbar collapseOnSelect expand="lg" bg="medium" variant="light" href="/#home">
->>>>>>> a2fcde0ddd93c3d33fccce272f42e97d9e11503c
+
   <ReactBootStrap.Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <ReactBootStrap.Navbar.Collapse id="responsive-navbar-nav">
     <ReactBootStrap.Nav className="me-auto">
