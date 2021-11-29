@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 // connection to mongoose
 const mongoose = require('mongoose');
 const users = require("./controllers/users")
-require(‘dotenv’).config()
+require('dotenv').config()
 const db = process.env.REACT_APP_DB;
 mongoose.connect(`${db}`);
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
