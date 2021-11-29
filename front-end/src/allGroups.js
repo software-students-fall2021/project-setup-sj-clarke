@@ -6,29 +6,24 @@ import Modal from "react-modal";
 import axios from 'axios';
 
 function AllGroups() {
-  // variables needed for all groups page and modals 
+  // variables needed for all groups page and modals
   const [groups, setGroups] = useState([]);
-  const [transactions, setTransactions] = useState([]);  
+  const [transactions, setTransactions] = useState([]);
   const [members, setMembers] = useState([]);
   useEffect(() => {
    // a nested function that fetches the data
 
-   async function fetchData() {
-     // Extract Mockaroo data
-     // get all groups 
-     const response_groups = await axios(
-       "/AllGroups"
-       
-     ); 
-     // set groups with the data retrieved from mockaroo 
-     setGroups(response_groups.data); 
+    async function fetchData() {
+      // Extract Mockaroo data
+      // get all groups
+      const response_groups = await axios("/AllGroups");
+      // set groups with the data retrieved from mockaroo
+      setGroups(response_groups.data);
       // get all transactions for a group
-      // currently mock data from mockaroo 
-     const response_groupData = await axios(
-      "/Transactions"
-    ); 
-    // set transactions
-    setTransactions(response_groupData.data); 
+      // currently mock data from mockaroo
+      const response_groupData = await axios("/Transactions");
+      // set transactions
+      setTransactions(response_groupData.data);
 
      // get all of the members for a group from mockaroo 
      const response_members = await axios(
@@ -76,7 +71,11 @@ function AllGroups() {
                     type="button"
                     className="btn btn-secondary btn-sm"
                     onClick={() => {
-                      {setModalOpen(true); setGroupName(group.name); setGroupDate(group.year)}
+                      {
+                        setModalOpen(true);
+                        setGroupName(group.name);
+                        setGroupDate(group.year);
+                      }
                     }}
                   >
                     more info
@@ -140,7 +139,8 @@ function AllGroups() {
                     <button
                       onClick={() => setModalOpen(false)}
                       type="button"
-                      className="btn btn-secondary btn-sm">
+                      className="btn btn-secondary btn-sm"
+                    >
                       exit
                     </button>
                   </Modal>
