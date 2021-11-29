@@ -12,7 +12,6 @@ function AllGroups() {
   const [members, setMembers] = useState([]);
   useEffect(() => {
    // a nested function that fetches the data
-
     async function fetchData() {
       // Extract Mockaroo data
       // get all groups
@@ -24,7 +23,6 @@ function AllGroups() {
       const response_groupData = await axios("/Transactions");
       // set transactions
       setTransactions(response_groupData.data);
-
      // get all of the members for a group from mockaroo 
      const response_members = await axios(
       "/Members"
