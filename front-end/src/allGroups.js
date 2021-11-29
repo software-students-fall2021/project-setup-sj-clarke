@@ -16,7 +16,7 @@ function AllGroups() {
     async function fetchData() {
       // Extract Mockaroo data
       // get all groups
-      const response_groups = await axios("/AllGroups");
+      const response_groups = await axios("/AllGroups/username");
       // set groups with the data retrieved from mockaroo
       setGroups(response_groups.data);
       // get all transactions for a group
