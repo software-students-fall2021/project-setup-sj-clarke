@@ -7,9 +7,10 @@ const bodyParser = require('body-parser')
 // connection to mongoose
 const mongoose = require('mongoose');
 const users = require("./controllers/users")
-require("dotenv").config();
-const db = process.env.REACT_APP_DB; 
-mongoose.connect(db); 
+require("dotenv").config()
+const db = process.env.REACT_APP_DB;
+mongoose.connect(`${db}`);
+//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 
 // initializing User schema 
@@ -262,13 +263,21 @@ let group_query = req.params.groupInput;
   }
 })
 
-// GET all Groups
-app.get("/AllGroups", (req, res,next) => {
-  // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-  axios
-  .get("https://my.api.mockaroo.com/groups.json?key=56f355b0")
-  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-  .catch(err => next(err)) // pass any errors to express
+// GET all Groups for a sepcific user
+app.get("/AllGroups/:usernameInput", async (req, res) => {
+  let username_query = req.params.usernameInput; 
+  
+  try{
+    // find user in database 
+    const response = await user.find({username: username_query});
+    // send the data in the response
+    res.json(response[0].allGroups)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
+ 
 })
 
 //GET a Group
