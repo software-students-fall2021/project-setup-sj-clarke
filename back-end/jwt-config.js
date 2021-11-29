@@ -21,7 +21,7 @@ const jwtStrategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
   const user = mongoose.model('user', user_schema)
   let username_query = req.params.usernameInput; 
 
-  const response = await user.find({username: username_query});
+  const response = user.find({username: username_query});
   if (response) {
     // we found the user... keep going
     next(null, response)

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
 
-const getLocalStorage = props => {
+const GetLocalStorage = props => {
   const [data, setData] = useState({}) // a state variable to hold the data placed into localStorage
 
   const handleClick = e => {
@@ -36,4 +36,4 @@ const getLocalStorage = props => {
   )
 }
 
-export default getLocalStorage
+export default GetLocalStorage

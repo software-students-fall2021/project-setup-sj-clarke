@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-const setLocalStorage = props => {
+const SetLocalStorage = props => {
   const [data, setData] = useState("") // a state variable that will be used to show the data in LocalStorage
 
   // when this component first renders, show any data in LocalStorage
@@ -50,4 +50,4 @@ const setLocalStorage = props => {
   )
 }
 
-export default setLocalStorage
+export default SetLocalStorage

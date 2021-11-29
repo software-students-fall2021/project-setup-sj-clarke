@@ -33,33 +33,15 @@ const App = (props) => {
           <Route path="/get-cookie" element={<GetCookie />} />
           <Route path="/set-local-storage" element={<SetLocalStorage />} />
           <Route path="/get-local-storage" element={<GetLocalStorage />} />
-          <Route path="/Home">
-            <Home />
-          </Route>
-          <Route path="/CreateGroup">
-            <CreateGroup />
-          </Route>
-          <Route path="/Friends">
-            <Friends />
-          </Route>
-          <Route path="/CurrentGroupMembers">
-            <CurrentGroupMembers />
-          </Route>
-          <Route path="/Account">
-            <Account />
-          </Route>
-          <Route path="/AllGroups">
-            <AllGroups />
-          </Route>
-          <Route path="/MoreInfo">
-            <MoreInfo />
-          </Route>
-          <Route path="/createAccount">
-            <CreateAccount />
-          </Route>
-          <Route path="/">
-            <Login user={user} setuser={setUser} />
-          </Route>
+          <Route path="/Home" element={<Home/>}/>
+          <Route path="/CreateGroup" element={<CreateGroup/>}/>
+          <Route path="/Friends" element={<Friends />}/>
+          <Route path="/CurrentGroupMembers" element={<CurrentGroupMembers/>}/>
+          <Route path="/Account" element={<Account/>}/>
+          <Route path="/AllGroups" element={<AllGroups/>}/>
+          <Route path="/MoreInfo" element={<MoreInfo/>}/>
+          <Route path="/createAccount" element={<CreateAccount/>}/>
+          <Route path="/" element={<Login user = {user} setuser={setUser}/>}/>
         </Routes>
       </Router>
     </div>
