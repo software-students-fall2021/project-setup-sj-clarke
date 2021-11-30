@@ -8,8 +8,16 @@ const cookieParser = require("cookie-parser")
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 // connection to mongoose
+<<<<<<< HEAD
 
 
+=======
+const mongoose = require('mongoose');
+const users = require("./controllers/users")
+require('dotenv').config()
+const db = process.env.REACT_APP_DB;
+mongoose.connect(`${db}`);
+>>>>>>> 1aa4caa0fe4348b5d3ab05fb4c660c13bdad4619
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
@@ -382,16 +390,17 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
   }
    })
 
-app.get("/CurrentGroupMembers", (req, res, next) => {
-    // aquire Friends from database (for now we are calling mockaroo)
-    axios
-    .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
-    // @TODO change the .chargee below when working on database 
-    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    .catch(err => next(err)) // pass any errors to express
+// app.get("/CurrentGroupMembers", (req, res, next) => {
+//     // aquire Friends from database (for now we are calling mockaroo)
+//     axios
+//     .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
+//     // @TODO change the .chargee below when working on database 
+//     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+//     .catch(err => next(err)) // pass any errors to express
     
-  })
+//   })
 
+<<<<<<< HEAD
 // sends a response for cookies including the Set-Cookie header
 app.get("/set-cookie", (req, res) => {
   res
@@ -401,6 +410,17 @@ app.get("/set-cookie", (req, res) => {
       message: "Sent a cookie to the browser... let's hope it's saved.",
     })
 })
+=======
+// // GET User
+// // route for HTTP GET requests to /json-example
+// app.get("/Users", (req, res,next) => {
+//   // aquire Users from database (for now we are calling mockaroo which gives us a random JSON array of users) 
+//   axios
+//   .get("https://my.api.mockaroo.com/Users.json?key=aa763330")
+//   .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+//   .catch(err => next(err)) // pass any errors to express
+// })
+>>>>>>> 1aa4caa0fe4348b5d3ab05fb4c660c13bdad4619
 
 // route that looks for Cookie header in the request and sends it back whatever data was found in it
 app.get("/get-cookie", (req, res) => {
