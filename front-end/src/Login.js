@@ -38,12 +38,10 @@ function Login(props){
                 username: e.target.username.value,
                 password: e.target.password.value
             }
-            console.log(process.env.BACK_END_DOMAIN)
+            console.log(process.env.REACT_APP_BACK_END_DOMAIN)
             console.log(process.env.REACT_APP_USERNAME)
-            console.log(requestData.password)
-            console.log(requestData.username)
             const response = await axios.post(
-            `http://localhost:5000/login`,
+            `${process.env.REACT_APP_BACK_END_DOMAIN}/login`,
                 requestData
             )
             
