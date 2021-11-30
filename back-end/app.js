@@ -12,7 +12,7 @@ const db = process.env.REACT_APP_DB;
 mongoose.connect(`${db}`);
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
-
+console.log(db); 
 // initializing User schema 
 const user_schema = new Schema ({
   username:  String, // String is shorthand for {type: String}
@@ -24,7 +24,6 @@ const user_schema = new Schema ({
   friends: [String]
   
 });
-
 // initializing Group schema 
 const group_schema = new Schema({
   name:  String, 
@@ -170,8 +169,18 @@ app.get("/CurrentGroup/:usernameInput", async (req, res) => {
 app.post("/AddToGroup/:usernameInput", async (req, res) => {
   try{
     // if: the friend or groupName passed through is not in the users friend list --> error 
-   //  const response = await user.find({username: username_query})
-          // go to tutor for this. 
+  //  const response = await user.find({username: username_query})
+  //  const allGroups = response[0].allGroups; 
+  //  const foundGroup = 0; 
+  //  allGroups.forEach(element => {
+  //   if (req.body.group == element){
+  //       foundGroup = 1; 
+  //   }
+  //  })
+  //  if (foundGroup == 0){
+  //    res.json(err)
+  //  }
+
     // otherwise: 
     // find group and update current members list with this added user 
     await group.findOneAndUpdate({name: req.body.groupName}, {
@@ -193,6 +202,7 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
       friend: req.body.friend,
       groupName: req.body.groupName
     }
+
     res.status(200).json(data)
 
   }
@@ -266,11 +276,12 @@ let group_query = req.params.groupInput;
 // GET all Groups for a sepcific user
 app.get("/AllGroups/:usernameInput", async (req, res) => {
   let username_query = req.params.usernameInput; 
-  
+  console.log(username_query)
   try{
     // find user in database 
     const response = await user.find({username: username_query});
     // send the data in the response
+    console.log(response[0])
     res.json(response[0].allGroups)
   }
   catch(err){
@@ -299,7 +310,9 @@ app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
   }
 })
 
-app.post("/CreateGroup", async (req, res)=>{
+
+// test this
+app.post("/CreateGroup/", async (req, res)=>{
   /*const data = {
     status: "Posted", 
     groupName: req.body.groupName
@@ -308,7 +321,6 @@ app.post("/CreateGroup", async (req, res)=>{
   console.log("Create Group got called")
   console.log(req.body.groupName) */
   console.log("Create Group got called")
- 
   console.log(req.query.groupName)
   let groupname_query = req.query.groupName;
   try{
@@ -318,7 +330,7 @@ app.post("/CreateGroup", async (req, res)=>{
     const newGroup = {
       name:  req.query.groupName, 
       date: Date.now(),
-      members: [req.query.friendAdded],
+      members: [req.query.friendAdded, req.query.userInput],
       transactions:  [],
     }
     new group(newGroup).save()
@@ -332,6 +344,23 @@ app.post("/CreateGroup", async (req, res)=>{
       friendName: req.query.friendAdded
     }
     res.status(200).json(data)
+    // set as the users current group and friend. 
+    await user.findOneAndUpdate({username: req.query.userInput}, {
+      $set: {
+        currentGroup: req.query.groupName
+      }, 
+      $push:{
+        allGroups: req.query.groupName
+      }
+    })
+    await user.findOneAndUpdate({username: req.query.friendAdded}, {
+      $set: {
+        currentGroup: req.query.groupName
+      }, 
+      $push:{
+        allGroups: req.query.groupName
+      }
+    })
   }
   catch(err){
     console.log(err)
