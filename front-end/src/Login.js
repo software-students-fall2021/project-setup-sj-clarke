@@ -5,6 +5,10 @@ import axios from 'axios';
 import createAccount from './createAccount'
 
 function Login(props){
+    //require("dotenv").config({ silent: true })
+
+    //const backend = process.env.REACT_APP_BACKEND
+    //console.log(backend)
 
     let [urlSearchParams] = useSearchParams()
 
@@ -13,7 +17,9 @@ function Login(props){
 
     useEffect(() => {
         const qsError = urlSearchParams.get("error")
-    })
+        if (qsError == "home")
+        setErrorMessage("Please log in to view the protected content.")
+    }, [])
 
     useEffect(() => {
 
@@ -27,14 +33,17 @@ function Login(props){
         e.preventDefault()
 
         
-
         try{
             const requestData = {
                 username: e.target.username.value,
                 password: e.target.password.value
             }
+            console.log(process.env.BACK_END_DOMAIN)
+            console.log(process.env.REACT_APP_USERNAME)
+            console.log(requestData.password)
+            console.log(requestData.username)
             const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND}/Login`,
+            `http://localhost:5000/login`,
                 requestData
             )
             
@@ -54,7 +63,9 @@ function Login(props){
             <div className="Login">
                 <header>Login</header>
                 {errorMessage ? <p className="error">{errorMessage}</p> : ""}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>{
+
+                }
                     <label>Username</label>
                     <input type="text" name="username" placeholder="Enter Username"></input>
                     <label>Password</label>
@@ -66,6 +77,6 @@ function Login(props){
             </div>
         )
 
-    else return <Navigate to="/Home"/>
+    else return <Navigate to="/home"/>
 }
 export default Login;

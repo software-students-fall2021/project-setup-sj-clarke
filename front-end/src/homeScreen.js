@@ -2,13 +2,18 @@ import "./header.css";
 import "./homeScreen.css";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Navigate } from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import axios from "axios";
 
 
 
 function Home(props){
+    const jwtToken = localStorage.getItem("token")
+    console.log(`JWT token: ${jwtToken}`)
+
+    const [response, setResponse] = useState({})
+    const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
     // Hold all transactions for current group to display on home screen 
     const [transactions, setTransactions] = useState([]);  
     const [date, setDate] = useState(); 
@@ -22,6 +27,23 @@ function Home(props){
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
     const [totalExpense, setTotalExpense] = useState(); 
+
+  
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND}/home`, {
+        headers: {Authorization: `JWT ${jwtToken}`},
+      })
+      .then(res => {
+        setResponse(res.data)
+      })
+      .catch(err => {
+        console.log(
+          "The server rejected the request for this protected resource.. we probably don't have a valid JWT token."
+        )
+        setIsLoggedIn(false)
+      })
+  },[])
   useEffect(() => {
     // a nested function that fetches the data
     async function fetchData() {
@@ -70,7 +92,11 @@ function Home(props){
   
     // general layout of home screen 
       return (
+        <>
+        {isLoggedIn ? (
+  
         <div className= "Home">
+          
         <title className ="CurrentTripTitle">Current Group: {currentGroup}
         <Link to="/MoreInfo" className="btn btn-secondary btn-sm">More info</Link>
         </title>  
@@ -127,8 +153,16 @@ function Home(props){
           </button>
         </Modal>
       </ReactBootStrap.Table>
+          
+    
     </div>
-  );
+        ) : (
+          <Link to="/login?error=home"/>
+        )}
+    </>
+  )
+
 }
+
 
 export default Home

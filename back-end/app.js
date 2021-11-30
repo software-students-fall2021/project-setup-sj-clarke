@@ -6,13 +6,15 @@ const morgan = require('morgan')
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 // connection to mongoose
-const mongoose = require('mongoose');
-const dotenv = require("dotenv").config();
-const db = process.env.REACT_APP_DB;
+
+
+//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
-
+const db = process.env.REACT_APP_DB;
+mongoose.connect(`${db}`);
 //required for authentication with JSON Web Tokens
 const jwt = require("jsonwebtoken")
 const passport = require("passport")
@@ -284,32 +286,82 @@ let group_query = req.params.groupInput;
   }
 })
 
-// GET all Groups
-app.get("/AllGroups", (req, res,next) => {
-  // aquire All Groups from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-  axios
-  .get("https://my.api.mockaroo.com/groups.json?key=56f355b0")
-  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-  .catch(err => next(err)) // pass any errors to express
+// GET all Groups for a sepcific user
+app.get("/AllGroups/:usernameInput", async (req, res) => {
+  let username_query = req.params.usernameInput; 
+  
+  try{
+    // find user in database 
+    const response = await user.find({username: username_query});
+    // send the data in the response
+    res.json(response[0].allGroups)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
+ 
 })
 
 //GET a Group
-app.get("/CreateGroup", (req, res,next) => {
+app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
   // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
-  axios
-  .get("https://my.api.mockaroo.com/test.json?key=34e7d950")
-  .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-  .catch(err => next(err)) // pass any errors to express
+ // axios
+  //.get("https://my.api.mockaroo.com/test.json?key=34e7d950")
+  //.then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+  //.catch(err => next(err)) // pass any errors to express
+  let groupname_query = req.params.groupnameInput;
+  try{
+    
+    const response = await user.find({groupname: groupname_query});
+    res.json(response[0].CreateGroup)
+  }
+  catch(err){
+   
+    res.json(err)
+  }
 })
 
-app.post("/CreateGroup", (req, res)=>{
-  const data = {
+app.post("/CreateGroup", async (req, res)=>{
+  /*const data = {
     status: "Posted", 
     groupName: req.body.groupName
   }
   res.json(data)
   console.log("Create Group got called")
-  console.log(req.body.groupName)
+  console.log(req.body.groupName) */
+  console.log("Create Group got called")
+ 
+  console.log(req.query.groupName)
+  let groupname_query = req.query.groupName;
+  try{
+    
+    //await user.query("Insert into user(groupName, FriendName)")
+    // find user and update group list with this added user 
+    const newGroup = {
+      name:  req.query.groupName, 
+      date: Date.now(),
+      members: [req.query.friendAdded],
+      transactions:  [],
+    }
+    new group(newGroup).save()
+    /*await group.findOneAndUpdate({groupname: groupname_query}, {
+      $push: newGroup
+       
+    })*/
+    const data = {
+      status: "posted", 
+      groupName: req.query.groupName,
+      friendName: req.query.friendAdded
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    console.log(err)
+    // if unable to retrieve the information
+    res.json(err)
+  }
+
 })
 
 // GET current group members
@@ -366,7 +418,7 @@ app.get("/get-cookie", (req, res) => {
 
 //route that is protected.. only authenticated users can access it
 app.get(
-  "/Home",
+  "/home",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     res.json({
@@ -381,10 +433,13 @@ app.get(
 )
 
 app.post("/login", function(req, res) {
-  let username_query = req.params.usernameInput; 
+  let username_query = req.usernameInput; 
 
   const username = req.body.username
   const password = req.body.password
+
+  console.log(username)
+  console.log(password)
 
   if (!username || !password){
     res
