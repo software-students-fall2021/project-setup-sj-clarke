@@ -12,6 +12,8 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [oweYou, setOweYou] = useState({});
   const [showModal, setModal] = useState(false);
   const [amount, setModalAmount] = useState();
+  const [user, setModalUser] = useState(" ");
+
   const [arrOfYouOwe, setarrOfYouOwe] = useState([]);
   const [arrOfOweYou, setarrOfOweYou] = useState([]);
   const username = process.env.REACT_APP_USERNAME;
@@ -127,6 +129,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
                   onClick={() => {
                     setModal(true);
                     setModalAmount(obj.amount);
+                    setModalUser(obj.name); 
                   }}
                 >
                   Settle Up
@@ -158,7 +161,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         showModal={showModal}
         setModal={setModal}
         amount={amount}
-        username={username}
+        username={user}
       />
     </div>
   );

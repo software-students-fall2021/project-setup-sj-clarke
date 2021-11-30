@@ -57,7 +57,7 @@ function CreateGroup() {
   }, []);
   
 
-
+const currentUser = "sjclarke"; 
 const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
     {
       group: "",
@@ -80,7 +80,7 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
     //console.log(newGroupAdditionValues.group)
     // post request to backend here 
     const group_response =  axios.post(
-        `http://localhost:5000/CreateGroup?groupName=${newGroupAdditionValues.group}&friendAdded=${newGroupAdditionValues.friend}`
+        `http://localhost:5000/CreateGroup?userInput=${currentUser}&groupName=${newGroupAdditionValues.group}&friendAdded=${newGroupAdditionValues.friend}`
       )
       .then(()=>{
         setNewGroupAdditionValues(

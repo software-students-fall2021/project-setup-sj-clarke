@@ -111,6 +111,8 @@ function Home(){
         </Modal>
         </ReactBootStrap.Table>
       </div>
+
+      
       )
 }
 export default Home;
