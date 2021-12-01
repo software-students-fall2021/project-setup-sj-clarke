@@ -357,25 +357,6 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
   }
    })
 
-// app.get("/CurrentGroupMembers", (req, res, next) => {
-//     // aquire Friends from database (for now we are calling mockaroo)
-//     axios
-//     .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
-//     // @TODO change the .chargee below when working on database 
-//     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-//     .catch(err => next(err)) // pass any errors to express
-    
-//   })
-
-// // GET User
-// // route for HTTP GET requests to /json-example
-// app.get("/Users", (req, res,next) => {
-//   // aquire Users from database (for now we are calling mockaroo which gives us a random JSON array of users) 
-//   axios
-//   .get("https://my.api.mockaroo.com/Users.json?key=aa763330")
-//   .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-//   .catch(err => next(err)) // pass any errors to express
-// })
 
 // POST a new User
 // data coming through will be the user
