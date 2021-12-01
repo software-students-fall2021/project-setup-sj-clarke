@@ -2,17 +2,12 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
-<<<<<<< HEAD
-=======
-const morgan = require('morgan')
-const bodyParser = require('body-parser')
->>>>>>> e8639a23f2612756ce7b0e91870e8ff06d8318ce
 // connection to mongoose
 const mongoose = require('mongoose');
 const users = require("./controllers/users")
-require(‘dotenv’).config()
+require('dotenv').config()
 const db = process.env.REACT_APP_DB;
-mongoose.connect(`${db}`);
+mongoose.connect('${db}');
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 
