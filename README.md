@@ -1,4 +1,5 @@
 # Project Repository: TripSplit
+[![CircleCI](https://circleci.com/gh/software-students-fall2021/project-setup-sj-clarke/tree/master.svg?style=shield)](https://circleci.com/gh/software-students-fall2021/project-setup-sj-clarke/tree/master)
 
 ## Project Description
 
