@@ -3,27 +3,49 @@ const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
 const morgan = require('morgan')
+const cors = require("cors")
+const cookieParser = require("cookie-parser")
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 // connection to mongoose
-const mongoose = require('mongoose');
-const users = require("./controllers/users")
-require('dotenv').config()
-const db = process.env.REACT_APP_DB;
-mongoose.connect(`${db}`);
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
-console.log(db); 
-// initializing User schema 
-const user_schema = new Schema ({
-  username:  String, // String is shorthand for {type: String}
-  password: String,
-  fName:   String,
-  lName: String,
-  currentGroup: String,
-  allGroups: [String],
-  friends: [String]
+require("dotenv").config({ silent: true })
+const db = process.env.REACT_APP_DB;
+mongoose.connect(`${db}`);
+//required for authentication with JSON Web Tokens
+const jwt = require("jsonwebtoken")
+const passport = require("passport")
+app.use(passport.initialize())
+
+//use JWT strategy within passport for authentication and handling
+const { jwtOptions, jwtStrategy } = require("./jwt-config.js") // import setup options for using JWT in passport
+passport.use(jwtStrategy)
+
+// set up some middleware
+app.use(morgan("dev", { skip: (req, res) => process.env.NODE_ENV === "test" })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
+
+// use express's builtin body-parser middleware to parse any data included in a request
+app.use(express.json()) // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+app.use(cookieParser()) // useful middleware for dealing with cookies
+
+
+// the following cors setup is important when working with cookies on your local machine
+app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
+
+
+//initializing User schema 
+// const user_schema = new Schema ({
+//   username:  String, // String is shorthand for {type: String}
+//   password: String,
+//   fName:   String,
+//   lName: String,
+//   currentGroup: String,
+//   allGroups: [String],
+//   friends: [String]
   
-});
+// });
 // initializing Group schema 
 const group_schema = new Schema({
   name:  String, 
@@ -40,7 +62,7 @@ const group_schema = new Schema({
   ],
 });
 // initializing mongoose models 
-const user = mongoose.model('user', user_schema)
+const user = mongoose.model('user')
 const group = mongoose.model('group', group_schema)
 
 // // example posting a group 
@@ -67,7 +89,6 @@ const group = mongoose.model('group', group_schema)
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use('/users', require('./routes/users'))
 
 //CORS stuff 
 app.use((req, res, next) => {
@@ -388,40 +409,148 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
   }
    })
 
-// app.get("/CurrentGroupMembers", (req, res, next) => {
-//     // aquire Friends from database (for now we are calling mockaroo)
-//     axios
-//     .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
-//     // @TODO change the .chargee below when working on database 
-//     .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-//     .catch(err => next(err)) // pass any errors to express
+app.get("/CurrentGroupMembers", (req, res, next) => {
+    // aquire Friends from database (for now we are calling mockaroo)
+    axios
+    .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
+    // @TODO change the .chargee below when working on database 
+    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
+    .catch(err => next(err)) // pass any errors to express
     
-//   })
+  })
 
-// // GET User
-// // route for HTTP GET requests to /json-example
-// app.get("/Users", (req, res,next) => {
-//   // aquire Users from database (for now we are calling mockaroo which gives us a random JSON array of users) 
-//   axios
-//   .get("https://my.api.mockaroo.com/Users.json?key=aa763330")
-//   .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-//   .catch(err => next(err)) // pass any errors to express
-// })
-
-// POST a new User
-// data coming through will be the user
-// add the User
-app.post("/Users", (req, res) => {
-const data = {
-  status: "Posted", 
-  first_name: req.body.first_name,
-  last_name: req.body.last_name,
-  password: req.body.password,
-  username: req.body.username
-}
-// send info to database once we make database connection 
-res.status(200).json(data)
+// sends a response for cookies including the Set-Cookie header
+app.get("/set-cookie", (req, res) => {
+  res
+    .cookie("foo", "bar")
+    .send({
+      success: true,
+      message: "Sent a cookie to the browser... let's hope it's saved.",
+    })
 })
+
+// route that looks for Cookie header in the request and sends it back whatever data was found in it
+app.get("/get-cookie", (req, res) => {
+  const numCookies = Object.keys(req.cookies).length
+
+  console.log(`Incoming cookie data: ${JSON.stringify(req.cookies, null, 0)}`)
+  res.send({
+    success: numCookies ? true : false,
+    message: numCookies
+      ? "thanks for sending cookies to the server"
+      : "no cookies sent to the server",
+      cookieData: req.cookies,
+  })
+})
+
+//route that is protected.. only authenticated users can access it
+app.get(
+  "/home",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      success: true,
+      user: {
+        //id: req.user.id,
+        username: req.user.username,
+
+      },
+      message: `Congratulations you have has accessed this route.`,
+    })
+  }
+)
+
+app.post("/login", async (req, res) => {
+  let username_query = req.body.username; 
+  console.log(username_query);
+
+  const username = req.body.username
+  const password = req.body.password
+
+  if (!username || !password){
+    res
+      .status(401)
+      .json({success: false, message: "no username or password supplied."})
+      console.log("error1")
+  }
+
+  
+    // find user in database 
+  const response = user.find({username : username_query}).then((found_user) => { //found_user.username
+    console.log(found_user[0].password);
+    console.log(req.body.password);
+    if (req.body.password == found_user[0].password){
+      console.log("passwords match")
+      const payload = { id: found_user.id}
+      const token = jwt.sign(payload, jwtOptions.secretOrKey)
+      res.json({ success: true, username: found_user[0].username, token: token})
+      console.log("error3")
+    }else{
+      res.status(401).json({ success: false, message: "passwords did not match."})
+      console.log("error4")
+    }
+
+
+  }).catch((err) => {
+    res
+    .status(401)
+    .json({ success: false, message: `user not found: ${req.body.username}`})
+    console.log(err)
+  });
+  //console.log(response);
+
+})
+
+app.get("/signup/:userInput", async (req, res, next) => {
+  try{
+    const response = await user.find({username: username_query});
+    res.json(response[0].SignUp)
+    console.log("hello")
+  }
+  catch(err){
+    res.json(err)
+  }
+})
+
+app.post("/signup/", async (req, res) => {
+  console.log("signup has been called")
+  console.log(req.query.username)
+    try{
+      const newUser = {
+        username: req.query.username,
+        password: req.query.password,
+        fName: req.query.fName,
+        lName: req.query.lName,
+        currentGroup: "",
+        allGroups: [],
+        friends: [],
+
+      }
+      new user(newUser).save()
+
+      const data = {
+        status: "posted",
+        username: req.query.username,
+        password: req.query.password,
+        fName: req.query.fName,
+        lName: req.query.lName
+      }
+      res.status(200).json(data)
+
+    }catch(err){
+      if(err == 404){
+        console.log("hello")
+      }
+      console.log(err)
+      res.json(err)
+
+    }
+
+})
+
+
+
+
 
 // export the express app we created to make it available to other modules
 module.exports = app
