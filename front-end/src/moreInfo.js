@@ -183,7 +183,6 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         amount={amount}
         username={user} // charger
         user = {username} // current user
-        transaction = {settleUp}
       />
     </div>
   );
