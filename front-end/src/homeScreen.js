@@ -25,28 +25,52 @@ function Home(){
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {
+        const username = process.env.REACT_APP_USERNAME; 
         // GET curent user's current group
         setCurrentUser(username)
+        console.log(username); 
         const response_current_group = await axios(
           `/CurrentGroup/${username}`
           ); 
+
         // Extract current group from the response from backend 
         setCurrentGroup(response_current_group.data)
+        
         // Query all transactions for the current group  
-        let query = `/Transactions/${response_current_group.data}`
+        let query = `/Transactions/Mexico`
         const response = await axios(
           query
         ); 
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
         setTransactions(response.data.reverse()); 
+
         }
       // fetch the data
       fetchData();
       // the blank array below causes this callback to be executed only once on component load
     }, []);
 
+    
+    console.log(transactions)
+    console.log(Object.keys(transactions[0].chargee)); 
 
+  
+//       function getChargees()  {
+//         transactions.map(transaction  => 
+//           {Object.keys(transaction.chargee).map(function(key) {
+//         chargeeArr.push(<option value={key}>{transaction.chargee[key]}</option>)
+//     });
+//   })
+// }
+
+
+
+//   getChargees(); 
+
+
+    
+  
     const index = 1; 
   
     // general layout of home screen 
@@ -69,7 +93,7 @@ function Home(){
                     <tr key = {outerElement.id}>
                     <td>{outerElement.date.split("T")[0]}</td>
                     <td>{outerElement.charger}</td>
-                    <td> {outerElement.chargee.map(oneChargee => 
+                    <td> {Object.keys(outerElement.chargee).map(oneChargee => 
                         <tr key = {outerElement.id}>
                             <td>{oneChargee}</td>
                           </tr>
