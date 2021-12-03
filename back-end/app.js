@@ -34,7 +34,7 @@ app.use(cookieParser()) // useful middleware for dealing with cookies
 app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
 
 
-// initializing User schema 
+//initializing User schema 
 const user_schema = new Schema ({
   username:  String, // String is shorthand for {type: String}
   password: String,
@@ -62,8 +62,8 @@ const group_schema = new Schema({
   ],
 });
 // initializing mongoose models 
-const user = mongoose.model('user', user_schema)
-const group = mongoose.model('group', group_schema)
+const user = mongoose.model('user')
+//const group = mongoose.model('group')
 
 // // example posting a group 
 //   const group_practice = new group({
@@ -89,7 +89,6 @@ const group = mongoose.model('group', group_schema)
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use('/users', require('./routes/users'))
 
 //CORS stuff 
 app.use((req, res, next) => {
@@ -422,8 +421,9 @@ app.get(
     res.json({
       success: true,
       user: {
-        id: req.user.id,
+        //id: req.user.id,
         username: req.user.username,
+
       },
       message: `Congratulations you have has accessed this route.`,
     })
@@ -431,7 +431,8 @@ app.get(
 )
 
 app.post("/login", async (req, res) => {
-  let username_query = req.username; 
+  let username_query = req.body.username; 
+  console.log(username_query);
 
   const username = req.body.username
   const password = req.body.password
@@ -445,23 +446,28 @@ app.post("/login", async (req, res) => {
 
   
     // find user in database 
-  const response = user.find({username: username_query});
+  const response = user.find({username : username_query}).then((found_user) => { //found_user.username
+    console.log(found_user[0].password);
+    console.log(req.body.password);
+    if (req.body.password == found_user[0].password){
+      console.log("passwords match")
+      const payload = { id: found_user.id}
+      const token = jwt.sign(payload, jwtOptions.secretOrKey)
+      res.json({ success: true, username: found_user[0].username, token: token})
+      console.log("error3")
+    }else{
+      res.status(401).json({ success: false, message: "passwords did not match."})
+      console.log("error4")
+    }
 
-  if (!response){
+
+  }).catch((err) => {
     res
     .status(401)
-    .json({ success: false, message: `user not found: ${username}`})
-    console.log("error2")
-  }else if (req.body.password == response.password){
-
-    const payload = { id: response.id}
-    const token = jwt.sign(payload, jwtOptions.secretOrKey)
-    res.json({ success: true, username:response.username, token: token})
-    console.log("error3")
-  }else{
-    res.status(401).json({ success: false, message: "passwords did not match."})
-    console.log("error4")
-  }
+    .json({ success: false, message: `user not found: ${req.body.username}`})
+    console.log(err)
+  });
+  //console.log(response);
 
 })
 

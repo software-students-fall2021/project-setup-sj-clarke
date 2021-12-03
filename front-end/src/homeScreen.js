@@ -30,14 +30,16 @@ function Home(props){
 
   
   useEffect(() => {
+    console.log(jwtToken)
     axios
-      .get(`${process.env.REACT_APP_BACKEND}/home`, {
-        headers: {Authorization: `JWT ${jwtToken}`},
+      .get(`${process.env.REACT_APP_BACK_END_DOMAIN}/home`, {
+        headers: { Authorization: `JWT ${jwtToken}` },
       })
       .then(res => {
         setResponse(res.data)
       })
       .catch(err => {
+        console.log(jwtToken);
         console.log(
           "The server rejected the request for this protected resource.. we probably don't have a valid JWT token."
         )
@@ -49,12 +51,14 @@ function Home(props){
     async function fetchData() {
       // GET curent user's current group
       const username = process.env.REACT_APP_USERNAME;
-      const response_current_group = await axios(`/CurrentGroup/sjclarke`);
+      const response_current_group = await axios(`/CurrentGroup/${process.env.REACT_APP_USERNAME}`, { headers: { Authorization: `JWT ${jwtToken}` } });
+      console.log(response_current_group);
       // Extract current group from the response from backend
       setCurrentGroup(response_current_group.data);
       // Query all transactions for the current group
       let query = `/Transactions/${response_current_group.data}`;
       const response = await axios(query);
+      console.log(response);
       // Extract the data from the server response
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
       setTransactions(response.data);
@@ -69,7 +73,7 @@ function Home(props){
       async function fetchData() {
         // GET curent user's current group
         const response_current_group = await axios(
-          "/CurrentGroup/sjclarke"
+          `/CurrentGroup/${process.env.REACT_APP_USERNAME}`
           ); 
         // Extract current group from the response from backend 
         setCurrentGroup(response_current_group.data)
