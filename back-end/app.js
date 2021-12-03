@@ -93,7 +93,6 @@ app.use((req, res, next) => {
 // GET all Friends of a specific user 
 app.get("/Friends/:usernameInput", async (req, res) => {
     let username_query = req.params.usernameInput; 
-    
     try{
       // find user in database 
       const response = await user.find({username: username_query});
@@ -160,6 +159,7 @@ app.get("/CurrentGroup/:usernameInput", async (req, res) => {
     // find user in database 
     const response = await user.find({username: username_query});
     // send the current group data in the response
+    // console.log(response[0])
     res.json(response[0].currentGroup)
   }
   catch(err){
@@ -324,8 +324,8 @@ app.post("/CreateGroup/", async (req, res)=>{
   res.json(data)
   console.log("Create Group got called")
   console.log(req.body.groupName) */
-  console.log("Create Group got called")
-  console.log(req.query.groupName)
+  // console.log("Create Group got called")
+  ///console.log(req.query.groupName)
   let groupname_query = req.query.groupName;
   try{
     

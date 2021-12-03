@@ -5,28 +5,9 @@
 // const request = require("supertest")
 // const app = require("../app.js");
 // const { response } = require("express");
+// const conn = require("../db/index.js"); 
 
-
-// // test GET 
-// // Testing to see that the mockaroo sends back 10 friends
-// describe('GET /CreateGroup', () => {
-  
-//   it('PASS, creating 10 groups', (done) => {
-//     request(app).get('/CreateGroup')
-//       .then((res) => {
-//         const body = res.body;
-//         expect(body.length).to.equal(10);
-//         done();
-//       })
-//       .catch((err) => done(err));
-//   });
-
- 
-// })
-
-    // test POST 
-
-//     describe('POST /CreateGroup', () => {
+//     describe('POST /CreateGroup/?groupName/?friendName', () => {
 //         process.env.NODE_ENV = 'test';
 //         before((done) => {
 //           conn.connect()
@@ -34,32 +15,20 @@
 //             .catch((err) => done(err));
 //         })
 //       it('PASS, creating a new group works', (done) => {
-//         request(app).post('/CreateGroup')
-//           .send({ groupName: 'Mexico'})
+//         request(app).post('/CreateGroup/?userInput=sj&groupName=Bahamas&friendAdded=clarkeAmy')
 //           .expect(200)
 //           .expect('Content-Type', /json/)
 //           .then((res) => {
 //             const body = res.body;
 //             expect(body).to.contain.property('status');
 //             expect(body).to.contain.property('groupName');
+//             expect(body).to.contain.property('friendName');
 //             done();
 //           })
 //           .catch((err) => done(err));
 //       });
 //     })
-// })
+
     
-    //   it('Fail, Creating a group by sending it through a new group', (done) => {
-    //     request(app).post('/CreateGroup')
-    //       .send({})
-    //       .expect(200)
-    //       .then((res) => {
-    //         const body = res.body;
-    //         expect(body.groupName)
-    //           .to.equal(undefined)
-    //         done();
-    //       })
-    //       .catch((err) => done(err));
-    //   });
-    // })
+   
 
