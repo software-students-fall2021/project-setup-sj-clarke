@@ -8,40 +8,43 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const users = require("./controllers/users")
 require('dotenv').config()
-const db = process.env.REACT_APP_DB;
-mongoose.connect(`${db}`);
-//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
+// const db = process.env.REACT_APP_DB;
+// mongoose.connect(`${db}`);
+// mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
-console.log(db); 
+
 // initializing User schema 
-const user_schema = new Schema ({
-  username:  String, // String is shorthand for {type: String}
-  password: String,
-  fName:   String,
-  lName: String,
-  currentGroup: String,
-  allGroups: [String],
-  friends: [String]
+// const user_schema = new Schema ({
+//   username:  String, // String is shorthand for {type: String}
+//   password: String,
+//   fName:   String,
+//   lName: String,
+//   currentGroup: String,
+//   allGroups: [String],
+//   friends: [String]
   
-});
+// });
 // initializing Group schema 
-const group_schema = new Schema({
-  name:  String, 
-  date: Date,
-  members: [String],
-  transactions:  [ 
-    {
-        charger: String, 
-        chargee: [String], 
-        amount: String, 
-        date: Date, 
-        description: String
-      }
-  ],
-});
+
+const user = require('./db/models/user.js').user; 
+const group = require('./db/models/group.js').group; 
+// const group_schema = new Schema({
+//   name:  String, 
+//   date: Date,
+//   members: [String],
+//   transactions:  [ 
+//     {
+//         charger: String, 
+//         chargee: [String], 
+//         amount: String, 
+//         date: Date, 
+//         description: String
+//       }
+//   ],
+// });
 // initializing mongoose models 
-const user = mongoose.model('user', user_schema)
-const group = mongoose.model('group', group_schema)
+// const user = mongoose.model('user', user_schema)
+// const group = mongoose.model('group', group_schema)
 
 // // example posting a group 
 //   const group_practice = new group({
@@ -242,7 +245,8 @@ await group.findOneAndUpdate({name: group_query}, {
       chargee: req.body.chargee,
       amount: req.body.amount, 
       date: req.body.date, 
-      description: req.body.description 
+      description: req.body.description,
+      completed: req.body.completed 
     }]
   }
 })
@@ -412,16 +416,25 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
 // data coming through will be the user
 // add the User
 app.post("/Users", (req, res) => {
-const data = {
-  status: "Posted", 
-  first_name: req.body.first_name,
-  last_name: req.body.last_name,
+const data = new user ({
+  fName: req.body.fName,
+  lName: req.body.lName,
   password: req.body.password,
-  username: req.body.username
-}
+  username: req.body.username, 
+  currentGroup: req.body.currentGroup,
+  allGroups: req.body.allGroups, 
+  friends: req.body.friends
+});
 // send info to database once we make database connection 
-res.status(200).json(data)
+data.save()
+  .then((data) => res.status(200).json(data)); 
 })
+
+app.get("/Users", async (req, res)  => {
+  const response = await user.find();
+  // send info to database once we make database connection 
+  res.status(200).json(response); 
+  })
 
 // export the express app we created to make it available to other modules
 module.exports = app
