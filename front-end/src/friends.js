@@ -93,7 +93,6 @@ function Friends() {
     setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
     const username = process.env.REACT_APP_USERNAME;
-    
     axios.post(`AddToGroup/${username}`, newGroupAdditionValues);
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });

@@ -70,6 +70,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   
         if (charger === username) {
           for (var j = 0; j < chargees.length; j++) {
+            
             const chargee = chargees[j].trim();
             var to_add = Number(transaction.amount);
 

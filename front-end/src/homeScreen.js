@@ -22,16 +22,22 @@ function Home(){
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
     const [totalExpense, setTotalExpense] = useState(); 
+
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {
         // GET curent user's current group
+        console.log(username)
         setCurrentUser(username)
         const response_current_group = await axios(
-          `/CurrentGroup/${username}`
+          `/CurrentGroup/sjclarke`
           ); 
+         
         // Extract current group from the response from backend 
+        console.log(currentGroup)
         setCurrentGroup(response_current_group.data)
+        
+       
         // Query all transactions for the current group  
         let query = `/Transactions/${response_current_group.data}`
         const response = await axios(
@@ -44,7 +50,8 @@ function Home(){
       // fetch the data
       fetchData();
       // the blank array below causes this callback to be executed only once on component load
-    }, []);
+    }, [transactions]);
+
 
 
     const index = 1; 
