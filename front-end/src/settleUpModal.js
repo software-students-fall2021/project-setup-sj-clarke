@@ -4,8 +4,10 @@ import "./modal.css";
 
 function SettleUp({ showModal, setModal, amount, username, user, transaction}) {
 
-  console.log(transaction)
+
   const handleYesClose = () => {
+  
+    
     
     // remove me from list of chargees 
     setModal(false);

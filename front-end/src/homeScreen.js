@@ -22,6 +22,8 @@ function Home(){
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
     const [totalExpense, setTotalExpense] = useState(); 
+
+
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {
@@ -30,12 +32,12 @@ function Home(){
         setCurrentUser(username)
         console.log(username); 
         const response_current_group = await axios(
-          `/CurrentGroup/${username}`
+          `/CurrentGroup/sjclarke`
           ); 
 
         // Extract current group from the response from backend 
         setCurrentGroup(response_current_group.data)
-        
+        console.log(currentGroup)
         // Query all transactions for the current group  
         let query = `/Transactions/Mexico`
         const response = await axios(
@@ -53,7 +55,7 @@ function Home(){
 
     
     console.log(transactions)
-    console.log(Object.keys(transactions[0].chargee)); 
+    
 
   
 //       function getChargees()  {
@@ -95,7 +97,7 @@ function Home(){
                     <td>{outerElement.charger}</td>
                     <td> {Object.keys(outerElement.chargee).map(oneChargee => 
                         <tr key = {outerElement.id}>
-                            <td>{oneChargee}</td>
+                            <td>{oneChargee.trim()}</td>
                           </tr>
                     )}</td>
                     <td className = "expenseColumn">${outerElement.amount}</td>

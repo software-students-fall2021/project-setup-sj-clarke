@@ -14,7 +14,9 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [amount, setModalAmount] = useState();
   const [user, setModalUser] = useState(" ");
   const [settleUp, setSettleUp] = useState({}); 
+  const [finalTransactions, setFinalTransactions] = useState({})
   const [arrOfYouOwe, setarrOfYouOwe] = useState([]);
+  const [arrOfTransactions, setarrOfTransactions] = useState([]); 
   const [arrOfOweYou, setarrOfOweYou] = useState([]);
   const [finalTransaction, setFinalTransaction] = useState({});
   const username = process.env.REACT_APP_USERNAME;
@@ -24,7 +26,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
     async function fetchData() {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
-
+      var chargeesArr = []; 
       const response_current_group = await axios(`/CurrentGroup/${username}`);
       //console.log({ username });
       let query = `/Transactions/${response_current_group.data}`;
@@ -35,24 +37,34 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
       for (var i = 0; i < response.data.length; i++) {
         var transaction = response.data[i];
         var charger = transaction.charger;
-        if (transaction.chargee.indexOf(username) != -1) {
-          transaction.completed = i; 
-          var amount_to_add = Number(transaction.amount);
-          amount_to_add = amount_to_add / (transaction.chargee.length + 1);
-          if (youOwe.hasOwnProperty(charger)) {
-            youOwe[charger] += amount_to_add;
-          } else {
-            youOwe[charger] = amount_to_add;
+        chargeesArr = Object.keys(transaction.chargee); 
+        if (chargeesArr.indexOf(username) != -1) {
+          if (transaction.chargee.username == 1){
+            continue;
           }
-          setYouOwe(youOwe);
-        }
+          else{
+            // add the transaction to the list (correponding index, in order. 
+            setarrOfTransactions(...arrOfTransactions, transaction)
+            // console.log(arrOfTransactions)
+            var amount_to_add = Number(transaction.amount);
+            amount_to_add = amount_to_add / (chargeesArr.length + 1);
+            if (youOwe.hasOwnProperty(charger)) {
+              youOwe[charger] += amount_to_add;
+            } else {
+              youOwe[charger] = amount_to_add;
+            }
+            
+       
+            setYouOwe(youOwe);
+          }
+          }
+         
       }
       
       var res = Object.keys(youOwe).map(function (name) {
         var obj = {
           name: "",
           amount: "",
-          index: 0
         };
         // console.log({ name });
         // console.log(youOwe[name]);
@@ -60,20 +72,24 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         obj.amount = youOwe[name];
         return obj;
       });
+      console.log(res); 
       setarrOfYouOwe(res);
+
       setYouOwe({});
 
       for (var i = 0; i < response.data.length; i++) {
         const transaction = response.data[i];
         const charger = transaction.charger;
         const chargees = transaction.chargee;
-  
+        chargeesArr = Object.keys(transaction.chargee); 
+
         if (charger === username) {
-          for (var j = 0; j < chargees.length; j++) {
-            const chargee = chargees[j].trim();
+          for (var j = 0; j < chargeesArr.length; j++) {
+            const chargee = chargeesArr[j]
+            
             var to_add = Number(transaction.amount);
 
-            to_add /= chargees.length + 1;
+            to_add /= chargeesArr.length + 1;
             if (oweYou.hasOwnProperty(chargee)) {
               oweYou[chargee] += to_add;
             } else {
@@ -84,6 +100,8 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
           }
         }
       }
+
+      var count = 0; 
       // console.log({ oweYou });
       var res2 = Object.keys(oweYou).map(function (name2) {
         var obj = {
@@ -132,7 +150,6 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
                     setModal(true);
                     setModalAmount(obj.amount);
                     setModalUser(obj.name); 
-                    setSettleUp(obj); 
                   }}
                 >
                   Settle Up
