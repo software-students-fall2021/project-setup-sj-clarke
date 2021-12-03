@@ -1,6 +1,6 @@
-import "./header.css";
-import "./homeScreen.css";
-import { Link } from "react-router-dom";
+import './header.css';
+import './homeScreen.css'
+import {Link} from 'react-router-dom'
 import Modal from "react-modal";
 import React, { useEffect, useState, Navigate } from "react";
 import * as ReactBootStrap from "react-bootstrap";
@@ -9,6 +9,7 @@ import axios from "axios";
 
 
 function Home(props){
+    const username = process.env.REACT_APP_USERNAME;
     const jwtToken = localStorage.getItem("token")
     console.log(`JWT token: ${jwtToken}`)
 
@@ -56,40 +57,44 @@ function Home(props){
       // Extract current group from the response from backend
       setCurrentGroup(response_current_group.data);
       // Query all transactions for the current group
-      let query = `/Transactions/${response_current_group.data}`;
-      const response = await axios(query);
+      let query = `/Transactions/Mexico`;
+
+      const response = await axios(query, { headers: { Authorization: `JWT ${jwtToken}` } });
       console.log(response);
+      
       // Extract the data from the server response
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
       setTransactions(response.data);
+      console.log("hello")
     }
     // fetch the data
     fetchData();
     // the blank array below causes this callback to be executed only once on component load
   }, []);
 
-    useEffect(() => {
-      // a nested function that fetches the data
-      async function fetchData() {
-        // GET curent user's current group
-        const response_current_group = await axios(
-          `/CurrentGroup/${process.env.REACT_APP_USERNAME}`
-          ); 
-        // Extract current group from the response from backend 
-        setCurrentGroup(response_current_group.data)
-        // Query all transactions for the current group  
-        let query = `/Transactions/${response_current_group.data}`
-        const response = await axios(
-          query
-        ); 
-        // Extract the data from the server response
-        // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(response.data.reverse()); 
-        }
-      // fetch the data
-      fetchData();
-      // the blank array below causes this callback to be executed only once on component load
-    }, []);
+    // useEffect(() => {
+    //   // a nested function that fetches the data
+    //   async function fetchData() {
+    //     // GET curent user's current group
+    //     setCurrentUser(username)
+    //     const response_current_group = await axios(
+    //       `/CurrentGroup/${process.env.REACT_APP_USERNAME}`
+    //       ); 
+    //     // Extract current group from the response from backend 
+    //     setCurrentGroup(response_current_group.data)
+    //     // Query all transactions for the current group  
+    //     let query = `/Transactions/${response_current_group.data}`
+    //     const response = await axios(
+    //       query
+    //     ); 
+    //     // Extract the data from the server response
+    //     // Set transactions to this data so we can render the rows of the home screen table with the transactions
+    //     setTransactions(response.data.reverse()); 
+    //     }
+    //   // fetch the data
+    //   fetchData();
+    //   // the blank array below causes this callback to be executed only once on component load
+    // }, []);
 
 
     const index = 1; 
@@ -143,18 +148,18 @@ function Home(props){
           </tbody>
       <Modal isOpen={transactionInfoModal} dialogClassName="modal-design">
           <h1 className="modal-title">Transaction Information</h1>
-          <p className="transaction-info">Date: {date}</p>
-          <p className="transaction-info">Charger: {charger}</p>
-          <p className="transaction-info">Chargee: {chargee}</p>
-          <p className="transaction-info">Description: {description}</p>
-          <p className="transaction-info">Total Expense: ${totalExpense}</p>
-          <button
-            onClick={() => setTransactionInfoModal(false)}
-            type="button"
-            className="btn btn-secondary btn-sm"
-          >
-            close
-          </button>
+          <p className = "transaction-info">Date: {date}</p>
+          <p className = "transaction-info">Charger: {charger}</p>
+          <p className = "transaction-info">Chargee: {chargee}</p>
+          <p className = "transaction-info" >Description: {description}</p>
+          <p className = "transaction-info" >Total Expense: ${totalExpense}</p>
+              <button
+                onClick={() => setTransactionInfoModal(false)}
+                type="button"
+                className="btn btn-secondary btn-sm"
+              >
+                close
+              </button>
         </Modal>
       </ReactBootStrap.Table>
           
