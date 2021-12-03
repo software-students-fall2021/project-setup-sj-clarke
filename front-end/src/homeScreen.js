@@ -10,7 +10,6 @@ import axios from 'axios';
 function Home(){
     // Hold all transactions for current group to display on home screen 
     const username = process.env.REACT_APP_USERNAME; 
-
     const [transactions, setTransactions] = useState([]);  
     const [date, setDate] = useState(); 
     const [charger, setCharger] = useState(); 
@@ -23,7 +22,6 @@ function Home(){
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
     const [totalExpense, setTotalExpense] = useState(); 
-
     useEffect(() => {
       // a nested function that fetches the data
       async function fetchData() {

@@ -16,6 +16,7 @@ function AddExpenseModal({ show, setModal }) {
     amount: "",
     description: "",
     date: "",
+    completed: 0 
   });
   const [newTransactionAmount, setNewTransactionAmount] = useState("");
   const [newTransactionMembers, setNewTransactionMembers] = useState([]);
@@ -79,7 +80,7 @@ function AddExpenseModal({ show, setModal }) {
   };
 
   // handles changes to the add friend form within "add friend" modal
-
+  // remove me from chargees and subtract amount from expens  
   return (
     <div>
       <ReactBootStrap.Modal

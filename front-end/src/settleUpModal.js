@@ -2,8 +2,22 @@ import React from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import "./modal.css";
 
-function SettleUp({ showModal, setModal, amount, username }) {
-  const handleClose = () => setModal(false);
+function SettleUp({ showModal, setModal, amount, username, user, transaction}) {
+
+  console.log(transaction)
+  const handleYesClose = () => {
+    
+    // remove me from list of chargees 
+    setModal(false);
+  }
+  
+
+
+  const handleNoClose = () => {
+    setModal(false);
+    
+  }
+
 
   return (
     <div>
@@ -19,10 +33,11 @@ function SettleUp({ showModal, setModal, amount, username }) {
           </ReactBootStrap.Modal.Title>
         </ReactBootStrap.Modal.Header>
         <ReactBootStrap.Modal.Footer>
-          <ReactBootStrap.Button variant="light" onClick={handleClose}>
+          <ReactBootStrap.Button variant="light" onClick={handleNoClose}>
             No
           </ReactBootStrap.Button>
-          <ReactBootStrap.Button onClick={handleClose}>
+          <ReactBootStrap.Button onClick={handleYesClose}
+          >
             Yes
           </ReactBootStrap.Button>
         </ReactBootStrap.Modal.Footer>

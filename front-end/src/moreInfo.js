@@ -13,9 +13,10 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [showModal, setModal] = useState(false);
   const [amount, setModalAmount] = useState();
   const [user, setModalUser] = useState(" ");
-
+  const [settleUp, setSettleUp] = useState({}); 
   const [arrOfYouOwe, setarrOfYouOwe] = useState([]);
   const [arrOfOweYou, setarrOfOweYou] = useState([]);
+  const [finalTransaction, setFinalTransaction] = useState({});
   const username = process.env.REACT_APP_USERNAME;
   useEffect(() => {
     // a nested function that fetches the data
@@ -31,13 +32,11 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
       const response = await axios(query);
       // Extract the data from the server response
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
-
       for (var i = 0; i < response.data.length; i++) {
         var transaction = response.data[i];
         var charger = transaction.charger;
-        //console.log(transaction.chargee);
-
         if (transaction.chargee.indexOf(username) != -1) {
+          transaction.completed = i; 
           var amount_to_add = Number(transaction.amount);
           amount_to_add = amount_to_add / (transaction.chargee.length + 1);
           if (youOwe.hasOwnProperty(charger)) {
@@ -48,11 +47,12 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
           setYouOwe(youOwe);
         }
       }
-
+      
       var res = Object.keys(youOwe).map(function (name) {
         var obj = {
           name: "",
           amount: "",
+          index: 0
         };
         // console.log({ name });
         // console.log(youOwe[name]);
@@ -67,6 +67,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         const transaction = response.data[i];
         const charger = transaction.charger;
         const chargees = transaction.chargee;
+  
         if (charger === username) {
           for (var j = 0; j < chargees.length; j++) {
             const chargee = chargees[j].trim();
@@ -78,6 +79,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
             } else {
               oweYou[chargee] = to_add;
             }
+            
             setOweYou(oweYou);
           }
         }
@@ -104,7 +106,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
     // the blank array below causes this callback to be executed only once on component load
   }, [transactions]);
 
-  //console.log(youOwe);
+  console.log(youOwe);
 
   return (
     <div>
@@ -130,6 +132,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
                     setModal(true);
                     setModalAmount(obj.amount);
                     setModalUser(obj.name); 
+                    setSettleUp(obj); 
                   }}
                 >
                   Settle Up
@@ -161,7 +164,9 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         showModal={showModal}
         setModal={setModal}
         amount={amount}
-        username={user}
+        username={user} // charger
+        user = {username} // current user
+        transaction = {settleUp}
       />
     </div>
   );
