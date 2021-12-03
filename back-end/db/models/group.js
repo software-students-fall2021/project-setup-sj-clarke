@@ -8,7 +8,7 @@ const group_schema = new Schema({
     transactions:  [ 
       {
           charger: String, 
-          chargee: [String], 
+          chargee: Object, 
           amount: String, 
           date: Date, 
           description: String
