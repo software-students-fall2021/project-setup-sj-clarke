@@ -7,12 +7,18 @@ import axios from "axios";
 import { render } from "@testing-library/react";
 import { useForm } from "react-hook-form";
 import {Button} from "react-bootstrap";
+import {Link} from 'react-router-dom'
 Modal.setAppElement("#root");
 
 function CreateGroup() {
+
   const [group, setGroup] = useState([])
   const [friend, setFriend] = useState([])
   const {register, handleSubmit, errors} = useForm()
+  const jwtToken = localStorage.getItem("token")
+    console.log(`JWT token: ${jwtToken}`)
+    const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
+
   useEffect(() => {
     // a nested function that fetches the data
   
@@ -94,6 +100,8 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
   
 
   return (
+    <>
+    {isLoggedIn ? (
     <div className="CreateGroup">
       <header>Create a New Group</header>
      
@@ -130,6 +138,10 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
         </form>
      
     </div>
+    ):(
+      <Link to="/login?error=home"/>
+    )}
+    </>
   );
 }
 export default CreateGroup;

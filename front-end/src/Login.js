@@ -1,50 +1,69 @@
 import React, {useState, useEffect} from 'react';
-import {Redirect, Link} from 'react-router-dom'
+import {Redirect, Link, Navigate, useSearchParams} from 'react-router-dom'
 import './Login.css';
 import axios from 'axios';
 import createAccount from './createAccount'
 
 function Login(props){
+    //require("dotenv").config({ silent: true })
 
-    const [status, setStatus] = useState({})
+    //const backend = process.env.REACT_APP_BACKEND
+    //console.log(backend)
+
+    let [urlSearchParams] = useSearchParams()
+
+    const [response, setResponse] = useState({})
+    const [errorMessage, setErrorMessage] = useState("")
+
+    useEffect(() => {
+        const qsError = urlSearchParams.get("error")
+        if (qsError == "home")
+        setErrorMessage("Please log in to view the protected content.")
+    }, [])
 
     useEffect(() => {
 
-        if(status.success){
-        console.log(`User successfully logged in: ${status.username}`);
+        if(response.success && response.token){
+        console.log(`User successfully logged in: ${response.username}`);
+        localStorage.setItem("token", response.token)
         }
-        props.setuser(status)
-    },[status])
+    },[response])
 
     const handleSubmit = async e => {
         e.preventDefault()
 
         
-
         try{
             const requestData = {
                 username: e.target.username.value,
                 password: e.target.password.value
             }
+            console.log(process.env.REACT_APP_BACK_END_DOMAIN)
+            console.log(process.env.REACT_APP_USERNAME)
             const response = await axios.post(
-                "https://my.api.mockaroo.com/Users.json?key=aa763330",
+            `${process.env.REACT_APP_BACK_END_DOMAIN}/login`,
                 requestData
             )
             
-        console.log(response.data)
-        setStatus(response.data)
+        console.log(`Server response: ${JSON.stringify(response.data, null, 0)}`)
+        setResponse(response.data)
     }catch(err){
-        throw new Error(err)
+        setErrorMessage(
+            "You have entered invalid credentials"
+        )
     }
 }
 
 
 
-    if(!status.success)
+    if(!response.success)
         return(
             <div className="Login">
                 <header>Login</header>
-                <form onSubmit={handleSubmit}>
+                {errorMessage ? <p className="error">{errorMessage}</p> : ""}
+                <form onSubmit={handleSubmit}>{
+
+                }
                     <label>Username</label>
                     <input type="text" name="username" placeholder="Enter Username"></input>
                     <label>Password</label>
@@ -56,6 +75,6 @@ function Login(props){
             </div>
         )
 
-    else return <Redirect to="/Home"/>
+    else return <Navigate to="/home"/>
 }
 export default Login;

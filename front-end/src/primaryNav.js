@@ -65,6 +65,9 @@ const PrimaryNav = (props) => {
             <ReactBootStrap.Nav.Link href="/Account" onClick={props.authorized}>
               Account
             </ReactBootStrap.Nav.Link>
+            <ReactBootStrap.Nav.Link href="/logout" onClick={props.authorized}>
+              Log Out
+            </ReactBootStrap.Nav.Link>
           </ReactBootStrap.Nav>
         </ReactBootStrap.Navbar.Collapse>
         <ReactBootStrap.Navbar.Brand href="/Home">

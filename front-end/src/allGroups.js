@@ -4,6 +4,7 @@ import * as ReactBootStrap from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 import Modal from "react-modal";
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 function AllGroups() {
   // variables needed for all groups page and modals
@@ -11,6 +12,10 @@ function AllGroups() {
   const [groups, setGroups] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [members, setMembers] = useState([]);
+  const jwtToken = localStorage.getItem("token")
+  console.log(`JWT token: ${jwtToken}`)
+  const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
+
   
   useEffect(() => {
    // a nested function that fetches the data
@@ -34,7 +39,7 @@ function AllGroups() {
 
  const [modalGroup, setModalGroup] = useState(" "); 
   async function getTransactions(groupName){
-      const response_groupData = await axios(`/Transactions/${groupName}`);
+      const response_groupData = await axios(`/Transactions/${groupName}`, { headers: { Authorization: `JWT ${jwtToken}` } });
       // set transactions
       setGroupName(groupName);
       setTransactions(response_groupData.data);
@@ -42,7 +47,7 @@ function AllGroups() {
 
 
   async function getMembers(groupName){
-    const res_members = await axios(`/Members/${groupName}`);
+    const res_members = await axios(`/Members/${groupName}`, { headers: { Authorization: `JWT ${jwtToken}` } });
     // set transactions
     setGroupName(groupName);
     setMembers(res_members.data);
@@ -56,6 +61,8 @@ function AllGroups() {
   const [seeMemModal, setMemModal] = useState(false);
 
   return (
+    <>
+    {isLoggedIn ? (
     <Container>
       <Row>
         <Col>
@@ -168,6 +175,10 @@ function AllGroups() {
         </ReactBootStrap.Table>
       </div>
     </Container>
+    ) : (
+      <Link to="/login?error=home"/>
+    )}
+    </>
   );
 }
 export default AllGroups;
