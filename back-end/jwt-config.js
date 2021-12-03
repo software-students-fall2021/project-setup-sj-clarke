@@ -3,7 +3,6 @@ const passportJWT = require("passport-jwt")
 const app = require("./app")
 const ExtractJwt = passportJWT.ExtractJwt
 const JwtStrategy = passportJWT.Strategy
-
 // set up some JWT authentication options
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
@@ -11,7 +10,7 @@ const db = process.env.REACT_APP_DB;
 mongoose.connect(`${db}`);
 
 
-  // initializing User schema 
+ // initializing User schema 
 const user_schema = new Schema ({
   username:  String, // String is shorthand for {type: String}
   password: String,

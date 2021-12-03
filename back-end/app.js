@@ -30,21 +30,22 @@ app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 app.use(cookieParser()) // useful middleware for dealing with cookies
 
+
 // the following cors setup is important when working with cookies on your local machine
 app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
 
 
 //initializing User schema 
-const user_schema = new Schema ({
-  username:  String, // String is shorthand for {type: String}
-  password: String,
-  fName:   String,
-  lName: String,
-  currentGroup: String,
-  allGroups: [String],
-  friends: [String]
+// const user_schema = new Schema ({
+//   username:  String, // String is shorthand for {type: String}
+//   password: String,
+//   fName:   String,
+//   lName: String,
+//   currentGroup: String,
+//   allGroups: [String],
+//   friends: [String]
   
-});
+// });
 // initializing Group schema 
 const group_schema = new Schema({
   name:  String, 
@@ -499,6 +500,57 @@ app.post("/login", async (req, res) => {
   //console.log(response);
 
 })
+
+app.get("/signup/:userInput", async (req, res, next) => {
+  try{
+    const response = await user.find({username: username_query});
+    res.json(response[0].SignUp)
+    console.log("hello")
+  }
+  catch(err){
+    res.json(err)
+  }
+})
+
+app.post("/signup/", async (req, res) => {
+  console.log("signup has been called")
+  console.log(req.query.username)
+    try{
+      const newUser = {
+        username: req.query.username,
+        password: req.query.password,
+        fName: req.query.fName,
+        lName: req.query.lName,
+        currentGroup: "",
+        allGroups: [],
+        friends: [],
+
+      }
+      new user(newUser).save()
+
+      const data = {
+        status: "posted",
+        username: req.query.username,
+        password: req.query.password,
+        fName: req.query.fName,
+        lName: req.query.lName
+      }
+      res.status(200).json(data)
+
+    }catch(err){
+      if(err == 404){
+        console.log("hello")
+      }
+      console.log(err)
+      res.json(err)
+
+    }
+
+})
+
+
+
+
 
 // export the express app we created to make it available to other modules
 module.exports = app

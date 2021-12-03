@@ -19,6 +19,7 @@ import SetCookie from "./setCookie"
 import GetCookie from "./getCookie"
 import SetLocalStorage from "./setLocalStorage"
 import GetLocalStorage from "./getLocalStorage"
+import Logout from "./Logout"
 
 const App = (props) => {
   require("dotenv").config();
@@ -42,6 +43,7 @@ const App = (props) => {
           <Route path="/MoreInfo" element={<MoreInfo/>}/>
           <Route path="/createAccount" element={<CreateAccount/>}/>
           <Route path="/" element={<Login/>}/>
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </Router>
     </div>
