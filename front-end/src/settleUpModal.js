@@ -1,15 +1,28 @@
 import React from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import "./modal.css";
+import axios from "axios";
 
-function SettleUp({ showModal, setModal, amount, username, user, transaction}) {
+function SettleUp({ showModal, setModal, amount, charger, currentuser, transactionIDArr, currentgroup}) {
 
+  console.log({charger})
+  console.log({currentuser})
+  console.log({transactionIDArr})
 
-  const handleYesClose = () => {
-  
+  async function handleYesClose() {
     
+
+    const response = await axios(`/Transactions/${currentgroup}`);
+    console.log(response.data)
+    for (var i = 0; i < transactionIDArr.length; i++){
+      for (var j = 0; j < response.data.length; j++){
+        if (transactionIDArr[i]=== response.data[j]._id){
+          // then update 
+          axios.post(`/updateTransaction/${currentgroup}/${transactionIDArr[i]}/${currentuser}`);
+        }
+      }
+    }
     
-    // remove me from list of chargees 
     setModal(false);
   }
   
@@ -17,7 +30,7 @@ function SettleUp({ showModal, setModal, amount, username, user, transaction}) {
 
   const handleNoClose = () => {
     setModal(false);
-    
+
   }
 
 
@@ -31,7 +44,7 @@ function SettleUp({ showModal, setModal, amount, username, user, transaction}) {
       >
         <ReactBootStrap.Modal.Header closeButton className="Modal">
           <ReactBootStrap.Modal.Title id="example-modal-sizes-title-lg">
-            Settle Up {amount} with {username}?
+            Settle Up {amount} with {charger}?
           </ReactBootStrap.Modal.Title>
         </ReactBootStrap.Modal.Header>
         <ReactBootStrap.Modal.Footer>

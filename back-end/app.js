@@ -303,6 +303,52 @@ const data = {
 res.json(data)
 })
 
+app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,res) => {
+  let group_query = req.params.groupInput;
+  let transactionID = req.params.transactionID; 
+  let temp = {
+    transactions: [
+    {
+      id: 0, 
+      charger: '',
+      chargee: {}, 
+      amount: "", 
+      date: Date, 
+      description: "", 
+      completed: 0
+  }
+]
+}
+
+  // update existing transaction for this group. 
+  const currentGroup = group.find({name: group_query})
+  console.log(group)
+  trans = group.transactions.transactionID; 
+
+  for (var i = 0; i < trans.length; i++){
+    if (trans._id = transactionID){
+      // copy the whole transaction into a new id
+      temp._id = trans._id
+      temp.charger = trans.charger
+      temp.chargee = trans.chargee
+      temp.amount = trans.amount
+      temp.date = trans.date
+      temp.description = trans.description
+      temp.completed = trans.completed
+    }
+    // 
+    temp.chargee[username] = 1
+  }
+  // find one and update group, pass through transaction 
+  await group.findOneAndUpdate({name: group_query}, temp)
+    
+  })
+ 
+  
+
+
+
+
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
 let group_query = req.params.groupInput; 

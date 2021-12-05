@@ -19,6 +19,9 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [arrOfTransactions, setarrOfTransactions] = useState([]); 
   const [arrOfOweYou, setarrOfOweYou] = useState([]);
   const [finalTransaction, setFinalTransaction] = useState({});
+  const [transactionArray, setTransactionArray] = useState({}); 
+  const [currentGroup, setCurrentGroup] = useState("")
+  // name : [930303, 400404]
   const username = process.env.REACT_APP_USERNAME;
   useEffect(() => {
     // a nested function that fetches the data
@@ -28,39 +31,84 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
       // mockaroo api call for list of friends in json file format
       var chargeesArr = []; 
       const response_current_group = await axios(`/CurrentGroup/${username}`);
+      setCurrentGroup(response_current_group.data)
       //console.log({ username });
       let query = `/Transactions/${response_current_group.data}`;
       //console.log({ response_current_group, query });
       const response = await axios(query);
       // Extract the data from the server response
+
+      console.log(response)
       // Set transactions to this data so we can render the rows of the home screen table with the transactions
       for (var i = 0; i < response.data.length; i++) {
         var transaction = response.data[i];
         var charger = transaction.charger;
         chargeesArr = Object.keys(transaction.chargee); 
-        if (chargeesArr.indexOf(username) != -1) {
-          if (transaction.chargee.username == 1){
-            continue;
-          }
-          else{
-            // add the transaction to the list (correponding index, in order. 
-            setarrOfTransactions(...arrOfTransactions, transaction)
-            // console.log(arrOfTransactions)
-            var amount_to_add = Number(transaction.amount);
-            amount_to_add = amount_to_add / (chargeesArr.length + 1);
-            if (youOwe.hasOwnProperty(charger)) {
-              youOwe[charger] += amount_to_add;
-            } else {
-              youOwe[charger] = amount_to_add;
+
+ 
+        console.log(Object.keys(transaction.chargee))
+        const names = Object.keys(transaction.chargee)
+        const valid = Object.values(transaction.chargee)
+        console.log(names); 
+        console.log(valid)
+
+        if (names.indexOf(username) !== -1){
+            for (var j = 0; j < names.length; j++){
+              if (names[j] == username){
+                if (valid[j] == 0){
+                  if (chargeesArr.indexOf(username) !== -1) {
+                    // add to id array transaction.id_
+                    var amount_to_add = Number(transaction.amount);
+                    amount_to_add = amount_to_add / (chargeesArr.length + 1);
+                    console.log(transaction._id); 
+        
+                    if (transactionArray.hasOwnProperty(charger)){
+                      transactionArray[charger].push(transaction._id)
+                    }
+                    else{
+                      transactionArray[charger] = [transaction._id]
+                      
+                    }
+                    console.log(transactionArray)
+                    if (youOwe.hasOwnProperty(charger)) {
+                      youOwe[charger] += amount_to_add;
+                    } else {
+                      youOwe[charger] = amount_to_add;
+                    }
+                    setYouOwe(youOwe);
+                  }
+
+                }
+                
+              }
             }
-            
-       
-            setYouOwe(youOwe);
-          }
+        }
+
+
+        // if (chargeesArr.indexOf(username) !== -1) {
+        //     // add to id array transaction.id_
+        //     var amount_to_add = Number(transaction.amount);
+        //     amount_to_add = amount_to_add / (chargeesArr.length + 1);
+        //     console.log(transaction._id); 
+
+        //     if (transactionArray.hasOwnProperty(charger)){
+        //       transactionArray[charger].push(transaction._id)
+        //     }
+        //     else{
+        //       transactionArray[charger] = [transaction._id]
+              
+        //     }
+        //     console.log(transactionArray)
+        //     if (youOwe.hasOwnProperty(charger)) {
+        //       youOwe[charger] += amount_to_add;
+        //     } else {
+        //       youOwe[charger] = amount_to_add;
+        //     }
+        //     setYouOwe(youOwe);
+        //   }
           }
          
-      }
-      
+    
       var res = Object.keys(youOwe).map(function (name) {
         var obj = {
           name: "",
@@ -74,6 +122,8 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
       });
       console.log(res); 
       setarrOfYouOwe(res);
+
+      console.log(arrOfOweYou)
 
       setYouOwe({});
 
@@ -128,7 +178,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
 
   return (
     <div>
-      {/* {console.log({ arrOfOweYou })} */}
+      {/* {console.log(username)} */}
       <h1>You Owe</h1>
       <ReactBootStrap.Table striped bordered hover>
         <thead className="headers">
@@ -181,8 +231,10 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         showModal={showModal}
         setModal={setModal}
         amount={amount}
-        username={user} // charger
-        user = {username} // current user
+        charger={user} // charger
+        currentuser = {username} // current user
+        transactionIDArr = {transactionArray[user]}
+        currentgroup = {currentGroup}
       />
     </div>
   );

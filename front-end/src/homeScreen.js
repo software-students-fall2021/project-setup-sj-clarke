@@ -49,7 +49,6 @@ function Home(props){
         setIsLoggedIn(false)
       })
 
-
       async function fetchData() {
         // GET curent user's current group
         const username = process.env.REACT_APP_USERNAME;
@@ -171,7 +170,7 @@ function Home(props){
           <h1 className="modal-title">Transaction Information</h1>
           <p className = "transaction-info">Date: {date}</p>
           <p className = "transaction-info">Charger: {charger}</p>
-          <p className = "transaction-info">Chargee: {chargee}</p>
+          <p className = "transaction-info">Chargee: {Object.keys(chargee)}</p>
           <p className = "transaction-info" >Description: {description}</p>
           <p className = "transaction-info" >Total Expense: ${totalExpense}</p>
               <button
