@@ -27,6 +27,7 @@ app.use(passport.initialize())
 
 //use JWT strategy within passport for authentication and handling
 const { jwtOptions, jwtStrategy } = require("./jwt-config.js") // import setup options for using JWT in passport
+const { Timestamp } = require("bson")
 passport.use(jwtStrategy)
 
 // set up some middleware
@@ -306,8 +307,8 @@ res.json(data)
 app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,res) => {
   let group_query = req.params.groupInput;
   let transactionID = req.params.transactionID; 
-  let temp = {
-    transactions: [
+  let username = req.params.username
+  let temp = 
     {
       id: 0, 
       charger: '',
@@ -317,33 +318,66 @@ app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,r
       description: "", 
       completed: 0
   }
-]
-}
-
   // update existing transaction for this group. 
-  const currentGroup = group.find({name: group_query})
-  console.log(group)
-  trans = group.transactions.transactionID; 
-
+  const currentGroup = await group.find({name: group_query})
+  console.log(currentGroup)
+  const trans = currentGroup[0].transactions
+  console.log(trans)
+  // add all transactions, only change the one 
+  var final = []
+  var index; 
   for (var i = 0; i < trans.length; i++){
-    if (trans._id = transactionID){
+    if ((trans[i]._id == transactionID)){
+      console.log(transactionID)
+      console.log(trans[i]._id)
+      
       // copy the whole transaction into a new id
-      temp._id = trans._id
-      temp.charger = trans.charger
-      temp.chargee = trans.chargee
-      temp.amount = trans.amount
-      temp.date = trans.date
-      temp.description = trans.description
-      temp.completed = trans.completed
+      temp._id = trans[i]._id
+      trans[i].chargee[username] +=1; 
+      temp.charger = trans[i].charger
+      temp.chargee = trans[i].chargee
+      temp.amount = trans[i].amount
+      temp.date = trans[i].date
+      temp.description = trans[i].description
+      temp.completed = trans[i].completed
+      index = i; 
+      
+      console.log(temp.chargee)
+      // temp.chargee[username] = 1
+      console.log(temp.chargee)
+      final.push(temp)
     }
-    // 
-    temp.chargee[username] = 1
+    else {
+      final.push(trans[i])
+    }
+
   }
+
+
+  await group.findOneAndUpdate({name: group_query}, 
+    { $set: {
+        transactions: final
+    }
+      
+     
+  }
+
+
+    )
+
+  // temp.chargee[username] = 1
+  // console.log(temp.chargee[username])
+  // currentGroup[0].transactions = temp; 
+
+  // console.log(currentGroup[0].transactions)
   // find one and update group, pass through transaction 
-  await group.findOneAndUpdate({name: group_query}, temp)
-    
-  })
- 
+  // await group.findOneAndReplace({name: group_query}, {
+  //   $push: {
+  //     transactions: [temp]
+  //   }
+  // })
+})
+
   
 
 

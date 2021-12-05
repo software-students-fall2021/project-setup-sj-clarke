@@ -16,7 +16,7 @@ function SettleUp({ showModal, setModal, amount, charger, currentuser, transacti
     console.log(response.data)
     for (var i = 0; i < transactionIDArr.length; i++){
       for (var j = 0; j < response.data.length; j++){
-        if (transactionIDArr[i]=== response.data[j]._id){
+        if (transactionIDArr[i] === response.data[j]._id){
           // then update 
           axios.post(`/updateTransaction/${currentgroup}/${transactionIDArr[i]}/${currentuser}`);
         }

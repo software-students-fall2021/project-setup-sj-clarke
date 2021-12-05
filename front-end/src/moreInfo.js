@@ -44,8 +44,6 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         var transaction = response.data[i];
         var charger = transaction.charger;
         chargeesArr = Object.keys(transaction.chargee); 
-
- 
         console.log(Object.keys(transaction.chargee))
         const names = Object.keys(transaction.chargee)
         const valid = Object.values(transaction.chargee)
