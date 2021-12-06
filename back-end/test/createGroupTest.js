@@ -108,18 +108,5 @@ const expect = chai.expect;
       });
     })
 
-    // DELETE a friend from a users friend list. 
-   /* describe('DELETE /CreateGroup/:username ', () => {
-      it('PASS, deleting a friend', (done) => {
-        const group = "Mexico"
-        const friend = "EmilyHerschmann"
-        request(app).delete(`/CreateGroup/${group}/${friend}`)
-          .then((res) => {
-            const body = res.body;
-            expect(res.body).to.contain.property("status")
-            done();
-          })
-          .catch((err) => done(err));
-      });
-    })*/
+ 
 
