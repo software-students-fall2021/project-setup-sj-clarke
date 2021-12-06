@@ -2,6 +2,7 @@
 
 
 
+
 // // test GET 
 // // Testing to see that the mockaroo sends back 10 friends
 // describe('GET /CreateGroup', () => {
@@ -19,9 +20,15 @@
  
 // })
 
-//     // test POST 
+    // test POST 
 
 //     describe('POST /CreateGroup', () => {
+//         process.env.NODE_ENV = 'test';
+//         before((done) => {
+//           conn.connect()
+//             .then(() => done())
+//             .catch((err) => done(err));
+//         })
 //       it('PASS, creating a new group works', (done) => {
 //         request(app).post('/CreateGroup')
 //           .send({ groupName: 'Mexico'})
@@ -35,20 +42,22 @@
 //           })
 //           .catch((err) => done(err));
 //       });
+//     })
+// })
     
-      it('Fail, Creating a group by sending it through a new group', (done) => {
-        request(app).post('/CreateGroup')
-          .send({})
-          .expect(200)
-          .then((res) => {
-            const body = res.body;
-            expect(body.groupName)
-              .to.equal(undefined)
-            done();
-          })
-          .catch((err) => done(err));
-      });
-    })*/
+    //   it('Fail, Creating a group by sending it through a new group', (done) => {
+    //     request(app).post('/CreateGroup')
+    //       .send({})
+    //       .expect(200)
+    //       .then((res) => {
+    //         const body = res.body;
+    //         expect(body.groupName)
+    //           .to.equal(undefined)
+    //         done();
+    //       })
+    //       .catch((err) => done(err));
+    //   });
+    // })
 
 process.env.NODE_ENV = 'test';
 const app = require("../app.js");
