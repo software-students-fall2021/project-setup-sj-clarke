@@ -2,17 +2,31 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+
+const morgan = require('morgan')
+const cors = require("cors")
+const cookieParser = require("cookie-parser")
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+
 // connection to mongoose
-const mongoose = require('mongoose');
 const users = require("./controllers/users")
 require('dotenv').config()
+
 const db = process.env.REACT_APP_DB;
-mongoose.connect('${db}');
+mongoose.connect(`${db}`);
+
+// const db = process.env.REACT_APP_DB;
+// mongoose.connect(`${db}`);
+// mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
+
+// initializing User schema 
+
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
-const db = process.env.REACT_APP_DB;
-mongoose.connect(`${db}`);
+// const db = process.env.REACT_APP_DB;
+// mongoose.connect(`${db}`);
 //required for authentication with JSON Web Tokens
 const jwt = require("jsonwebtoken")
 const passport = require("passport")
@@ -20,6 +34,7 @@ app.use(passport.initialize())
 
 //use JWT strategy within passport for authentication and handling
 const { jwtOptions, jwtStrategy } = require("./jwt-config.js") // import setup options for using JWT in passport
+const { Timestamp } = require("bson")
 passport.use(jwtStrategy)
 
 // set up some middleware
@@ -35,7 +50,7 @@ app.use(cookieParser()) // useful middleware for dealing with cookies
 app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
 
 
-//initializing User schema 
+// initializing User schema 
 // const user_schema = new Schema ({
 //   username:  String, // String is shorthand for {type: String}
 //   password: String,
@@ -47,6 +62,21 @@ app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // al
   
 // });
 // initializing Group schema 
+
+const user_schema = new mongoose.Schema ({
+  username:  String, // String is shorthand for {type: String}
+  password: String,
+  fName:   String,
+  lName: String,
+  currentGroup: String,
+  allGroups: [String],
+  friends: [String]
+  
+});
+
+const user = mongoose.model('user')
+
+// const group = require('./db/models/group.js').group; 
 const group_schema = new Schema({
   name:  String, 
   date: Date,
@@ -54,7 +84,7 @@ const group_schema = new Schema({
   transactions:  [ 
     {
         charger: String, 
-        chargee: [String], 
+        chargee: Object, 
         amount: String, 
         date: Date, 
         description: String
@@ -62,7 +92,7 @@ const group_schema = new Schema({
   ],
 });
 // initializing mongoose models 
-const user = mongoose.model('user')
+// const user = mongoose.model('user', user_schema)
 const group = mongoose.model('group', group_schema)
 
 // // example posting a group 
@@ -238,6 +268,7 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
 // send back json of the group, then front end retracts the list of transactions
 app.get("/Transactions/:groupInput", async (req, res) => {
   // aquire from database (for now we are calling mockaroo)
+  console.log(req.headers); 
   let group_query = req.params.groupInput; 
   try{
     // find user in database 
@@ -263,7 +294,8 @@ await group.findOneAndUpdate({name: group_query}, {
       chargee: req.body.chargee,
       amount: req.body.amount, 
       date: req.body.date, 
-      description: req.body.description 
+      description: req.body.description,
+      completed: req.body.completed 
     }]
   }
 })
@@ -278,6 +310,85 @@ const data = {
 // send information to database here 
 res.json(data)
 })
+
+app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,res) => {
+  let group_query = req.params.groupInput;
+  let transactionID = req.params.transactionID; 
+  let username = req.params.username
+  let temp = 
+    {
+      id: 0, 
+      charger: '',
+      chargee: {}, 
+      amount: "", 
+      date: Date, 
+      description: "", 
+      completed: 0
+  }
+  // update existing transaction for this group. 
+  const currentGroup = await group.find({name: group_query})
+  console.log(currentGroup)
+  const trans = currentGroup[0].transactions
+  console.log(trans)
+  // add all transactions, only change the one 
+  var final = []
+  var index; 
+  for (var i = 0; i < trans.length; i++){
+    if ((trans[i]._id == transactionID)){
+      console.log(transactionID)
+      console.log(trans[i]._id)
+      
+      // copy the whole transaction into a new id
+      temp._id = trans[i]._id
+      trans[i].chargee[username] +=1; 
+      temp.charger = trans[i].charger
+      temp.chargee = trans[i].chargee
+      temp.amount = trans[i].amount
+      temp.date = trans[i].date
+      temp.description = trans[i].description
+      temp.completed = trans[i].completed
+      index = i; 
+      
+      console.log(temp.chargee)
+      // temp.chargee[username] = 1
+      console.log(temp.chargee)
+      final.push(temp)
+    }
+    else {
+      final.push(trans[i])
+    }
+
+  }
+
+
+  await group.findOneAndUpdate({name: group_query}, 
+    { $set: {
+        transactions: final
+    }
+      
+     
+  }
+
+
+    )
+
+  // temp.chargee[username] = 1
+  // console.log(temp.chargee[username])
+  // currentGroup[0].transactions = temp; 
+
+  // console.log(currentGroup[0].transactions)
+  // find one and update group, pass through transaction 
+  // await group.findOneAndReplace({name: group_query}, {
+  //   $push: {
+  //     transactions: [temp]
+  //   }
+  // })
+})
+
+  
+
+
+
 
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
@@ -410,19 +521,54 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
    })
 
 
+
 // POST a new User
 // data coming through will be the user
 // add the User
 app.post("/Users", (req, res) => {
-const data = {
-  status: "Posted", 
-  first_name: req.body.first_name,
-  last_name: req.body.last_name,
+const data = new user ({
+  fName: req.body.fName,
+  lName: req.body.lName,
   password: req.body.password,
-  username: req.body.username
-}
+  username: req.body.username, 
+  currentGroup: req.body.currentGroup,
+  allGroups: req.body.allGroups, 
+  friends: req.body.friends
+});
 // send info to database once we make database connection 
-res.status(200).json(data)
+data.save()
+  .then((data) => res.status(200).json(data)); 
+})
+
+app.get("/Users", async (req, res)  => {
+  const response = await user.find();
+  // send info to database once we make database connection 
+  res.status(200).json(response); 
+  })
+  //})
+
+// sends a response for cookies including the Set-Cookie header
+app.get("/set-cookie", (req, res) => {
+  res
+    .cookie("foo", "bar")
+    .send({
+      success: true,
+      message: "Sent a cookie to the browser... let's hope it's saved.",
+    })
+})
+
+// route that looks for Cookie header in the request and sends it back whatever data was found in it
+app.get("/get-cookie", (req, res) => {
+  const numCookies = Object.keys(req.cookies).length
+
+  console.log(`Incoming cookie data: ${JSON.stringify(req.cookies, null, 0)}`)
+  res.send({
+    success: numCookies ? true : false,
+    message: numCookies
+      ? "thanks for sending cookies to the server"
+      : "no cookies sent to the server",
+      cookieData: req.cookies,
+  })
 })
 
 //route that is protected.. only authenticated users can access it
