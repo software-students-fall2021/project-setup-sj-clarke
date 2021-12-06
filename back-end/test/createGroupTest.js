@@ -1,55 +1,4 @@
-
-// process.env.NODE_ENV = 'test';
-
-// const expect = require("chai").expect; 
-// const request = require("supertest")
-// const app = require("../app.js");
-// const { response } = require("express");
-
-
-// // test GET 
-// // Testing to see that the mockaroo sends back 10 friends
-// describe('GET /CreateGroup', () => {
-  
-//   it('PASS, creating 10 groups', (done) => {
-//     request(app).get('/CreateGroup')
-//       .then((res) => {
-//         const body = res.body;
-//         expect(body.length).to.equal(10);
-//         done();
-//       })
-//       .catch((err) => done(err));
-//   });
-
- 
-// })
-
-    // test POST 
-
-//     describe('POST /CreateGroup', () => {
-//         process.env.NODE_ENV = 'test';
-//         before((done) => {
-//           conn.connect()
-//             .then(() => done())
-//             .catch((err) => done(err));
-//         })
-//       it('PASS, creating a new group works', (done) => {
-//         request(app).post('/CreateGroup')
-//           .send({ groupName: 'Mexico'})
-//           .expect(200)
-//           .expect('Content-Type', /json/)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body).to.contain.property('status');
-//             expect(body).to.contain.property('groupName');
-//             done();
-//           })
-//           .catch((err) => done(err));
-//       });
-//     })
-// })
-    
-    //   it('Fail, Creating a group by sending it through a new group', (done) => {
+   //   it('Fail, Creating a group by sending it through a new group', (done) => {
     //     request(app).post('/CreateGroup')
     //       .send({})
     //       .expect(200)
@@ -116,18 +65,5 @@ const expect = chai.expect;
       });
     })
 
-    // DELETE a friend from a users friend list. 
-   /* describe('DELETE /CreateGroup/:username ', () => {
-      it('PASS, deleting a friend', (done) => {
-        const group = "Mexico"
-        const friend = "EmilyHerschmann"
-        request(app).delete(`/CreateGroup/${group}/${friend}`)
-          .then((res) => {
-            const body = res.body;
-            expect(res.body).to.contain.property("status")
-            done();
-          })
-          .catch((err) => done(err));
-      });
-    })*/
+ 
 

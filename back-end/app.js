@@ -2,19 +2,26 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+
 const morgan = require('morgan')
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+
 // connection to mongoose
 const users = require("./controllers/users")
 require('dotenv').config()
+
+const db = process.env.REACT_APP_DB;
+mongoose.connect('${db}');
+
 // const db = process.env.REACT_APP_DB;
 // mongoose.connect(`${db}`);
 // mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 
 // initializing User schema 
+
 //mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
@@ -513,25 +520,7 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
   }
    })
 
-app.get("/CurrentGroupMembers", (req, res, next) => {
-    // aquire Friends from database (for now we are calling mockaroo)
-    axios
-    .get("https://api.mockaroo.com/api/7f5697d0?count=10&key=1d7007e0")
-    // @TODO change the .chargee below when working on database 
-    .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-    .catch(err => next(err)) // pass any errors to express
-    
-//   })
 
-// // GET User
-// // route for HTTP GET requests to /json-example
-// app.get("/Users", (req, res,next) => {
-//   // aquire Users from database (for now we are calling mockaroo which gives us a random JSON array of users) 
-//   axios
-//   .get("https://my.api.mockaroo.com/Users.json?key=aa763330")
-//   .then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-//   .catch(err => next(err)) // pass any errors to express
-// })
 
 // POST a new User
 // data coming through will be the user
