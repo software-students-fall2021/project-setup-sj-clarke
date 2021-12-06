@@ -18,7 +18,8 @@ describe('GET /AllGroups/:username ', () => {
           expect(res.body).to.be.an("array")
           done();
         })
-        .catch((err) => done(err));
+        .catch((err) => done(err))
+        .timeout(4000);
     });
   })
 
