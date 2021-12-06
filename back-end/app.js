@@ -14,7 +14,7 @@ const users = require("./controllers/users")
 require('dotenv').config()
 
 const db = process.env.REACT_APP_DB;
-mongoose.connect('${db}');
+mongoose.connect(`${db}`);
 
 // const db = process.env.REACT_APP_DB;
 // mongoose.connect(`${db}`);
