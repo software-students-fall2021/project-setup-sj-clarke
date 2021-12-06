@@ -14,13 +14,12 @@ function AllGroups() {
    // a nested function that fetches the data
 
     async function fetchData() {
-      // Extract Mockaroo data
       // get all groups
       const response_groups = await axios("/AllGroups/sjclarke");
-      // set groups with the data retrieved from mockaroo
+ 
       setGroups(response_groups.data);
       // get all transactions for a group
-      // currently mock data from mockaroo
+
       const response_groupData = await axios("/Transactions/Mexico");
       // set transactions
       setTransactions(response_groupData.data);
