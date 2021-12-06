@@ -1,21 +1,4 @@
-
-//       it('PASS, creating a new group works', (done) => {
-//         request(app).post('/CreateGroup')
-//           .send({ groupName: 'Mexico'})
-//           .expect(200)
-//           .expect('Content-Type', /json/)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body).to.contain.property('status');
-//             expect(body).to.contain.property('groupName');
-//             done();
-//           })
-//           .catch((err) => done(err));
-//       });
-//     })
-// })
-    
-    //   it('Fail, Creating a group by sending it through a new group', (done) => {
+   //   it('Fail, Creating a group by sending it through a new group', (done) => {
     //     request(app).post('/CreateGroup')
     //       .send({})
     //       .expect(200)
