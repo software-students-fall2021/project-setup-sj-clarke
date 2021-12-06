@@ -1,24 +1,3 @@
-
-
-
-
-// // test GET 
-// // Testing to see that the mockaroo sends back 10 friends
-// describe('GET /CreateGroup', () => {
-  
-//   it('PASS, creating 10 groups', (done) => {
-//     request(app).get('/CreateGroup')
-//       .then((res) => {
-//         const body = res.body;
-//         expect(body.length).to.equal(10);
-//         done();
-//       })
-//       .catch((err) => done(err));
-//   });
-
- 
-// })
-
 //     // test POST 
 
 //     describe('POST /CreateGroup', () => {
