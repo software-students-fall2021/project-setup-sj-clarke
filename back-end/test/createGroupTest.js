@@ -1,4 +1,3 @@
-
 process.env.NODE_ENV = 'test';
 const app = require("../app.js");
 const request = require("supertest");
@@ -8,7 +7,7 @@ const expect = chai.expect;
 // GET all friends of a specific user 
   describe('GET /CreateGroup/:groups ', () => {
     it('PASS, getting group', (done) => {
-      const group = "Mexico"
+      const group = "China"
       request(app).get(`/CreateGroup/${group}`)
         .then((res) => {
           const body = res.body;
@@ -17,6 +16,17 @@ const expect = chai.expect;
         })
         .catch((err) => done(err));
     });
+    it("PASS, Deleting group just created", (done) => {
+        request(app).delete('/Group/China')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            expect(body).to.contain.property("groupDeleted");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
   })
 
   // POST new group to a list of groups 
@@ -24,8 +34,7 @@ const expect = chai.expect;
     describe('POST /CreateGroup/:groups', () => {
       it('PASS, adding a new group works', (done) => {
        // const group = "Mexico"
-        request(app).post('/CreateGroup/').send({ groupName: 'Mexico'})
-         // .send({ groupName: 'Mexico'})
+        request(app).post('/CreateGroup/').send({ groupName: 'China' })
           .expect(200)
           .expect('Content-Type', /json/)
           .then((res) => {
@@ -35,7 +44,20 @@ const expect = chai.expect;
             done();
           })
           .catch((err) => done(err));
-      });
+      })
+      it("PASS, Deleting group just created", (done) => {
+        request(app).delete('/Group/China')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            expect(body).to.contain.property("groupDeleted");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
+
+
     
       it('Fail, Create Group requires you to send through a group name in json', (done) => {
         //const group = "Mexico"
@@ -49,7 +71,18 @@ const expect = chai.expect;
             done();
           })
           .catch((err) => done(err));
-      });
+      })
+      it("PASS, Deleting group just created", (done) => {
+        request(app).delete('/Group/Mexico')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            expect(body).to.contain.property("groupDeleted");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
     })
 
  

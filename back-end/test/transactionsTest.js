@@ -1,63 +1,142 @@
-// process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test';
 
-// const expect = require("chai").expect; 
-// const request = require("supertest")
-// const app = require("../app.js");
-// const { response } = require("express");
+const expect = require("chai").expect; 
+const request = require("supertest")
+const app = require("../app.js");
+const { response } = require("express");
 
-// // test GET 
-// // Testing to see that the mockaroo sends back 10 transactions
-// describe('GET /Transactions', () => {
-//   it('PASS, getting transactions has 10 transactions returned', (done) => {
-//     request(app).get('/Transactions')
-//       .then((res) => {
-//         const body = res.body;
-//         expect(body.length).to.equal(10);
-//         done();
-//       })
-//       .catch((err) => done(err));
-//   });
-// })
-// test POST 
-//     describe('POST /Transactions', () => {
-//       it('PASS, creating a new Transaction works', (done) => {
-//         request(app).post('/Transactions')
-//           .send({ date: 'July 7', 
-//           group: "Mexico 2021", 
-//           charger: "Sarah-Jane", 
-//           chargee: "Clarke", 
-//           amount: "20"
-//         })
-//           .expect(200)
-//           .expect('Content-Type', /json/)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body).to.contain.property('status');
-//             expect(body).to.contain.property('date');
-//             expect(body).to.contain.property('group');
-//             expect(body).to.contain.property('charger');
-//             expect(body).to.contain.property('chargee');
-//             expect(body).to.contain.property('amount');
-//             done();
-//           })
-//           .catch((err) => done(err));
-//       });
-//     })
-            
-// //       it('Fail, Transaction requires you to send through a charger', (done) => {
-// //         request(app).post('/Friends')
-// //           .send({ date: 'July 7', 
-// //           group: "Mexico 2021",
-// //           chargee: "Clarke", 
-// //           amount: "20"
-// //         })
-// //           .expect(200)
-// //           .then((res) => {
-// //             const body = res.body;
-// //             expect(body.charger)
-// //               .to.equal(undefined)
-// //             done();
-// //           })
-// //           .catch((err) => done(err));
-//       });
-//     })
+// Testing Transactions 
+
+describe('GET /Transactions', () => {
+    // make users to put in group 
+    it('OK, making user 1', (done) => {
+        request(app).post('/Users')
+          .send({
+            username: "SJ",
+            password: "Clarke", 
+            fName: "Sarah-Jane", 
+            lName: "Clarke", 
+            currentGroup:  " ", 
+            allGroups: [], 
+            friends: []
+        })
+        .expect(200)
+           .then((res) => {
+             const body = res.body;
+             expect(body).to.contain.property('username');
+             expect(body).to.contain.property('password');
+             expect(body).to.contain.property('fName');
+             expect(body).to.contain.property('lName');
+             done();
+           })
+        })
+
+        it('OK, making user 2', (done) => {
+            request(app).post('/Users')
+              .send({
+                username: "oEbner",
+                password: "1234", 
+                fName: "Olivia", 
+                lName: "Ebner", 
+                currentGroup:  " ", 
+                allGroups: [], 
+                friends: []
+            })
+            .expect(200)
+               .then((res) => {
+                 const body = res.body;
+                 expect(body).to.contain.property('username');
+                 expect(body).to.contain.property('password');
+                 expect(body).to.contain.property('fName');
+                 expect(body).to.contain.property('lName');
+                 done();
+               })
+            })
+
+    // make a group to test 
+    it('PASS, create a new group to get transactions from', (done) => {
+         request(app).post('/CreateGroup/')
+         .send({
+             groupName: "Maldives", 
+             friendAdded: "oEbner", 
+             userInput: "SJ"
+         })
+           .expect(200)
+           .then((res) => {
+             const body = res.body;
+             expect(body).to.contain.property('status');
+            // expect(body).to.contain.property('groupName');
+             done();
+           })
+           .catch((err) => done(err));
+        })
+
+        it('PASS, posting transaction into this new group', (done) => {
+            request(app).post('/Transactions/Maldives')
+            .send({
+                charger: "SJ", 
+                chargee: {
+                    "oEbner": 0
+                }, 
+                amount: "500", 
+                description: "Dinner and drinks", 
+                date: "2021-10-26", 
+            })
+              .then((res) => {
+                const body = res.body;
+                expect(body).to.contain.property("charger");
+                expect(body).to.contain.property("chargee");
+                expect(body).to.contain.property("amount");
+                expect(body).to.contain.property("description");
+                expect(body).to.contain.property("date");
+                done();
+              })
+              .catch((err) => done(err));
+          });
+
+    it('PASS, getting transactions from this new group', (done) => {
+      request(app).get('/Transactions/Maldives')
+        .then((res) => {
+          const body = res.body;
+          expect(body).have.lengthOf(1);
+          done();
+        })
+        .catch((err) => done(err));
+    });
+    it("PASS, Deleting group just created", (done) => {
+        request(app).delete('/Group/Maldives')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            expect(body).to.contain.property("groupDeleted");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
+
+  })
+
+  describe('/Members tests deleting user just created so DB not affected', () => {
+    it("PASS, Deleting user 1 just created", (done) => {
+        request(app).delete('/Users/SJ')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
+    it("PASS, Deleting user 2 just created", (done) => {
+        request(app).delete('/Users/oEbner')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
+
+})
