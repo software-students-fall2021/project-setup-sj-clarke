@@ -1,40 +1,23 @@
-// // process.env.NODE_ENV = 'test';
-// const request = require('supertest'); 
-// const app = require("../app.js");
-// const expect = require('chai').expect;
-// const conn = require("../db/index.js"); 
-
+// const chai = require("chai");
+// const expect = chai.expect;
+// const request = require("supertest");
+// const app = require("../app");
+// const { MongoMemoryServer } = require("mongodb-memory-server");
+// const mongoose = require("mongoose");
+// const await = require('await')
 
 // // test GET for All Groups
 // // Testing to see that the mockaroo sends back 10 groups
-// describe('GET /AllGroups ', () => {
-//     process.env.NODE_ENV = 'test';
-//     before((done) => {
-//       conn.connect()
-//         .then(() => done())
-//         .catch((err) => done(err));
-//     })
- 
+// const getGroups = jest.fn() 
+
+// const app2 = makeApp({
+//     getAllGroups
+// })
+
+// describe('GET /AllGroups ', async () => {
 //     it('PASS, getting All Groups when none have been created yet', (done) => {
-//         request(app).post("/Users")
-//         .send({
-//             username: "sj",
-//             password: "Clarke", 
-//             fName: "Sarah-Jane", 
-//             lName: "Clarke", 
-//             currentGroup:  " ", 
-//             allGroups: [], 
-//             friends: []
-//         })
-//       .then((res) => {  
-//       request(app).get('/AllGroups/sj')
-//         .then((res) => {
-//           const body = res.body;
-//           expect(body.length).to.equal(0);
-//           done();
-//         })
-//         .catch((err) => done(err));
-//     })
+//      request(app).get("/AllGroups")
+//       expect(getAllGroups.mock.calls.length).toBe(1)
     
 //   })
 // })

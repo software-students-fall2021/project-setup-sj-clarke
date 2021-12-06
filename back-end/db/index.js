@@ -1,5 +1,10 @@
-require('dotenv').config()
-const mongoose = require('mongoose'); 
+const chai = require("chai");
+const expect = chai.expect;
+const request = require("supertest");
+const app = require("../app");
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const mongoose = require("mongoose");
+
 // const db = process.env.REACT_APP_DB; // DB link
 const db = 'mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'; 
 // add models in a file 

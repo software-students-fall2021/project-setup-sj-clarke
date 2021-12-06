@@ -62,7 +62,7 @@ function Home(props){
         
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(response.data);
+        setTransactions(response.data.reverse());
         console.log("hello")
       }
       // fetch the data
@@ -72,47 +72,14 @@ function Home(props){
   },[])
 
 
-  // useEffect(() => {
-  //   // a nested function that fetches the data
-  //   async function fetchData() {
-  //     // GET curent user's current group
-  //     const username = process.env.REACT_APP_USERNAME;
-  //     const response_current_group = await axios(`/CurrentGroup/sjclarke`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
-  //     console.log(response_current_group.data);
-  //     // Extract current group from the response from backend
-  //     setCurrentGroup(response_current_group.data);
-  //     // Query all transactions for the current group
-
-  //     const response = await axios(`/Transactions/Mexico`)// , { headers: { Authorization: `JWT ${jwtToken}` } });
-  //     console.log(response.data);
-      
-  //     // Extract the data from the server response
-  //     // Set transactions to this data so we can render the rows of the home screen table with the transactions
-  //     setTransactions(response.data);
-  //     console.log("hello")
-  //   }
-  //   // fetch the data
-  //   fetchData();
-  //   // the blank array below causes this callback to be executed only once on component load
-  // }, []);
+ 
 
   
     
     console.log(transactions)
     
 
-  
-//       function getChargees()  {
-//         transactions.map(transaction  => 
-//           {Object.keys(transaction.chargee).map(function(key) {
-//         chargeeArr.push(<option value={key}>{transaction.chargee[key]}</option>)
-//     });
-//   })
-// }
 
-
-
-//   getChargees(); 
 
 
     
