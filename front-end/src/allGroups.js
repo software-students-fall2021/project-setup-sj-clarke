@@ -4,14 +4,22 @@ import * as ReactBootStrap from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 import Modal from "react-modal";
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 function AllGroups() {
   // variables needed for all groups page and modals
+  const [currentUser, setCurrentUser] = useState(" "); 
   const [groups, setGroups] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [members, setMembers] = useState([]);
+  const jwtToken = localStorage.getItem("token")
+  console.log(`JWT token: ${jwtToken}`)
+  const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
+
+  
   useEffect(() => {
    // a nested function that fetches the data
+<<<<<<< HEAD
 
     async function fetchData() {
       // get all groups
@@ -31,12 +39,41 @@ function AllGroups() {
     // set members
     setMembers(response_members.data);
 
+=======
+      async function fetchData() {
+      // Extract Mockaroo data
+      // get all groups
+      setCurrentUser("sjclarke") 
+      
+      const response_groups = await axios(`http://localhost:5000/AllGroups/sjclarke`);
+      // set groups with the data retrieved from mockaroo
+      setGroups(response_groups.data);
+      // get all transactions for a group
+      // currently mock data from mockaroo
+>>>>>>> f3093307e515c0c249370143fa6c0c3856047d7e
      }
    // fetch the data
    fetchData();
    
    // the blank array below causes this callback to be executed only once on component load
  }, []);
+
+
+ const [modalGroup, setModalGroup] = useState(" "); 
+  async function getTransactions(groupName){
+      const response_groupData = await axios(`/Transactions/${groupName}`, { headers: { Authorization: `JWT ${jwtToken}` } });
+      // set transactions
+      setGroupName(groupName);
+      setTransactions(response_groupData.data);
+  }
+
+
+  async function getMembers(groupName){
+    const res_members = await axios(`/Members/${groupName}`, { headers: { Authorization: `JWT ${jwtToken}` } });
+    // set transactions
+    setGroupName(groupName);
+    setMembers(res_members.data);
+}
   
   const [groupName, setGroupName] = useState(" ");
   const [groupDate, setGroupDate] = useState(" ");
@@ -46,6 +83,8 @@ function AllGroups() {
   const [seeMemModal, setMemModal] = useState(false);
 
   return (
+    <>
+    {isLoggedIn ? (
     <Container>
       <Row>
         <Col>
@@ -56,42 +95,46 @@ function AllGroups() {
         <ReactBootStrap.Table striped bordered hover>
           <thead>
             <tr>
-              <th>Date</th>
               <th>Group</th>
             </tr>
           </thead>
           <tbody>
             {groups.map((group) => (
               <tr key={group.id}>
-                <td>{group.year}</td>
-                <td>{group.name}</td>
+                <td>{group}</td>
                 <td>
                   <button
                     type="button"
                     className="btn btn-secondary btn-sm"
                     onClick={() => {
+                      // eslint-disable-next-line no-lone-blocks
                       {
+                        setGroupName(group);
                         setModalOpen(true);
-                        setGroupName(group.name);
-                        setGroupDate(group.year);
+                        getTransactions(group)
+                        getMembers(group)
+                        setModalGroup(group); 
                       }
                     }}
                   >
                     more info
                   </button>
-                  <Modal isOpen={infoOpen}>
-                    <h1 className="modal-title">{groupName}</h1>
-                    <h3>{groupDate}</h3>
+                  <Modal isOpen={infoOpen} dialogClassName="modal-design">
+                    <h1 className="modal-title">Transactions({transactions.length})</h1>
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm"
                       onClick={() => {
-                        setMemModal(true);
+                        // eslint-disable-next-line no-lone-blocks
+                        {
+                          setMemModal(true);
+                          setGroupName(group);
+                        }
                       }}
                     >
                       See Members
                     </button>
-                    <Modal isOpen={seeMemModal}>
+                    <Modal isOpen={seeMemModal} dialogClassName="modal-design">
                       <h className="modal-title">Members({members.length})</h>
                       <ReactBootStrap.Table striped bordered hover>
                         <thead>
@@ -102,13 +145,16 @@ function AllGroups() {
                         <tbody>
                           {members.map((member) => (
                             <tr key={member.id}>
-                              <td>{member.username}</td>
+                              <td>{member}</td>
                             </tr>
                           ))}
                         </tbody>
                       </ReactBootStrap.Table>
                       <button
-                        onClick={() => setMemModal(false)}
+                        onClick={() => {
+                          setMemModal(false)
+                          setGroupName(modalGroup);
+                        }}
                         type="button"
                         className="btn btn-secondary btn-sm"
                       >
@@ -127,7 +173,7 @@ function AllGroups() {
                       <tbody>
                         {transactions.map((transaction) => (
                           <tr key={transaction.id}>
-                            <td>{transaction.date}</td>
+                            <td>{transaction.date.split("T")[0]}</td>
                             <td>{transaction.charger}</td>
                             <td>{transaction.chargee}</td>
                             <td>${transaction.amount}</td>
@@ -136,7 +182,8 @@ function AllGroups() {
                       </tbody>
                     </ReactBootStrap.Table>
                     <button
-                      onClick={() => setModalOpen(false)}
+                      onClick={() => setModalOpen(false)
+                       }
                       type="button"
                       className="btn btn-secondary btn-sm"
                     >
@@ -150,6 +197,10 @@ function AllGroups() {
         </ReactBootStrap.Table>
       </div>
     </Container>
+    ) : (
+      <Link to="/login?error=home"/>
+    )}
+    </>
   );
 }
 export default AllGroups;

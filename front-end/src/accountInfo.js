@@ -3,10 +3,14 @@ import './accountInfo.css'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import "./mockUsers.json"
+import {Link} from 'react-router-dom'
 
 
 
 function Account(props){
+    const jwtToken = localStorage.getItem("token")
+    console.log(`JWT token: ${jwtToken}`)
+    const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
 
 
     
@@ -17,6 +21,8 @@ function Account(props){
 
     
     return(
+        <>
+        {isLoggedIn ? (
         <div className="Account">
             <header>Account Information</header>
             <p>Change your account information</p>
@@ -31,6 +37,10 @@ function Account(props){
 
 
         </div>
+        ): (
+            <Link to="/login?error=home"/>
+        )}
+        </>
     )
 
     

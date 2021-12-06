@@ -7,12 +7,18 @@ import axios from "axios";
 import { render } from "@testing-library/react";
 import { useForm } from "react-hook-form";
 import {Button} from "react-bootstrap";
+import {Link} from 'react-router-dom'
 Modal.setAppElement("#root");
 
 function CreateGroup() {
+
   const [group, setGroup] = useState([])
   const [friend, setFriend] = useState([])
   const {register, handleSubmit, errors} = useForm()
+  const jwtToken = localStorage.getItem("token")
+    console.log(`JWT token: ${jwtToken}`)
+    const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
+
   useEffect(() => {
     // a nested function that fetches the data
   
@@ -57,7 +63,7 @@ function CreateGroup() {
   }, []);
   
 
-
+const currentUser = "sjclarke"; 
 const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
     {
       group: "",
@@ -80,7 +86,7 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
     //console.log(newGroupAdditionValues.group)
     // post request to backend here 
     const group_response =  axios.post(
-        `http://localhost:5000/CreateGroup?groupName=${newGroupAdditionValues.group}&friendAdded=${newGroupAdditionValues.friend}`
+        `http://localhost:5000/CreateGroup?userInput=${currentUser}&groupName=${newGroupAdditionValues.group}&friendAdded=${newGroupAdditionValues.friend}`
       )
       .then(()=>{
         setNewGroupAdditionValues(
@@ -94,6 +100,8 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
   
 
   return (
+    <>
+    {isLoggedIn ? (
     <div className="CreateGroup">
       <header>Create a New Group</header>
      
@@ -130,6 +138,10 @@ const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
         </form>
      
     </div>
+    ):(
+      <Link to="/login?error=home"/>
+    )}
+    </>
   );
 }
 export default CreateGroup;
