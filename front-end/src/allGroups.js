@@ -175,7 +175,11 @@ function AllGroups() {
                           <tr key={transaction.id}>
                             <td>{transaction.date.split("T")[0]}</td>
                             <td>{transaction.charger}</td>
-                            <td>{transaction.chargee}</td>
+                            <td> {Object.keys(transaction.chargee).map(oneChargee => 
+                        <tr key = {transaction.id}>
+                            <td>{oneChargee.trim()}</td>
+                          </tr>
+                    )}</td>
                             <td>${transaction.amount}</td>
                           </tr>
                         ))}

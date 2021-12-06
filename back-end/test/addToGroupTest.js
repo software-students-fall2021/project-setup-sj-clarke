@@ -5,13 +5,14 @@
 // const app = require("../app.js");
 // const { response } = require("express");
 
-// // testing a POST for adding new friend to a group 
-// describe('POST /AddToGroup', () => {
+// testing a POST for adding new friend to a group 
+// describe('POST /AddToGroup/:user', () => {
 //     it('PASS, adding new friend to a group works', (done) => {
-//       request(app).post('/AddToGroup')
+//         const user = "sjclarke"
+//       request(app).post('/AddToGroup/${user')
 //         .send({ 
 //         friend: 'Sarah-Jane', 
-//         groupName: "Mexico 2021"})
+//         groupName: "Mexico"})
 //         .expect(200)
 //         .expect('Content-Type', /json/)
 //         .then((res) => {
@@ -25,7 +26,8 @@
 //     });
   
 //     it('Fail, adding a new friend to group requires you to send through group name', (done) => {
-//       request(app).post('/AddToGroup')
+//         const user = "sjclarke"
+//         request(app).post(`/AddToGroup/${user}`)
 //         .send({friend: "Sarah-Jane"})
 //         .expect(200)
 //         .then((res) => {
