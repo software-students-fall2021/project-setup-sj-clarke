@@ -1,8 +1,4 @@
-   //   it('Fail, Creating a group by sending it through a new group', (done) => {
-    //     request(app).post('/CreateGroup')
-    //       .send({})
-    //       .expect(200)
-    //       .then((res) => {
+
     //         const body = res.body;
     //         expect(body.groupName)
     //           .to.equal(undefined)
