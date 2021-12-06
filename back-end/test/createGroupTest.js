@@ -1,14 +1,4 @@
 
-
-    // test POST 
-
-//     describe('POST /CreateGroup', () => {
-//         process.env.NODE_ENV = 'test';
-//         before((done) => {
-//           conn.connect()
-//             .then(() => done())
-//             .catch((err) => done(err));
-//         })
 //       it('PASS, creating a new group works', (done) => {
 //         request(app).post('/CreateGroup')
 //           .send({ groupName: 'Mexico'})
