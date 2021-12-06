@@ -545,7 +545,7 @@ app.get("/Users", async (req, res)  => {
   // send info to database once we make database connection 
   res.status(200).json(response); 
   })
-  })
+  //})
 
 // sends a response for cookies including the Set-Cookie header
 app.get("/set-cookie", (req, res) => {
