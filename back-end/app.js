@@ -501,11 +501,12 @@ app.post("/login", async (req, res) => {
 
 })
 
+
 app.get("/signup/:userInput", async (req, res, next) => {
   try{
     const response = await user.find({username: username_query});
     res.json(response[0].SignUp)
-    console.log("hello")
+ 
   }
   catch(err){
     res.json(err)
@@ -547,6 +548,13 @@ app.post("/signup/", async (req, res) => {
     }
 
 })
+
+app.get("/accountinfo/:usernameInput", async (req, res) => {
+  let username_query = req.body.usernameInput;
+  const response = await user.find({usernameInput : username_query})
+  res.json(response[0])
+  
+  })
 
 
 
