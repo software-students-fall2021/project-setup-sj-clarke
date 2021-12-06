@@ -1,13 +1,4 @@
 
-    //         const body = res.body;
-    //         expect(body.groupName)
-    //           .to.equal(undefined)
-    //         done();
-    //       })
-    //       .catch((err) => done(err));
-    //   });
-    // })
-
 process.env.NODE_ENV = 'test';
 const app = require("../app.js");
 const request = require("supertest");
