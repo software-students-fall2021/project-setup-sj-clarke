@@ -3,18 +3,20 @@ import * as ReactBootStrap from "react-bootstrap";
 import Modal from "react-modal";
 import "./friends.css";
 import axios from "axios";
-Modal.setAppElement("#root");
+// Modal.setAppElement("#root");
 
 function Friends() {
   const [friends, setFriends] = useState([]);
   // will hold the current user from login page (for now just user in database we have)
   const [currentUser, setCurrentUser] = useState();
+  const username = process.env.REACT_APP_USERNAME; 
 
-  useEffect(() => {
+  // console.log(username)
+  useEffect(() => {  
     // a nested function that fetches the data
+    setCurrentUser(username)
     async function fetchData() {
       // extract the friends list from the server response
-      const username = process.env.REACT_APP_USERNAME;
       const response = await axios(`/Friends/${username}`);
       // set friends
       setFriends(response.data);
@@ -81,6 +83,7 @@ function Friends() {
     newdata[event.target.id] = event.target.value;
     newdata.friend = selectedFriend;
     setNewGroupAdditionValues(newdata);
+    console.log(newdata);
   };
 
   // Handling submission of adding friend to a group
@@ -90,9 +93,11 @@ function Friends() {
     setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
     const username = process.env.REACT_APP_USERNAME;
+    
     axios.post(`AddToGroup/${username}`, newGroupAdditionValues);
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });
+
   };
 
   // hook JSON to hold the data of a new friend addition

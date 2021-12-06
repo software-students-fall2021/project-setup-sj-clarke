@@ -1,8 +1,26 @@
 # Project Repository: TripSplit
+[![CircleCI](https://circleci.com/gh/software-students-fall2021/project-setup-sj-clarke/tree/master.svg?style=shield)](https://circleci.com/gh/software-students-fall2021/project-setup-sj-clarke/tree/master)
+
 
 ## Project Description
 
 TripSplit is a web application that makes splitting expenses during vacations, events, or day to day activities easy to keep track of and less tedious. We want to elimite the stress and frustration associated with this process and make our users lifes easier. Once on the TripSplit web application, users will be able to create a group, which they can add friends who also have TripSplit accounts to. Once a trip is created, all users who have access to this trip can create expenses. When a trip is first created, each member of the group will have 0 balances due. However, when payments begin to be created and split between members of the group, balances will be created for each person within the group that the user owes money to. For example, if I was on a trip with 5 my friends and one person named Sarah covered dinner for $500. After dinner Sarah will create this expense on her TripSplit account within the TripSplit group, input $500 as the total payment, add all 4 of us to the payment, and once the payment has been created, under our balances we will see a new entry that says we owe Sarah $100. These balances will constantly be updated as new payments are created or even deleted throughout the trip. 
+
+
+## Link to react-app live on the web 
+http://104.131.21.102:3000/ 
+
+## Instructions on how to run the app: 
+cd project-setup-sj-clarke
+cd front-end 
+pm2 start npm -- start
+cd - 
+cd back-end 
+pm2 start npm -- start
+
+Then, the front end and back end should be running.
+Front end: port 3000
+Back end: port 5000
 
 
 ## Product Vision Statement 
@@ -50,6 +68,8 @@ Wireframe: https://github.com/software-students-fall2021/user-experience-design-
 
 Prototype: https://tripsplit.invisionapp.com/console/share/US34ZYPCAH 
 ( Link to Invision )
+
+
 
 
 

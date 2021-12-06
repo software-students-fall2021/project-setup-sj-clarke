@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import axios from "axios";
 function CurrentGroupMembers() {
+  const jwtToken = localStorage.getItem("token")
+  console.log(`JWT token: ${jwtToken}`)
   // dummy data for summary of current trip transactions
   const [names, setNames] = useState([]);
   const [tripName, setTripName] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
 
   useEffect(() => {
     // a nested function that fetches the data

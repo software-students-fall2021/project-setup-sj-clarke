@@ -7,12 +7,11 @@
 
 // // test GET for Members of any group 
 // describe('GET /Members', () => {
-  
 //     it('PASS, getting 10 group members', (done) => {
-//       request(app).get('/Members')
+//       request(app).get('/Members/Mexico')
 //         .then((res) => {
 //           const body = res.body;
-//           expect(body.length).to.equal(10);
+//           expect(body).to.be.an("array");
 //           done();
 //         })
 //         .catch((err) => done(err));

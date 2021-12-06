@@ -1,55 +1,78 @@
-// process.env.NODE_ENV = 'test';
 
-// const expect = require("chai").expect; 
-// const request = require("supertest")
+// // FRIENDS TESTS 
+// // makes sure the connection is to a mock database not the actual db. 
+// const request = require('supertest'); 
 // const app = require("../app.js");
-// const { response } = require("express");
+// const expect = require('chai').expect;
+// const conn = require("../db/index.js"); 
 
+// // GET all friends of a specific user 
+// describe('GET /Friends ', () => {
+//       process.env.NODE_ENV = 'test';
+//       before((done) => {
+//         conn.connect()
+//           .then(() => done())
+//           .catch((err) => done(err));
+//       })
+    
 
-// // test GET 
-// // Testing to see that the mockaroo sends back 10 friends
-// describe('GET /Friends', () => {
-  
-//   it('PASS, getting friends has 10 Friends returned', (done) => {
-//     request(app).get('/Friends')
+//   it('OK, getting Friends without adding has 0 friends', (done) => {
+//     request(app).post('/Users')
+//       .send({
+//         username: "olivia",
+//         password: "Clarke", 
+//         fName: "Sarah-Jane", 
+//         lName: "Clarke", 
+//         currentGroup:  " ", 
+//         allGroups: [], 
+//         friends: []
+//     })
 //       .then((res) => {
-//         const body = res.body;
-//         expect(body.length).to.equal(10);
-//         done();
+//         request(app).get(`/Friends/${res.body.username}`)
+//           .then((res) => {
+//             const body = res.body;
+//             expect(body.length).to.equal(0);
+//             done();
+//           })
 //       })
 //       .catch((err) => done(err));
 //   });
 
- 
-// })
-
-//     // test POST 
-
-//     describe('POST /Friends', () => {
-//       it('PASS, creating a new Friend works', (done) => {
-//         request(app).post('/Friends')
-//           .send({ friendAdded: 'Sarah-Jane'})
-//           .expect(200)
-//           .expect('Content-Type', /json/)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body).to.contain.property('status');
-//             expect(body).to.contain.property('friendAdded');
-//             done();
-//           })
-//           .catch((err) => done(err));
-//       });
-    
-//       it('Fail, Friend requires you to send through a Friend', (done) => {
-//         request(app).post('/Friends')
-//           .send({})
-//           .expect(200)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body.friendAdded)
-//               .to.equal(undefined)
-//             done();
-//           })
-//           .catch((err) => done(err));
-//       });
+//   it('OK, getting Friends after adding friend', (done) => {
+//     request(app).post('/Users')
+//       .send({
+//         username: "sj",
+//         password: "Clarke", 
+//         fName: "Sarah-Jane", 
+//         lName: "Clarke", 
+//         currentGroup:  " ", 
+//         allGroups: [], 
+//         friends: []
 //     })
+//       .then((res) => {
+//         request(app).post('/Friends/sj')
+//         .send({
+//               friendAdded: "sjclarke"
+//         })
+//           .then((res) => {
+//             request(app).get(`/Friends/sj`)
+//             .then((res) => {
+//               const body = res.body;
+//               expect(body).to.be.an("array");
+//               done();
+//             })
+            
+//           })
+//       })
+//       .catch((err) => done(err));
+//       })
+        
+      
+//   });
+
+  
+
+
+
+
+

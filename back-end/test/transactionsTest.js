@@ -18,7 +18,7 @@
 //       .catch((err) => done(err));
 //   });
 // })
-// // test POST 
+// test POST 
 //     describe('POST /Transactions', () => {
 //       it('PASS, creating a new Transaction works', (done) => {
 //         request(app).post('/Transactions')
@@ -42,21 +42,22 @@
 //           })
 //           .catch((err) => done(err));
 //       });
-    
-//       it('Fail, Transaction requires you to send through a charger', (done) => {
-//         request(app).post('/Friends')
-//           .send({ date: 'July 7', 
-//           group: "Mexico 2021",
-//           chargee: "Clarke", 
-//           amount: "20"
-//         })
-//           .expect(200)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body.charger)
-//               .to.equal(undefined)
-//             done();
-//           })
-//           .catch((err) => done(err));
+//     })
+            
+// //       it('Fail, Transaction requires you to send through a charger', (done) => {
+// //         request(app).post('/Friends')
+// //           .send({ date: 'July 7', 
+// //           group: "Mexico 2021",
+// //           chargee: "Clarke", 
+// //           amount: "20"
+// //         })
+// //           .expect(200)
+// //           .then((res) => {
+// //             const body = res.body;
+// //             expect(body.charger)
+// //               .to.equal(undefined)
+// //             done();
+// //           })
+// //           .catch((err) => done(err));
 //       });
 //     })

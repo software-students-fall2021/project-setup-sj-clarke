@@ -1,3 +1,4 @@
+
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai')
@@ -6,6 +7,7 @@ const request = require("supertest")
 const app = require("../app.js");
 const { response } = require("express");
 let mongoose = require("mongoose");
+
 
   
 describe('GET /AllGroups/:username ', () => {
@@ -22,15 +24,15 @@ describe('GET /AllGroups/:username ', () => {
   })
 // // test GET for All Groups
 // // Testing to see that the mockaroo sends back 10 groups
-// describe('GET /AllGroups ', () => {
-  
-//     it('PASS, getting All Groups', (done) => {
-//       request(app).get('/AllGroups')
-//         .then((res) => {
-//           const body = res.body;
-//           expect(body.length).to.equal(10);
-//           done();
-//         })
-//         .catch((err) => done(err));
-//     });
+// const getGroups = jest.fn() 
+
+// const app2 = makeApp({
+//     getAllGroups
+// })
+
+// describe('GET /AllGroups ', async () => {
+//     it('PASS, getting All Groups when none have been created yet', (done) => {
+//      request(app).get("/AllGroups")
+//       expect(getAllGroups.mock.calls.length).toBe(1)
+    
 //   })

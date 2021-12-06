@@ -2,17 +2,68 @@
 const express = require("express") // CommonJS import style!
 const app = express() // instantiate an Express object
 const axios = require('axios')
+
+const morgan = require('morgan')
+const cors = require("cors")
+const cookieParser = require("cookie-parser")
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+
 // connection to mongoose
-const mongoose = require('mongoose');
 const users = require("./controllers/users")
 require('dotenv').config()
+
 const db = process.env.REACT_APP_DB;
 mongoose.connect('${db}');
-//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
-const { Schema } = mongoose;
+
+// const db = process.env.REACT_APP_DB;
+// mongoose.connect(`${db}`);
+// mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 
 // initializing User schema 
-const user_schema = new Schema ({
+
+//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
+const { Schema } = mongoose;
+require("dotenv").config({ silent: true })
+// const db = process.env.REACT_APP_DB;
+// mongoose.connect(`${db}`);
+//required for authentication with JSON Web Tokens
+const jwt = require("jsonwebtoken")
+const passport = require("passport")
+app.use(passport.initialize())
+
+//use JWT strategy within passport for authentication and handling
+const { jwtOptions, jwtStrategy } = require("./jwt-config.js") // import setup options for using JWT in passport
+const { Timestamp } = require("bson")
+passport.use(jwtStrategy)
+
+// set up some middleware
+app.use(morgan("dev", { skip: (req, res) => process.env.NODE_ENV === "test" })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
+
+// use express's builtin body-parser middleware to parse any data included in a request
+app.use(express.json()) // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+app.use(cookieParser()) // useful middleware for dealing with cookies
+
+
+// the following cors setup is important when working with cookies on your local machine
+app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
+
+
+// initializing User schema 
+// const user_schema = new Schema ({
+//   username:  String, // String is shorthand for {type: String}
+//   password: String,
+//   fName:   String,
+//   lName: String,
+//   currentGroup: String,
+//   allGroups: [String],
+//   friends: [String]
+  
+// });
+// initializing Group schema 
+
+const user_schema = new mongoose.Schema ({
   username:  String, // String is shorthand for {type: String}
   password: String,
   fName:   String,
@@ -23,7 +74,9 @@ const user_schema = new Schema ({
   
 });
 
-// initializing Group schema 
+const user = mongoose.model('user')
+
+// const group = require('./db/models/group.js').group; 
 const group_schema = new Schema({
   name:  String, 
   date: Date,
@@ -31,7 +84,7 @@ const group_schema = new Schema({
   transactions:  [ 
     {
         charger: String, 
-        chargee: [String], 
+        chargee: Object, 
         amount: String, 
         date: Date, 
         description: String
@@ -39,7 +92,7 @@ const group_schema = new Schema({
   ],
 });
 // initializing mongoose models 
-const user = mongoose.model('user', user_schema)
+// const user = mongoose.model('user', user_schema)
 const group = mongoose.model('group', group_schema)
 
 // // example posting a group 
@@ -66,7 +119,6 @@ const group = mongoose.model('group', group_schema)
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use('/users', require('./routes/users'))
 
 //CORS stuff 
 app.use((req, res, next) => {
@@ -168,8 +220,18 @@ app.get("/CurrentGroup/:usernameInput", async (req, res) => {
 app.post("/AddToGroup/:usernameInput", async (req, res) => {
   try{
     // if: the friend or groupName passed through is not in the users friend list --> error 
-   //  const response = await user.find({username: username_query})
-          // go to tutor for this. 
+  //  const response = await user.find({username: username_query})
+  //  const allGroups = response[0].allGroups; 
+  //  const foundGroup = 0; 
+  //  allGroups.forEach(element => {
+  //   if (req.body.group == element){
+  //       foundGroup = 1; 
+  //   }
+  //  })
+  //  if (foundGroup == 0){
+  //    res.json(err)
+  //  }
+
     // otherwise: 
     // find group and update current members list with this added user 
     await group.findOneAndUpdate({name: req.body.groupName}, {
@@ -191,6 +253,7 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
       friend: req.body.friend,
       groupName: req.body.groupName
     }
+
     res.status(200).json(data)
 
   }
@@ -205,6 +268,7 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
 // send back json of the group, then front end retracts the list of transactions
 app.get("/Transactions/:groupInput", async (req, res) => {
   // aquire from database (for now we are calling mockaroo)
+  console.log(req.headers); 
   let group_query = req.params.groupInput; 
   try{
     // find user in database 
@@ -230,7 +294,8 @@ await group.findOneAndUpdate({name: group_query}, {
       chargee: req.body.chargee,
       amount: req.body.amount, 
       date: req.body.date, 
-      description: req.body.description 
+      description: req.body.description,
+      completed: req.body.completed 
     }]
   }
 })
@@ -245,6 +310,85 @@ const data = {
 // send information to database here 
 res.json(data)
 })
+
+app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,res) => {
+  let group_query = req.params.groupInput;
+  let transactionID = req.params.transactionID; 
+  let username = req.params.username
+  let temp = 
+    {
+      id: 0, 
+      charger: '',
+      chargee: {}, 
+      amount: "", 
+      date: Date, 
+      description: "", 
+      completed: 0
+  }
+  // update existing transaction for this group. 
+  const currentGroup = await group.find({name: group_query})
+  console.log(currentGroup)
+  const trans = currentGroup[0].transactions
+  console.log(trans)
+  // add all transactions, only change the one 
+  var final = []
+  var index; 
+  for (var i = 0; i < trans.length; i++){
+    if ((trans[i]._id == transactionID)){
+      console.log(transactionID)
+      console.log(trans[i]._id)
+      
+      // copy the whole transaction into a new id
+      temp._id = trans[i]._id
+      trans[i].chargee[username] +=1; 
+      temp.charger = trans[i].charger
+      temp.chargee = trans[i].chargee
+      temp.amount = trans[i].amount
+      temp.date = trans[i].date
+      temp.description = trans[i].description
+      temp.completed = trans[i].completed
+      index = i; 
+      
+      console.log(temp.chargee)
+      // temp.chargee[username] = 1
+      console.log(temp.chargee)
+      final.push(temp)
+    }
+    else {
+      final.push(trans[i])
+    }
+
+  }
+
+
+  await group.findOneAndUpdate({name: group_query}, 
+    { $set: {
+        transactions: final
+    }
+      
+     
+  }
+
+
+    )
+
+  // temp.chargee[username] = 1
+  // console.log(temp.chargee[username])
+  // currentGroup[0].transactions = temp; 
+
+  // console.log(currentGroup[0].transactions)
+  // find one and update group, pass through transaction 
+  // await group.findOneAndReplace({name: group_query}, {
+  //   $push: {
+  //     transactions: [temp]
+  //   }
+  // })
+})
+
+  
+
+
+
 
 // GET all members of any group 
 app.get("/Members/:groupInput", async (req, res) => {
@@ -264,11 +408,12 @@ let group_query = req.params.groupInput;
 // GET all Groups for a sepcific user
 app.get("/AllGroups/:usernameInput", async (req, res) => {
   let username_query = req.params.usernameInput; 
-  
+  console.log(username_query)
   try{
     // find user in database 
     const response = await user.find({username: username_query});
     // send the data in the response
+    console.log(response[0])
     res.json(response[0].allGroups)
   }
   catch(err){
@@ -297,7 +442,9 @@ app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
   }
 })
 
-app.post("/CreateGroup", async (req, res)=>{
+
+// test this
+app.post("/CreateGroup/", async (req, res)=>{
   /*const data = {
     status: "Posted", 
     groupName: req.body.groupName
@@ -306,7 +453,6 @@ app.post("/CreateGroup", async (req, res)=>{
   console.log("Create Group got called")
   console.log(req.body.groupName) */
   console.log("Create Group got called")
- 
   console.log(req.query.groupName)
   let groupname_query = req.query.groupName;
   try{
@@ -316,7 +462,7 @@ app.post("/CreateGroup", async (req, res)=>{
     const newGroup = {
       name:  req.query.groupName, 
       date: Date.now(),
-      members: [req.query.friendAdded],
+      members: [req.query.friendAdded, req.query.userInput],
       transactions:  [],
     }
     new group(newGroup).save()
@@ -330,6 +476,23 @@ app.post("/CreateGroup", async (req, res)=>{
       friendName: req.query.friendAdded
     }
     res.status(200).json(data)
+    // set as the users current group and friend. 
+    await user.findOneAndUpdate({username: req.query.userInput}, {
+      $set: {
+        currentGroup: req.query.groupName
+      }, 
+      $push:{
+        allGroups: req.query.groupName
+      }
+    })
+    await user.findOneAndUpdate({username: req.query.friendAdded}, {
+      $set: {
+        currentGroup: req.query.groupName
+      }, 
+      $push:{
+        allGroups: req.query.groupName
+      }
+    })
   }
   catch(err){
     console.log(err)
@@ -358,20 +521,164 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
    })
 
 
+
 // POST a new User
 // data coming through will be the user
 // add the User
 app.post("/Users", (req, res) => {
-const data = {
-  status: "Posted", 
-  first_name: req.body.first_name,
-  last_name: req.body.last_name,
+const data = new user ({
+  fName: req.body.fName,
+  lName: req.body.lName,
   password: req.body.password,
-  username: req.body.username
-}
+  username: req.body.username, 
+  currentGroup: req.body.currentGroup,
+  allGroups: req.body.allGroups, 
+  friends: req.body.friends
+});
 // send info to database once we make database connection 
-res.status(200).json(data)
+data.save()
+  .then((data) => res.status(200).json(data)); 
 })
+
+app.get("/Users", async (req, res)  => {
+  const response = await user.find();
+  // send info to database once we make database connection 
+  res.status(200).json(response); 
+  })
+  })
+
+// sends a response for cookies including the Set-Cookie header
+app.get("/set-cookie", (req, res) => {
+  res
+    .cookie("foo", "bar")
+    .send({
+      success: true,
+      message: "Sent a cookie to the browser... let's hope it's saved.",
+    })
+})
+
+// route that looks for Cookie header in the request and sends it back whatever data was found in it
+app.get("/get-cookie", (req, res) => {
+  const numCookies = Object.keys(req.cookies).length
+
+  console.log(`Incoming cookie data: ${JSON.stringify(req.cookies, null, 0)}`)
+  res.send({
+    success: numCookies ? true : false,
+    message: numCookies
+      ? "thanks for sending cookies to the server"
+      : "no cookies sent to the server",
+      cookieData: req.cookies,
+  })
+})
+
+//route that is protected.. only authenticated users can access it
+app.get(
+  "/home",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      success: true,
+      user: {
+        //id: req.user.id,
+        username: req.user.username,
+
+      },
+      message: `Congratulations you have has accessed this route.`,
+    })
+  }
+)
+
+app.post("/login", async (req, res) => {
+  let username_query = req.body.username; 
+  console.log(username_query);
+
+  const username = req.body.username
+  const password = req.body.password
+
+  if (!username || !password){
+    res
+      .status(401)
+      .json({success: false, message: "no username or password supplied."})
+      console.log("error1")
+  }
+
+  
+    // find user in database 
+  const response = user.find({username : username_query}).then((found_user) => { //found_user.username
+    console.log(found_user[0].password);
+    console.log(req.body.password);
+    if (req.body.password == found_user[0].password){
+      console.log("passwords match")
+      const payload = { id: found_user.id}
+      const token = jwt.sign(payload, jwtOptions.secretOrKey)
+      res.json({ success: true, username: found_user[0].username, token: token})
+      console.log("error3")
+    }else{
+      res.status(401).json({ success: false, message: "passwords did not match."})
+      console.log("error4")
+    }
+
+
+  }).catch((err) => {
+    res
+    .status(401)
+    .json({ success: false, message: `user not found: ${req.body.username}`})
+    console.log(err)
+  });
+  //console.log(response);
+
+})
+
+app.get("/signup/:userInput", async (req, res, next) => {
+  try{
+    const response = await user.find({username: username_query});
+    res.json(response[0].SignUp)
+    console.log("hello")
+  }
+  catch(err){
+    res.json(err)
+  }
+})
+
+app.post("/signup/", async (req, res) => {
+  console.log("signup has been called")
+  console.log(req.query.username)
+    try{
+      const newUser = {
+        username: req.query.username,
+        password: req.query.password,
+        fName: req.query.fName,
+        lName: req.query.lName,
+        currentGroup: "",
+        allGroups: [],
+        friends: [],
+
+      }
+      new user(newUser).save()
+
+      const data = {
+        status: "posted",
+        username: req.query.username,
+        password: req.query.password,
+        fName: req.query.fName,
+        lName: req.query.lName
+      }
+      res.status(200).json(data)
+
+    }catch(err){
+      if(err == 404){
+        console.log("hello")
+      }
+      console.log(err)
+      res.json(err)
+
+    }
+
+})
+
+
+
+
 
 // export the express app we created to make it available to other modules
 module.exports = app
