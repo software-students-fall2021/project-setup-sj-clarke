@@ -5,23 +5,39 @@ const chai = require('chai')
 const expect = require("chai").expect; 
 const request = require("supertest")
 const app = require("../app.js");
-const { response } = require("express");
-let mongoose = require("mongoose");
-
+const chaiHttp = require('chai-http');
+// const { response } = require("express");
+// let mongoose = require("mongoose");
+chai.use(chaiHttp);
 
   
+// describe('GET /AllGroups/:username ', () => {
+//     it('PASS, getting all friends of a user', (done) => {
+//       const user = "sjclarke"
+//       request(app).get(`/AllGroups/${user}`)
+//         .then((res) => {
+//           const body = res.body;
+//           expect(res.body).to.be.an("array")
+//           done();
+//         })
+//         .catch((err) => done(err));
+//     });
+//   })
+    
 describe('GET /AllGroups/:username ', () => {
-    it('PASS, getting all friends of a user', (done) => {
-      const user = "sjclarke"
-      request(app).get(`/AllGroups/${user}`)
-        .then((res) => {
-          const body = res.body;
-          expect(res.body).to.be.an("array")
-          done();
-        })
-        .catch((err) => done(err));
-    });
-  })
+  it('PASS, getting all friends of a user', (done) => {
+    const user = "sjclarke"
+    chai.request(app)
+      .get(`/AllGroups/${user}`)
+      .end((err,res)=>{
+        const body = res.body;
+        expect(res.body).to.be.an("array")
+        done();
+      })
+      .timeout(4000)
+  });
+})
+
 // // test GET for All Groups
 // // Testing to see that the mockaroo sends back 10 groups
 // const getGroups = jest.fn() 
