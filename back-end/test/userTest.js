@@ -22,7 +22,7 @@ describe('Testing /Users GET', () => {
 
 describe('Testing /Users POST ', () => {
   it('PASS, POST user worked', (done) => {
-    chai.request(app).post("/Users")
+    chai.request(app).post("localhost/Users")
     .send({
         username: "olivia",
         password: "Clarke", 
