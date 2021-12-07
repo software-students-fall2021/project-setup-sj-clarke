@@ -3,7 +3,6 @@ const app = require("../app.js");
 const request = require("supertest");
 const chai = require('chai')
 const expect = chai.expect;
-const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 

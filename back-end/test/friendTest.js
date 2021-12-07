@@ -20,7 +20,7 @@ describe('/Friends tests ', () => {
         friends: []
     })
       .then((res) => {
-        chai.request(app).get(`localhost/Friends/${res.body.username}`)
+        chai.request(app).get(`/Friends/${res.body.username}`)
           .then((res) => {
             const body = res.body;
             expect(body).be.an('array');
