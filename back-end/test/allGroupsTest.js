@@ -18,7 +18,7 @@ describe(`GET /AllGroups/:username `, () => {
         expect(res.body).to.be.an(`array`)
         done();
       })
-      // .timeout(4000)
+      .timeout(4000)
   });
 })
 
