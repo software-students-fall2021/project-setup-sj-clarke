@@ -10,7 +10,7 @@ const app = require("../app.js");
 describe('GET /CurrentGroup', () => {
     // making 2 users 
     it('OK, making user 1', (done) => {
-        request(app).post('/Users')
+        request(app).post('localhost/Users')
           .send({
             username: "SJ",
             password: "Clarke", 
@@ -70,8 +70,6 @@ describe('GET /CurrentGroup', () => {
            })
            .catch((err) => done(err));
         })
-
-        // GOTTA THIS
     // current group should be the group just created by this user 
     it('PASS, getting current group', (done) => {
       request(app).get('localhost/CurrentGroup/SJ')
