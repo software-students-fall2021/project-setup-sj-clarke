@@ -23,21 +23,22 @@ let mongoose = require("mongoose");
 // })
 describe("Empty test" , () => {
   it('PASS, empty test' , (done) => {
-    console.log("in empty test")
+    console.log("in empty");
     done();
   })
 });
 describe('GET /AllGroups/:username ', () => {
     it('PASS, getting all friends of a user', (done) => {
       const user = "sjclarke"
-      chai.request(app).get(`/AllGroups/${user}`) // might need to add localhost or IP address before slash
+      request(app).get(`/AllGroups/${user}`) // might need to add localhost or IP address before slash
         .then((res) => {
           const body = res.body;
+          console.log("logging body");
+          console.log(body);
           expect(body).to.be.an("array")
           done();
         })
         .catch((err) => done(err))
-        .timeout(4000);
     });
   })
 
