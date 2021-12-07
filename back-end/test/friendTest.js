@@ -1,14 +1,15 @@
 
 // FRIENDS TESTS 
-
-const request = require('supertest'); 
 const app = require("../app.js");
 const expect = require('chai').expect;
+const chai = require('chai');
+const chaiHttp = require('chai-http')
+chai.use(chaiHttp)
 
 // GET all friends of a specific user 
 describe('/Friends tests ', () => {
   it('OK, getting Friends', (done) => {
-    request(app).post('/Users')
+    chai.request(app).post('localhost/Users')
       .send({
         username: "SJ",
         password: "Clarke", 
@@ -19,7 +20,7 @@ describe('/Friends tests ', () => {
         friends: []
     })
       .then((res) => {
-        request(app).get(`/Friends/${res.body.username}`)
+        chai.request(app).get(`localhost/Friends/${res.body.username}`)
           .then((res) => {
             const body = res.body;
             expect(body).be.an('array');
@@ -29,7 +30,7 @@ describe('/Friends tests ', () => {
       .catch((err) => done(err));
   });
   it('OK, Posting friend works', (done) => {
-        request(app).post('/Friends/SJ')
+        chai.request(app).post('localhost/Friends/SJ')
         .send({
               friendAdded: "amyClarke"
         })
@@ -44,7 +45,7 @@ describe('/Friends tests ', () => {
       
 describe('/Friends tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user just created", (done) => {
-        request(app).delete('/Users/SJ')
+        chai.request(app).delete('localhost/Users/SJ')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

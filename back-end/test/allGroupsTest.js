@@ -22,12 +22,7 @@ chai.use(chaiHttp);
 //       .timeout(4000)
 //   });
 // })
-describe("Empty test" , () => {
-  it('PASS, empty test' , (done) => {
-    console.log("in empty");
-    done();
-  })
-});
+
 describe('GET /AllGroups/:username ', () => {
     it('PASS, getting all friends of a user', (done) => {
       const user = "sjclarke"

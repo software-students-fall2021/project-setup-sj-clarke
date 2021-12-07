@@ -84,7 +84,7 @@ describe('GET /CurrentGroup', () => {
 
     // delete so DB is not affected
     it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/Maldives')
+        chai.request(app).delete('/Group/Maldives')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -99,7 +99,7 @@ describe('GET /CurrentGroup', () => {
 
   describe('/CurrentGroup tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
-        request(app).delete('/Users/SJ')
+        chai.request(app).delete('/Users/SJ')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -109,7 +109,7 @@ describe('GET /CurrentGroup', () => {
            
     })
     it("PASS, Deleting user 2 just created", (done) => {
-        request(app).delete('/Users/oEbner')
+        chai.request(app).delete('/Users/oEbner')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

@@ -3,14 +3,16 @@
 const expect = require("chai").expect; 
 const request = require("supertest")
 const app = require("../app.js");
-
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+chai.use(chaiHttp);
 
 // Members tests
 
 describe('GET /Members', () => {
     // making 2 users 
     it('OK, making user 1', (done) => {
-        request(app).post('/Users')
+        chai.request(app).post('localhost/Users')
           .send({
             username: "SJ",
             password: "Clarke", 
@@ -32,7 +34,7 @@ describe('GET /Members', () => {
         })
 
         it('OK, making user 2', (done) => {
-            request(app).post('/Users')
+            chai.request(app).post('localhost/Users')
               .send({
                 username: "oEbner",
                 password: "1234", 
@@ -56,7 +58,7 @@ describe('GET /Members', () => {
     // make a group to test 
     it('PASS, create a new group to get members from', (done) => {
         // const group = "Mexico"
-         request(app).post('/CreateGroup/')
+         chai.request(app).post('localhost/CreateGroup/')
          .send({
              groupName: "Maldives", 
              friendAdded: "oEbner", 
@@ -73,7 +75,7 @@ describe('GET /Members', () => {
         })
 
     it('PASS, getting group members from this new group', (done) => {
-      request(app).get('localhost/Members/Maldives')
+      chai.request(app).get('localhost/Members/Maldives')
         .then((res) => {
           const body = res.body;
           expect(body).to.be.an("array");
@@ -82,7 +84,7 @@ describe('GET /Members', () => {
         .catch((err) => done(err));
     });
     it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/Maldives')
+        chai.request(app).delete('local/Group/Maldives')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -97,7 +99,7 @@ describe('GET /Members', () => {
 
   describe('/Members tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
-        request(app).delete('/Users/SJ')
+        chai.request(app).delete('/Users/SJ')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -107,7 +109,7 @@ describe('GET /Members', () => {
            
     })
     it("PASS, Deleting user 2 just created", (done) => {
-        request(app).delete('/Users/oEbner')
+        chai.request(app).delete('localhost/Users/oEbner')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

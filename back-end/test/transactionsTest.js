@@ -4,13 +4,15 @@ const expect = require("chai").expect;
 const request = require("supertest")
 const app = require("../app.js");
 const { response } = require("express");
-
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+chai.use(chaiHttp);
 // Testing Transactions 
 
 describe('GET /Transactions', () => {
     // make users to put in group 
     it('OK, making user 1', (done) => {
-        request(app).post('/Users')
+        chai.request(app).post('localhost/Users')
           .send({
             username: "SJ",
             password: "Clarke", 
@@ -32,7 +34,7 @@ describe('GET /Transactions', () => {
         })
 
         it('OK, making user 2', (done) => {
-            request(app).post('/Users')
+            chai.request(app).post('localhost/Users')
               .send({
                 username: "oEbner",
                 password: "1234", 
@@ -55,7 +57,7 @@ describe('GET /Transactions', () => {
 
     // make a group to test 
     it('PASS, create a new group to get transactions from', (done) => {
-         request(app).post('/CreateGroup/')
+         chai.request(app).post('localhost/CreateGroup/')
          .send({
              groupName: "Maldives", 
              friendAdded: "oEbner", 
@@ -72,7 +74,7 @@ describe('GET /Transactions', () => {
         })
 
         it('PASS, posting transaction into this new group', (done) => {
-            request(app).post('/Transactions/Maldives')
+            chai.request(app).post('localhost/Transactions/Maldives')
             .send({
                 charger: "SJ", 
                 chargee: {
@@ -95,7 +97,7 @@ describe('GET /Transactions', () => {
           });
 
     it('PASS, getting transactions from this new group', (done) => {
-      request(app).get('localhost/Transactions/Maldives')
+      chai.request(app).get('localhost/Transactions/Maldives')
         .then((res) => {
           const body = res.body;
           expect(body).have.lengthOf(1);
@@ -104,7 +106,7 @@ describe('GET /Transactions', () => {
         .catch((err) => done(err));
     });
     it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/Maldives')
+        chai.request(app).delete('/Group/Maldives')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -119,7 +121,7 @@ describe('GET /Transactions', () => {
 
   describe('/Members tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
-        request(app).delete('/Users/SJ')
+        chai.request(app).delete('/Users/SJ')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -129,7 +131,7 @@ describe('GET /Transactions', () => {
            
     })
     it("PASS, Deleting user 2 just created", (done) => {
-        request(app).delete('/Users/oEbner')
+        request(app).delete('localhost/Users/oEbner')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

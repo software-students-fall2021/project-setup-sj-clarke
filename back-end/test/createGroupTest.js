@@ -3,12 +3,15 @@ const app = require("../app.js");
 const request = require("supertest");
 const chai = require('chai')
 const expect = chai.expect;
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+chai.use(chaiHttp);
 
 // GET all friends of a specific user 
   describe('GET /CreateGroup/:groups ', () => {
     it('PASS, getting group', (done) => {
       const group = "China"
-      request(app).get(`localhost/CreateGroup/${group}`)
+      chai.request(app).get(`localhost/CreateGroup/${group}`)
         .then((res) => {
           const body = res.body;
           console.log(res);
@@ -17,7 +20,7 @@ const expect = chai.expect;
         .catch((err) => done(err));
     });
     it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/China')
+        chai.request(app).delete('/Group/China')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -34,7 +37,7 @@ const expect = chai.expect;
     describe('POST /CreateGroup/:groups', () => {
       it('PASS, adding a new group works', (done) => {
        // const group = "Mexico"
-        request(app).post('/CreateGroup/').send({ groupName: 'China' })
+        chai.request(app).post('/CreateGroup/').send({ groupName: 'China' })
           .expect(200)
           .expect('Content-Type', /json/)
           .then((res) => {
@@ -46,7 +49,7 @@ const expect = chai.expect;
           .catch((err) => done(err));
       })
       it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/China')
+        chai.request(app).delete('/Group/China')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
