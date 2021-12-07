@@ -1,16 +1,16 @@
 
-
 const expect = require("chai").expect; 
 const request = require("supertest")
 const app = require("../app.js");
-
-
+const chai = require('chai');
+const chaiHttp = require("chai-http");
+chai.use(chaiHttp);
 // test GET for Current group of a user
 
 describe('GET /CurrentGroup', () => {
     // making 2 users 
     it('OK, making user 1', (done) => {
-        request(app).post('localhost/Users')
+        chai.request(app).post('localhost/Users')
           .send({
             username: "SJ",
             password: "Clarke", 
@@ -32,7 +32,7 @@ describe('GET /CurrentGroup', () => {
         })
 
         it('OK, making user 2', (done) => {
-            request(app).post('localhost/Users')
+            chai.request(app).post('localhost/Users')
               .send({
                 username: "oEbner",
                 password: "1234", 
@@ -55,7 +55,7 @@ describe('GET /CurrentGroup', () => {
 
     // make a group to test 
     it('PASS, create a new group to get members from', (done) => {
-         request(app).post('localhost/CreateGroup/')
+         chai.request(app).post('localhost/CreateGroup/')
          .send({
              groupName: "Maldives", 
              friendAdded: "oEbner", 
@@ -72,7 +72,7 @@ describe('GET /CurrentGroup', () => {
         })
     // current group should be the group just created by this user 
     it('PASS, getting current group', (done) => {
-      request(app).get('localhost/CurrentGroup')
+      chai.request(app).get('localhost/CurrentGroup')
         .then((res) => {
           const body = res.body;
           expect(body).to.be.a("string");
