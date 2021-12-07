@@ -7,21 +7,18 @@ const request = require("supertest")
 const app = require("../app.js");
 const { response } = require("express");
 let mongoose = require("mongoose");
-const chaiHttp = require('chai-http');
-
-chai.use(chaiHttp);
 
 describe(`GET /AllGroups/:username `, () => {
   it(`PASS, getting all friends of a user`, (done) => {
     const user = `sjclarke`
-    chai.request(app)
+    request(app)
       .get(`/AllGroups/${user}`)
       .end((err,res)=>{
         const body = res.body;
         expect(res.body).to.be.an(`array`)
         done();
       })
-      //.timeout(4000)
+      // .timeout(4000)
   });
 })
 
