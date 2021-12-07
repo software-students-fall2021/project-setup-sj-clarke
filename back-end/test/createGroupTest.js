@@ -9,7 +9,7 @@ const expect = chai.expect;
   describe('GET /CreateGroup/:groups ', () => {
     it('PASS, getting group', (done) => {
       const group = "China"
-      request(app).get(`/CreateGroup/${group}`)
+      request(app).get(`localhost/CreateGroup/${group}`)
         .then((res) => {
           const body = res.body;
           console.log(res);
