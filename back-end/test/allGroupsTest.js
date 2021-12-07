@@ -1,13 +1,14 @@
 
 process.env.NODE_ENV = 'test';
-
+//import chaiHttp from 'chai-http';
 const chai = require('chai')
+const chaiHttp = require('chai-http')
 const expect = require("chai").expect; 
 const request = require("supertest")
 const app = require("../app.js");
 const { response } = require("express");
 let mongoose = require("mongoose");
-
+chai.use(chaiHttp);
 // describe(`GET /AllGroups/:username `, () => {
 //   it(`PASS, getting all friends of a user`, (done) => {
 //     const user = `sjclarke`
@@ -30,7 +31,7 @@ describe("Empty test" , () => {
 describe('GET /AllGroups/:username ', () => {
     it('PASS, getting all friends of a user', (done) => {
       const user = "sjclarke"
-      request(app).get(`localhost/AllGroups/${user}`) // might need to add localhost or IP address before slash
+      chai.request(app).get(`/AllGroups/${user}`) // might need to add localhost or IP address before slash
         .then((res) => {
           const body = res.body;
           console.log("logging body");

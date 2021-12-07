@@ -9,7 +9,7 @@ const conn = require("../db/index.js");
 // GET all friends of a specific user 
 describe('Testing /Users GET', () => {
     it('PASS, getting Users works', (done) => {
-        request(app).get('/Users')
+        request(app).get('localhost/Users')
           .then((res) => { 
             expect(res.body).to.be.an("array")
             done(); 

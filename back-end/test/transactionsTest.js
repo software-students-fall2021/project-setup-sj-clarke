@@ -95,7 +95,7 @@ describe('GET /Transactions', () => {
           });
 
     it('PASS, getting transactions from this new group', (done) => {
-      request(app).get('/Transactions/Maldives')
+      request(app).get('localhost/Transactions/Maldives')
         .then((res) => {
           const body = res.body;
           expect(body).have.lengthOf(1);

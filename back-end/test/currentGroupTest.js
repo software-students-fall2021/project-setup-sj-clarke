@@ -71,9 +71,10 @@ describe('GET /CurrentGroup', () => {
            .catch((err) => done(err));
         })
 
+        // GOTTA THIS
     // current group should be the group just created by this user 
     it('PASS, getting current group', (done) => {
-      request(app).get('/CurrentGroup/SJ')
+      request(app).get('localhost/CurrentGroup/SJ')
         .then((res) => {
           const body = res.body;
           expect(body).to.be.a("string");

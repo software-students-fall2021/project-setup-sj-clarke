@@ -73,7 +73,7 @@ describe('GET /Members', () => {
         })
 
     it('PASS, getting group members from this new group', (done) => {
-      request(app).get('/Members/Maldives')
+      request(app).get('localhost/Members/Maldives')
         .then((res) => {
           const body = res.body;
           expect(body).to.be.an("array");
