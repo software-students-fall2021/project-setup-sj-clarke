@@ -30,7 +30,7 @@ describe("Empty test" , () => {
 describe('GET /AllGroups/:username ', () => {
     it('PASS, getting all friends of a user', (done) => {
       const user = "sjclarke"
-      request(app).get(`/AllGroups/${user}`) // might need to add localhost or IP address before slash
+      request(app).get(`localhost/AllGroups/${user}`) // might need to add localhost or IP address before slash
         .then((res) => {
           const body = res.body;
           console.log("logging body");
