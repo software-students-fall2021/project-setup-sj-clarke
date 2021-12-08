@@ -12,10 +12,6 @@ jobs:
           password: piqdi4-dyqhom-diMjiz  # context / project UI env-var reference
     steps:
       - checkout
-      - environment:
-           REACT_APP_DB: 'mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'
-          JWT_SECRET: 'knowledge.kitchen'
-          
       - run: echo "this is the build and test express.js job"
       - run: |
           cd back-end
