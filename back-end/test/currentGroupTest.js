@@ -1,9 +1,6 @@
-
-
 const expect = require("chai").expect; 
 const request = require("supertest")
 const app = require("../app.js");
-
 
 // test GET for Current group of a user
 

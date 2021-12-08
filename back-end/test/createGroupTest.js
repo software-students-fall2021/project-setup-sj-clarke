@@ -5,7 +5,6 @@ const chai = require('chai')
 const expect = chai.expect;
 
 
-
     describe('POST /CreateGroup', () => {
       // making 2 users 
       it('OK, making user 1', (done) => {
