@@ -16,3 +16,6 @@ label {
 input[type=submit] {
   background-color: rgb(73, 176, 145);
 }
+input[type=text]{
+  text-align: center
+}
