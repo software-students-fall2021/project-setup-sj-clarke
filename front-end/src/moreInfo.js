@@ -22,7 +22,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [transactionArray, setTransactionArray] = useState({}); 
   const [currentGroup, setCurrentGroup] = useState("")
   // name : [930303, 400404]
-  const username = process.env.REACT_APP_USERNAME;
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
   useEffect(() => {
     // a nested function that fetches the data
 
@@ -30,7 +30,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
       // axios is a 3rd-party module for fetching data from servers
       // mockaroo api call for list of friends in json file format
       var chargeesArr = []; 
-      const response_current_group = await axios(`/CurrentGroup/${username}`);
+      const response_current_group = await axios(`/CurrentGroup/${currentUser}`);
       setCurrentGroup(response_current_group.data)
       //console.log({ username });
       let query = `/Transactions/${response_current_group.data}`;
@@ -50,11 +50,11 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         console.log(names); 
         console.log(valid)
 
-        if (names.indexOf(username) !== -1){
+        if (names.indexOf(currentUser) !== -1){
             for (var j = 0; j < names.length; j++){
-              if (names[j] == username){
+              if (names[j] == currentUser){
                 if (valid[j] == 0){
-                  if (chargeesArr.indexOf(username) !== -1) {
+                  if (chargeesArr.indexOf(currentUser) !== -1) {
                     // add to id array transaction.id_
                     var amount_to_add = Number(transaction.amount);
                     amount_to_add = amount_to_add / (chargeesArr.length + 1);
@@ -131,7 +131,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         const chargees = transaction.chargee;
         chargeesArr = Object.keys(transaction.chargee); 
 
-        if (charger === username) {
+        if (charger === currentUser) {
           for (var j = 0; j < chargeesArr.length; j++) {
             const chargee = chargeesArr[j]
             
@@ -230,7 +230,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
         setModal={setModal}
         amount={amount}
         charger={user} // charger
-        currentuser = {username} // current user
+        currentuser = {currentUser} // current user
         transactionIDArr = {transactionArray[user]}
         currentgroup = {currentGroup}
       />
