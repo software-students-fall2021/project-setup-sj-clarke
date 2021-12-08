@@ -7,7 +7,7 @@ const { response } = require("express");
 
 // Testing Transactions 
 
-describe('GET /Transactions', () => {
+describe('POST /Transactions', () => {
     // make users to put in group 
     it('OK, making user 1', (done) => {
         request(app).post('/Users')
@@ -89,6 +89,9 @@ describe('GET /Transactions', () => {
               .catch((err) => done(err));
           });
 
+        })
+
+  describe('GET /Transactions', () => {
     it('PASS, getting transactions from this new group', (done) => {
       request(app).get('/Transactions/Maldives')
         .then((res) => {
