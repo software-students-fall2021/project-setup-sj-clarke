@@ -6,6 +6,7 @@ import React, { useEffect, useState, Navigate } from "react";
 import * as ReactBootStrap from "react-bootstrap";
 import axios from "axios";
 
+require('dotenv').config()
 
 
 function Home(props){
@@ -27,11 +28,13 @@ function Home(props){
     const [currentUser, setCurrentUser] = useState(); 
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
-    const [totalExpense, setTotalExpense] = useState(); 
+    const [totalExpense, setTotalExpense] = useState();
+    const [uName, setUName] = useState(localStorage.getItem("loggedInUser"));
 
-  
+   
   useEffect(() => {
     console.log(jwtToken)
+    
     axios
       .get(`${process.env.REACT_APP_BACK_END_DOMAIN}/home`, {
         headers: { Authorization: `JWT ${jwtToken}` },
@@ -46,57 +49,42 @@ function Home(props){
         )
         setIsLoggedIn(false)
       })
+
+      async function fetchData() {
+        // GET curent user's current group
+        const username = process.env.REACT_APP_USERNAME;
+        const response_current_group = await axios(`/CurrentGroup/${uName}`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
+        console.log(response_current_group.data);
+        // Extract current group from the response from backend
+        setCurrentGroup(response_current_group.data);
+        // Query all transactions for the current group
+        const response = await axios(`/Transactions/${response_current_group.data}`)// , { headers: { Authorization: `JWT ${jwtToken}` } });
+        console.log(response.data);
+        
+        // Extract the data from the server response
+        // Set transactions to this data so we can render the rows of the home screen table with the transactions
+        setTransactions(response.data);
+        console.log("hello")
+      }
+      // fetch the data
+      fetchData();
+
+
   },[])
-  useEffect(() => {
-    // a nested function that fetches the data
-    async function fetchData() {
-      // GET curent user's current group
-      const username = process.env.REACT_APP_USERNAME;
-      const response_current_group = await axios(`/CurrentGroup/${process.env.REACT_APP_USERNAME}`, { headers: { Authorization: `JWT ${jwtToken}` } });
-      console.log(response_current_group);
-      // Extract current group from the response from backend
-      setCurrentGroup(response_current_group.data);
-      // Query all transactions for the current group
-      let query = `/Transactions/Mexico`;
-
-      const response = await axios(query, { headers: { Authorization: `JWT ${jwtToken}` } });
-      console.log(response);
-      
-      // Extract the data from the server response
-      // Set transactions to this data so we can render the rows of the home screen table with the transactions
-      setTransactions(response.data);
-      console.log("hello")
-    }
-    // fetch the data
-    fetchData();
-    // the blank array below causes this callback to be executed only once on component load
-  }, []);
-
-    // useEffect(() => {
-    //   // a nested function that fetches the data
-    //   async function fetchData() {
-    //     // GET curent user's current group
-    //     setCurrentUser(username)
-    //     const response_current_group = await axios(
-    //       `/CurrentGroup/${process.env.REACT_APP_USERNAME}`
-    //       ); 
-    //     // Extract current group from the response from backend 
-    //     setCurrentGroup(response_current_group.data)
-    //     // Query all transactions for the current group  
-    //     let query = `/Transactions/${response_current_group.data}`
-    //     const response = await axios(
-    //       query
-    //     ); 
-    //     // Extract the data from the server response
-    //     // Set transactions to this data so we can render the rows of the home screen table with the transactions
-    //     setTransactions(response.data.reverse()); 
-    //     }
-    //   // fetch the data
-    //   fetchData();
-    //   // the blank array below causes this callback to be executed only once on component load
-    // }, []);
 
 
+ 
+
+  
+    
+    console.log(transactions)
+    
+
+
+
+
+    
+  
     const index = 1; 
   
     // general layout of home screen 
@@ -123,9 +111,9 @@ function Home(props){
                     <tr key = {outerElement.id}>
                     <td>{outerElement.date.split("T")[0]}</td>
                     <td>{outerElement.charger}</td>
-                    <td> {outerElement.chargee.map(oneChargee => 
+                    <td> {Object.keys(outerElement.chargee).map(oneChargee => 
                         <tr key = {outerElement.id}>
-                            <td>{oneChargee}</td>
+                            <td>{oneChargee.trim()}</td>
                           </tr>
                     )}</td>
                     <td className = "expenseColumn">${outerElement.amount}</td>
@@ -150,7 +138,7 @@ function Home(props){
           <h1 className="modal-title">Transaction Information</h1>
           <p className = "transaction-info">Date: {date}</p>
           <p className = "transaction-info">Charger: {charger}</p>
-          <p className = "transaction-info">Chargee: {chargee}</p>
+          <p className = "transaction-info">Chargee: {Object.keys(chargee)}</p>
           <p className = "transaction-info" >Description: {description}</p>
           <p className = "transaction-info" >Total Expense: ${totalExpense}</p>
               <button

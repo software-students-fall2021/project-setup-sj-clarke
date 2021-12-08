@@ -32,16 +32,24 @@ General coding standards:
 
 # Other information
 
-
-## Git Workflow 
-. . . 
-
-
 ## Instructions for setting up local development 
-More information to come once we begin developing 
+You need visual studio code or some application to open this application written in JavaScript. 
+Express.js  back end and node.js front end. 
 
 
 ## Instructions for building and testing the project 
-More information to come once the project reaches this stage 
+Git clone this repository then: 
+cd project-setup-sj-clarke
+npm install (install all dependencies)
+cd front-end 
+pm2 start npm -- start
+cd - 
+cd back-end 
+pm2 start npm -- start
+
+Then, the front end and back end should be running.
+Front end: port 3000
+Back end: port 5000
+
 
 

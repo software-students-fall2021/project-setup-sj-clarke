@@ -12,24 +12,27 @@ function AddExpenseModal({ show, setModal }) {
   // GOTTA WORK ON THIS
   const [newExpense, setNewExpense] = useState({
     charger: "",
-    chargee: "",
+    chargee: {},
     amount: "",
     description: "",
     date: "",
+    completed: 0 
   });
+
+
   const [newTransactionAmount, setNewTransactionAmount] = useState("");
   const [newTransactionMembers, setNewTransactionMembers] = useState([]);
   const [newTransactionDescription, setNewTransactionDescription] =
     useState("");
   const [newTransactionDate, setNewTransactionDate] = useState("");
   const [currentGroup, setCurrentGroup] = useState();
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
 
   useEffect(() => {
     // a nested function that fetches the data
     async function fetchData() {
       // GET curent user's current group
-      const username = process.env.REACT_APP_USERNAME;
-      const response_current_group = await axios(`/CurrentGroup/${username}`);
+      const response_current_group = await axios(`/CurrentGroup/${currentUser}`);
       // Extract current group from the response from backend
       setCurrentGroup(response_current_group.data);
     }
@@ -39,17 +42,26 @@ function AddExpenseModal({ show, setModal }) {
   }, []);
 
   const handleTransactionSubmit = () => {
-    const username = process.env.REACT_APP_USERNAME;
+
+    var temp = {}
+
+    for (var i = 0; i < newTransactionMembers.length; i++){
+        temp[newTransactionMembers[i].trim()] = 0; 
+    }
+    console.log(temp)
+    
+    const username = currentUser;
     newExpense.charger = username;
-    newExpense.chargee = newTransactionMembers;
+    newExpense.chargee = temp;
     newExpense.amount = newTransactionAmount;
     newExpense.description = newTransactionDescription;
     newExpense.date = newTransactionDate;
+    console.log({newExpense})
     axios.post(`/Transactions/${currentGroup}`, newExpense);
     // clear the input line
     setNewExpense({
       charger: "",
-      chargee: "",
+      chargee: {},
       amount: "",
       description: "",
       date: "",
@@ -64,6 +76,7 @@ function AddExpenseModal({ show, setModal }) {
   const handleTransactionMembersChange = (event) => {
     const newdata = event.target.value;
     const splitter = newdata.trim().split(",");
+    console.log({splitter})
     setNewTransactionMembers(splitter);
     console.log(newdata);
   };
@@ -79,7 +92,7 @@ function AddExpenseModal({ show, setModal }) {
   };
 
   // handles changes to the add friend form within "add friend" modal
-
+  // remove me from chargees and subtract amount from expens  
   return (
     <div>
       <ReactBootStrap.Modal

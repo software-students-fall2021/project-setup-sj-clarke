@@ -8,7 +8,8 @@ import {Link} from 'react-router-dom'
 
 function AllGroups() {
   // variables needed for all groups page and modals
-  const [currentUser, setCurrentUser] = useState(" "); 
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser")); 
+  //setCurrentUser(localStorage.getItem("loggedInUser")) 
   const [groups, setGroups] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [members, setMembers] = useState([]);
@@ -22,9 +23,9 @@ function AllGroups() {
       async function fetchData() {
       // Extract Mockaroo data
       // get all groups
-      setCurrentUser("sjclarke") 
+      console.log(currentUser)
       
-      const response_groups = await axios(`http://localhost:5000/AllGroups/sjclarke`);
+      const response_groups = await axios(`http://localhost:5000/AllGroups/${currentUser}`);
       // set groups with the data retrieved from mockaroo
       setGroups(response_groups.data);
       // get all transactions for a group
@@ -153,7 +154,11 @@ function AllGroups() {
                           <tr key={transaction.id}>
                             <td>{transaction.date.split("T")[0]}</td>
                             <td>{transaction.charger}</td>
-                            <td>{transaction.chargee}</td>
+                            <td> {Object.keys(transaction.chargee).map(oneChargee => 
+                        <tr key = {transaction.id}>
+                            <td>{oneChargee.trim()}</td>
+                          </tr>
+                    )}</td>
                             <td>${transaction.amount}</td>
                           </tr>
                         ))}

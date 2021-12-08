@@ -13,16 +13,19 @@ function Account(props){
     console.log(`JWT token: ${jwtToken}`)
     const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
     const [currentUser, setCurrentUser] = useState();
-    const username = process.env.REACT_APP_USERNAME;
+    const username = localStorage.getItem("loggedInUser");
+    console.log(username)
     const [accountInfo, setAccountInfo] = useState([]);
     const [fName, setFName] = useState()
     const [lName, setLName] = useState()
-    const [uName, setUName] = useState()
+    const [uName, setUName] = useState(localStorage.getItem("loggedInUser"));
    
 
     useEffect(() => {
         async function fetchData (){
-            const response = await axios(`/accountinfo/${username}`, { headers: { Authorization: `JWT ${jwtToken}` } });
+           
+            const response = await axios(`/accountinfo/${uName}`, { headers: { Authorization: `JWT ${jwtToken}` } });
+            console.log(response)
 
             setFName(response.data.fName)
             setLName(response.data.lName)
@@ -36,7 +39,9 @@ function Account(props){
  
     
 
-
+    console.log(fName)
+    console.log(lName)
+    console.log(uName)
     
     return(
        
