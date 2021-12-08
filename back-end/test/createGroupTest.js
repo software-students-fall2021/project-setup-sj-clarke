@@ -5,7 +5,7 @@ const chai = require('chai')
 const expect = chai.expect;
 
 
-    describe('POST /CreateGroup', () => {
+    describe('/CreateGroup making users', () => {
       // making 2 users 
       it('OK, making user 1', (done) => {
           request(app).post('/Users')
@@ -55,7 +55,7 @@ const expect = chai.expect;
     
 
   // POST new group to a list of groups 
-    describe('POST /CreateGroup/', () => {
+    describe('/CreateGroup/ making new group', () => {
       it('PASS, adding a new group works', (done) => {
         request(app).post("/CreateGroup?userInput=SJ&groupName=China&friendAdded=oEbner")
           .expect(200)
@@ -68,6 +68,11 @@ const expect = chai.expect;
           })
           .catch((err) => done(err));
       })
+    })
+        
+        
+
+    describe('/CreateGroup/ deleting group just created', () => {
       it("PASS, Deleting group just created", (done) => {
         request(app).delete('/Group/China')
         .then((res)=> {
@@ -81,7 +86,7 @@ const expect = chai.expect;
     })
   })
 
-  describe('/CreateGroup tests deleting user just created so DB not affected', () => {
+  describe('/CreateGroup deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
         request(app).delete('/Users/SJ')
         .then((res)=> {

@@ -74,7 +74,6 @@ describe('GET /CurrentGroup', () => {
         .catch((err) => done(err));
     });
     
-
     // delete so DB is not affected
     it("PASS, Deleting group just created", (done) => {
         request(app).delete('/Group/Canada')
