@@ -55,13 +55,7 @@ describe('GET /Members', () => {
 
     // make a group to test 
     it('PASS, create a new group to get members from', (done) => {
-        // const group = "Mexico"
-         request(app).post('/CreateGroup/')
-         .send({
-             groupName: "Maldives", 
-             friendAdded: "oEbner", 
-             userInput: "SJ"
-         })
+         request(app).post('/CreateGroup?userInput=SJ&groupName=Maldives&friendAdded=oEbner')
            .expect(200)
            .then((res) => {
              const body = res.body;

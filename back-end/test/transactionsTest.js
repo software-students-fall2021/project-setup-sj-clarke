@@ -55,12 +55,7 @@ describe('GET /Transactions', () => {
 
     // make a group to test 
     it('PASS, create a new group to get transactions from', (done) => {
-         request(app).post('/CreateGroup/')
-         .send({
-             groupName: "Maldives", 
-             friendAdded: "oEbner", 
-             userInput: "SJ"
-         })
+         request(app).post("/CreateGroup/?userInput=SJ&groupName=Maldives&friendAdded=oEbner")
            .expect(200)
            .then((res) => {
              const body = res.body;

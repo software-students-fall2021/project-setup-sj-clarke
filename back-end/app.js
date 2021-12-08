@@ -264,6 +264,7 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
   // send info to database once we make database connection
 })
 
+
 // GET all transactions for any group
 // send back json of the group, then front end retracts the list of transactions
 app.get("/Transactions/:groupInput", async (req, res) => {
@@ -442,6 +443,23 @@ app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
   }
 })
 
+app.delete("/Group/:groupInput", async (req, res) => {
+  let group_query = req.params.groupInput; 
+  try{
+    // find user and update friends list with this added user 
+    await group.findOneAndDelete({name: group_query})
+    const data = {
+      status: "deleted", 
+      groupDeleted: group_query
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
+})
+
 
 // test this
 app.post("/CreateGroup/", async (req, res)=>{
@@ -538,6 +556,23 @@ const data = new user ({
 // send info to database once we make database connection 
 data.save()
   .then((data) => res.status(200).json(data)); 
+})
+
+app.delete("/Users/:userInput", async (req, res) => {
+  let user_query = req.params.userInput; 
+  try{
+    // find user and update friends list with this added user 
+    await user.findOneAndDelete({username: user_query})
+    const data = {
+      status: "deleted", 
+      userDeleted: user_query
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
 })
 
 app.get("/Users", async (req, res)  => {
