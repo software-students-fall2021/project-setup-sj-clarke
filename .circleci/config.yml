@@ -12,11 +12,9 @@ jobs:
           password: piqdi4-dyqhom-diMjiz  # context / project UI env-var reference
     steps:
       - checkout
-      - run:
-          name: "Setup custom environment variables"
-          command: 
-            echo 'export REACT_APP_DB=mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority >> $BASH_ENV
-          echo 'export JWT_SECRET=knowledge.kitchen' >> $BASH_ENV
+      - environment:
+           REACT_APP_DB: 'mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'
+          JWT_SECRET: 'knowledge.kitchen'
           
       - run: echo "this is the build and test express.js job"
       - run: |

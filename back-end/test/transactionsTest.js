@@ -55,7 +55,7 @@ describe('GET /Transactions', () => {
 
     // make a group to test 
     it('PASS, create a new group to get transactions from', (done) => {
-         request(app).post("/CreateGroup/?userInput=SJ&groupName=Maldives&friendAdded=oEbner")
+         request(app).post("/CreateGroup?userInput=SJ&groupName=Maldives&friendAdded=oEbner")
            .expect(200)
            .then((res) => {
              const body = res.body;
@@ -98,6 +98,10 @@ describe('GET /Transactions', () => {
         })
         .catch((err) => done(err));
     });
+
+  })
+
+  describe('/Transactions', () => {
     it("PASS, Deleting group just created", (done) => {
         request(app).delete('/Group/Maldives')
         .then((res)=> {
@@ -110,8 +114,8 @@ describe('GET /Transactions', () => {
            
     })
 
-  })
 
+  })
   describe('/Members tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
         request(app).delete('/Users/SJ')

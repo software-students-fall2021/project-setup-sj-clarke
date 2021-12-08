@@ -447,7 +447,7 @@ app.delete("/Group/:groupInput", async (req, res) => {
   let group_query = req.params.groupInput; 
   try{
     // find user and update friends list with this added user 
-    await group.findOneAndDelete({name: group_query})
+    await group.remove({name: group_query})
     const data = {
       status: "deleted", 
       groupDeleted: group_query

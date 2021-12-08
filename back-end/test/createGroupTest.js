@@ -57,9 +57,10 @@ const expect = chai.expect;
   // POST new group to a list of groups 
     describe('POST /CreateGroup/', () => {
       it('PASS, adding a new group works', (done) => {
-        request(app).post("/CreateGroup/?userInput=SJ&groupName=China&friendAdded=oEbner")
+        request(app).post("/CreateGroup?userInput=SJ&groupName=China&friendAdded=oEbner")
           .expect(200)
           .then((res) => {
+            
             const body = res.body;
             expect(body).to.contain.property('status');
            // expect(body).to.contain.property('groupName');

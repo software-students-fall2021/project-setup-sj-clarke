@@ -52,7 +52,7 @@ describe('GET /CurrentGroup', () => {
 
     // make a group to test 
     it('PASS, create a new group to get members from', (done) => {
-         request(app).post("/CreateGroup/?userInput=SJ&groupName=China&friendAdded=oEbner")
+         request(app).post("/CreateGroup?userInput=SJ&groupName=Canada&friendAdded=oEbner")
            .expect(200)
            .then((res) => {
              const body = res.body;
@@ -77,7 +77,7 @@ describe('GET /CurrentGroup', () => {
 
     // delete so DB is not affected
     it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/China')
+        request(app).delete('/Group/Canada')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
