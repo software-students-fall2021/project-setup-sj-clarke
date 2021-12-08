@@ -95,7 +95,7 @@ describe('POST /Members', () => {
 
   describe('/Members tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
-        request(app).delete('/Users/SJ')
+        request(app).delete('/Users/sClarke')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -105,7 +105,7 @@ describe('POST /Members', () => {
            
     })
     it("PASS, Deleting user 2 just created", (done) => {
-        request(app).delete('/Users/oEbner')
+        request(app).delete('/Users/sM')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

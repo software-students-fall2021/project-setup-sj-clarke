@@ -9,11 +9,7 @@ jobs:
       - image: cimg/node:16.13.0 # latest stable node at the time of writing
         auth:
           username: gbs278
-<<<<<<< HEAD
-          password: piqdi4-dyqhom-diMjiz  # context / project UI env-var reference
-=======
           password: piqdi4-dyqhom-diMjiz # context / project UI env-var reference
->>>>>>> bd0bbccb9f17819eaea3a5cb14626cfb9091462b
     steps:
       - checkout
       - run: echo "this is the build and test express.js job"
