@@ -1,0 +1,13 @@
+FROM node
+
+WORKDIR /root
+
+COPY . /root
+RUN ls -la
+
+RUN npm install
+
+EXPOSE 5000
+
+CMD ["npm", "run", "start"]
+

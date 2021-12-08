@@ -7,11 +7,17 @@ jobs:
   build-and-test-express-js:
     docker:
       - image: cimg/node:16.13.0 # latest stable node at the time of writing
-        # auth:
-        #   username: mydockerhub-user
-        #   password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+        auth:
+          username: gbs278
+          password: piqdi4-dyqhom-diMjiz  # context / project UI env-var reference
     steps:
       - checkout
+      - run:
+          name: "Setup custom environment variables"
+          command: echo 'export REACT_APP_DB=mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority >> $BASH_ENV
+          command: echo 'export JWT_SECRET=knowledge.kitchen' >> $BASH_ENV
+          
+JWT_SECRET=knowledge.kitchen
       - run: echo "this is the build and test express.js job"
       - run: |
           cd back-end
