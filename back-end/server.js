@@ -13,12 +13,3 @@ db.connect()
     console.log(`Server running on port: ${port}`)
   })
 })
-
-
-// a function to stop listening to the port
-// const close = () => {
-//   listener.close()
-// }
-// module.exports = {
-//   close: close,
-// }

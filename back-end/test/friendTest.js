@@ -1,74 +1,60 @@
 
-// // FRIENDS TESTS 
-// // makes sure the connection is to a mock database not the actual db. 
-// const request = require('supertest'); 
-// const app = require("../app.js");
-// const expect = require('chai').expect;
-// const conn = require("../db/index.js"); 
+// FRIENDS TESTS 
 
-// // GET all friends of a specific user 
-// describe('GET /Friends ', () => {
-//       process.env.NODE_ENV = 'test';
-//       before((done) => {
-//         conn.connect()
-//           .then(() => done())
-//           .catch((err) => done(err));
-//       })
-    
+const request = require('supertest'); 
+const app = require("../app.js");
+const expect = require('chai').expect;
 
-//   it('OK, getting Friends without adding has 0 friends', (done) => {
-//     request(app).post('/Users')
-//       .send({
-//         username: "olivia",
-//         password: "Clarke", 
-//         fName: "Sarah-Jane", 
-//         lName: "Clarke", 
-//         currentGroup:  " ", 
-//         allGroups: [], 
-//         friends: []
-//     })
-//       .then((res) => {
-//         request(app).get(`/Friends/${res.body.username}`)
-//           .then((res) => {
-//             const body = res.body;
-//             expect(body.length).to.equal(0);
-//             done();
-//           })
-//       })
-//       .catch((err) => done(err));
-//   });
-
-//   it('OK, getting Friends after adding friend', (done) => {
-//     request(app).post('/Users')
-//       .send({
-//         username: "sj",
-//         password: "Clarke", 
-//         fName: "Sarah-Jane", 
-//         lName: "Clarke", 
-//         currentGroup:  " ", 
-//         allGroups: [], 
-//         friends: []
-//     })
-//       .then((res) => {
-//         request(app).post('/Friends/sj')
-//         .send({
-//               friendAdded: "sjclarke"
-//         })
-//           .then((res) => {
-//             request(app).get(`/Friends/sj`)
-//             .then((res) => {
-//               const body = res.body;
-//               expect(body).to.be.an("array");
-//               done();
-//             })
-            
-//           })
-//       })
-//       .catch((err) => done(err));
-//       })
-        
+// GET all friends of a specific user 
+describe('/Friends tests ', () => {
+  it('OK, getting Friends', (done) => {
+    request(app).post('/Users')
+      .send({
+        username: "SJ",
+        password: "Clarke", 
+        fName: "Sarah-Jane", 
+        lName: "Clarke", 
+        currentGroup:  " ", 
+        allGroups: [], 
+        friends: []
+    })
+      .then((res) => {
+        request(app).get(`/Friends/${res.body.username}`)
+          .then((res) => {
+            const body = res.body;
+            expect(body).be.an('array');
+            done();
+          })
+      })
+      .catch((err) => done(err));
+  });
+  it('OK, Posting friend works', (done) => {
+        request(app).post('/Friends/SJ')
+        .send({
+              friendAdded: "amyClarke"
+        })
+          .then((res) => {
+            const body = res.body;
+              expect(body).to.contain.property("friendAdded");
+              done();
+            })
+          .catch((err) => done(err));
+      })
+    })
       
-//   });
+describe('/Friends tests deleting user just created so DB not affected', () => {
+    it("PASS, Deleting user just created", (done) => {
+        request(app).delete('/Users/SJ')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
+})
+         
 
   
 
