@@ -16,17 +16,9 @@ require('dotenv').config()
 const db = process.env.REACT_APP_DB;
 mongoose.connect(`${db}`);
 
-// const db = process.env.REACT_APP_DB;
-// mongoose.connect(`${db}`);
-// mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
-
-// initializing User schema 
-
-//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
-// const db = process.env.REACT_APP_DB;
-// mongoose.connect(`${db}`);
+
 //required for authentication with JSON Web Tokens
 const jwt = require("jsonwebtoken")
 const passport = require("passport")
@@ -50,19 +42,6 @@ app.use(cookieParser()) // useful middleware for dealing with cookies
 app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
 
 
-// initializing User schema 
-// const user_schema = new Schema ({
-//   username:  String, // String is shorthand for {type: String}
-//   password: String,
-//   fName:   String,
-//   lName: String,
-//   currentGroup: String,
-//   allGroups: [String],
-//   friends: [String]
-  
-// });
-// initializing Group schema 
-
 const user_schema = new mongoose.Schema ({
   username:  String, // String is shorthand for {type: String}
   password: String,
@@ -76,7 +55,7 @@ const user_schema = new mongoose.Schema ({
 
 const user = mongoose.model('user')
 
-// const group = require('./db/models/group.js').group; 
+
 const group_schema = new Schema({
   name:  String, 
   date: Date,
@@ -91,29 +70,9 @@ const group_schema = new Schema({
       }
   ],
 });
-// initializing mongoose models 
-// const user = mongoose.model('user', user_schema)
+
 const group = mongoose.model('group', group_schema)
 
-// // example posting a group 
-//   const group_practice = new group({
-//     name:  "Cannes", 
-//     date: "2018",
-//     members: ["sjclarke", "clarkeAndrew"], 
-//     transactions:  [ 
-//       {
-//         charger: "clarkeAndrew", 
-//         chargee: "sjclarke", 
-//         amount: "90", 
-//         date: "12/04/2018", 
-//         description: "Coffee and breakfast"
-//       }
-//     ]
-//   }
-//   )
-  // user_practice.save().then(() => console.log("POSTED USER")); 
-
- // group_practice.save().then(() => console.log("POSTED GROUP")); 
 
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -219,20 +178,7 @@ app.get("/CurrentGroup/:usernameInput", async (req, res) => {
 
 app.post("/AddToGroup/:usernameInput", async (req, res) => {
   try{
-    // if: the friend or groupName passed through is not in the users friend list --> error 
-  //  const response = await user.find({username: username_query})
-  //  const allGroups = response[0].allGroups; 
-  //  const foundGroup = 0; 
-  //  allGroups.forEach(element => {
-  //   if (req.body.group == element){
-  //       foundGroup = 1; 
-  //   }
-  //  })
-  //  if (foundGroup == 0){
-  //    res.json(err)
-  //  }
-
-    // otherwise: 
+    
     // find group and update current members list with this added user 
     await group.findOneAndUpdate({name: req.body.groupName}, {
       $push: {
@@ -425,11 +371,7 @@ app.get("/AllGroups/:usernameInput", async (req, res) => {
 
 //GET a Group
 app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
-  // aquire Friends from database (for now we are calling mockaroo which gives us a random JSON array of friends) 
- // axios
-  //.get("https://my.api.mockaroo.com/test.json?key=34e7d950")
-  //.then(apiResponse => res.status(200).json(apiResponse.data)) // pass data along directly to client
-  //.catch(err => next(err)) // pass any errors to express
+ 
   let groupname_query = req.params.groupnameInput;
   try{
     
@@ -453,16 +395,16 @@ app.post("/CreateGroup/", async (req, res)=>{
   console.log("Create Group got called")
   console.log(req.body.groupName) */
   console.log("Create Group got called")
-  console.log(req.query.groupName)
-  let groupname_query = req.query.groupName;
+  console.log(req.body.groupName)
+  let groupname_query = req.body.groupName;
   try{
     
     //await user.query("Insert into user(groupName, FriendName)")
     // find user and update group list with this added user 
     const newGroup = {
-      name:  req.query.groupName, 
+      name:  req.body.groupName, 
       date: Date.now(),
-      members: [req.query.friendAdded, req.query.userInput],
+      members: [req.body.friendAdded, req.body.userInput],
       transactions:  [],
     }
     new group(newGroup).save()
@@ -502,6 +444,25 @@ app.post("/CreateGroup/", async (req, res)=>{
 
 })
 
+
+app.delete('/Group/:groupInput', async (req,res) => {
+  const group_query = req.params.groupInput
+  try{
+    // find user and update friends list with this added user 
+    await group.deleteOne({name: group_query})
+    const data = {
+      status: "deleted", 
+      groupDeleted: group_query
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
+  
+})
+
 // GET current group members
 app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
   let user_query = req.params.user; 
@@ -539,6 +500,25 @@ const data = new user ({
 data.save()
   .then((data) => res.status(200).json(data)); 
 })
+
+app.delete('/Users/:userInput', async (req,res) => {
+  const username_query = req.params.userInput
+  try{
+    // find user and update friends list with this added user 
+    await user.deleteOne({username: username_query})
+    const data = {
+      status: "deleted", 
+      userDeleted: username_query
+    }
+    res.status(200).json(data)
+  }
+  catch(err){
+    // if unable to retrieve the information
+    res.json(err)
+  }
+  
+})
+
 
 app.get("/Users", async (req, res)  => {
   const response = await user.find();
