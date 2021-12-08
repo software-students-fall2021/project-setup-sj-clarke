@@ -2,6 +2,7 @@
 import './createAccount.css'
 import axios from "axios";
 import { Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 function CreateAccount(){
     const [username, setUsername] = useState([])
@@ -9,6 +10,7 @@ function CreateAccount(){
     const [fName, setFName] = useState([])
     const [lName, setLName] = useState([])
 
+    
     useEffect(() => {
         async function fetchData() {
             const response = await axios("http://localhost:5000/signup/user");
@@ -84,8 +86,10 @@ function CreateAccount(){
                 <input id="username" type="text" name="username" placeholder="Enter Username" value = {newUserValues.username} onChange = {(e) => handleAddUserChange(e)}></input>
                 <label>Password</label>
                 <input id="password" type="password" name="password" placeholder="Enter Password" value = {newUserValues.password} onChange = {(e) => handleAddUserChange(e)}></input>
-                <Button onClick = {(event) => { handleUserSubmit(event) }} type="button">Sign Up</Button>
+                <Button onClick = {(event) => { handleUserSubmit(event) }} type="button">Sign Up</Button> 
             </form>
+            <Link to="/">Back to Login</Link>
+            
 
         </div>
 

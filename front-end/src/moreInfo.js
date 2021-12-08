@@ -21,8 +21,9 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
   const [finalTransaction, setFinalTransaction] = useState({});
   const [transactionArray, setTransactionArray] = useState({}); 
   const [currentGroup, setCurrentGroup] = useState("")
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"))
   // name : [930303, 400404]
-  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
+  const username = currentUser;
   useEffect(() => {
     // a nested function that fetches the data
 
