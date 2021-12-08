@@ -11,31 +11,49 @@ const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
-describe(`GET /AllGroups/:username `, () => {
-  it(`PASS, getting all friends of a user`, (done) => {
-    const user = `sjclarke`
-    chai.request(app)
-      .get(`/AllGroups/${user}`)
-      .end((err,res)=>{
-        const body = res.body;
-        expect(res.body).to.be.an(`array`)
-        done();
-      })
-      //.timeout(4000)
-  });
-})
+describe('GET /AllGroups/:username ', () => {
 
-// describe('GET /AllGroups/:username ', () => {
-//     it('PASS, getting all friends of a user', (done) => {
-//       const user = "sjclarke"
-//       chai.request(app).get(`/AllGroups/${user}`) // might need to add localhost or IP address before slash
-//         .then((res) => {
-//           const body = res.body;
-//           expect(body).to.be.an("array")
-//           done();
-//         })
-//         .catch((err) => done(err))
-//         // .timeout(4000);
-//     });
-//   })
+  it('OK, making user 1', (done) => {
+    request(app).post('/Users')
+      .send({
+        username: "SJ",
+        password: "Clarke", 
+        fName: "Sarah-Jane", 
+        lName: "Clarke", 
+        currentGroup:  " ", 
+        allGroups: [], 
+        friends: []
+    })
+    .expect(200)
+       .then((res) => {
+         const body = res.body;
+         expect(body).to.contain.property('username');
+         expect(body).to.contain.property('password');
+         expect(body).to.contain.property('fName');
+         expect(body).to.contain.property('lName');
+         done();
+       })
+    })
+    it('PASS, getting all friends of a user', (done) => {
+      request(app).get(`/AllGroups/SJ`)
+        .then((res) => {
+          const body = res.body;
+          expect(res.body).to.be.an("array")
+          done();
+        })
+        .catch((err) => done(err));
+    });
+  })
+  describe('/AllGroups tests deleting user just created so DB not affected', () => {
+    it("PASS, Deleting user 1 just created", (done) => {
+        request(app).delete('/Users/SJ')
+        .then((res)=> {
+            const body = res.body;
+            expect(body).to.contain.property("status");
+            done(); 
+        })
+        .catch((err) => done(err));
+           
+    })
+  })
 

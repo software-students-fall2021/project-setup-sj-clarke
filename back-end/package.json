@@ -4,8 +4,8 @@
   "description": "The back-end of your project will live in this directory.",
   "main": "server.js",
   "scripts": {
-    "start": " nodemon index.js",
-    "test": "mocha 'test/*.js' --recursive -- exit --timeout 9000000000"
+    "start": " nodemon server.js",
+    "test": "mocha 'test/*.js' --exit"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "enzyme": "^3.11.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
+    "istanbul": "^0.4.5",
     "joi": "^14.3.1",
     "mockgoose": "^8.0.4",
     "mongodb": "^4.1.4",

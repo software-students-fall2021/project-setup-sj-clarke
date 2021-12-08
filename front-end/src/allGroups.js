@@ -16,10 +16,11 @@ function AllGroups() {
   const jwtToken = localStorage.getItem("token")
   console.log(`JWT token: ${jwtToken}`)
   const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
-
-  
-  useEffect(() => {
+  require('dotenv').config()
+    const username = process.env.REACT_APP_USERNAME;
+    useEffect(() => {
    // a nested function that fetches the data
+
       async function fetchData() {
       // Extract Mockaroo data
       // get all groups
@@ -29,7 +30,6 @@ function AllGroups() {
       // set groups with the data retrieved from mockaroo
       setGroups(response_groups.data);
       // get all transactions for a group
-      // currently mock data from mockaroo
      }
    // fetch the data
    fetchData();

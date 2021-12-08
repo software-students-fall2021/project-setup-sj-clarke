@@ -1,9 +1,6 @@
-
-
 const expect = require("chai").expect; 
 const request = require("supertest")
 const app = require("../app.js");
-
 
 // test GET for Current group of a user
 
@@ -55,12 +52,7 @@ describe('GET /CurrentGroup', () => {
 
     // make a group to test 
     it('PASS, create a new group to get members from', (done) => {
-         request(app).post('/CreateGroup/')
-         .send({
-             groupName: "Maldives", 
-             friendAdded: "oEbner", 
-             userInput: "SJ"
-         })
+         request(app).post("/CreateGroup?userInput=SJ&groupName=Canada&friendAdded=oEbner")
            .expect(200)
            .then((res) => {
              const body = res.body;
@@ -82,10 +74,9 @@ describe('GET /CurrentGroup', () => {
         .catch((err) => done(err));
     });
     
-
     // delete so DB is not affected
     it("PASS, Deleting group just created", (done) => {
-        request(app).delete('/Group/Maldives')
+        request(app).delete('/Group/Canada')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

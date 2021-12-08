@@ -7,12 +7,12 @@ const app = require("../app.js");
 
 // Members tests
 
-describe('GET /Members', () => {
+describe('POST /Members', () => {
     // making 2 users 
     it('OK, making user 1', (done) => {
         request(app).post('/Users')
           .send({
-            username: "SJ",
+            username: "Sclarke",
             password: "Clarke", 
             fName: "Sarah-Jane", 
             lName: "Clarke", 
@@ -34,7 +34,7 @@ describe('GET /Members', () => {
         it('OK, making user 2', (done) => {
             request(app).post('/Users')
               .send({
-                username: "oEbner",
+                username: "sM",
                 password: "1234", 
                 fName: "Olivia", 
                 lName: "Ebner", 
@@ -53,15 +53,10 @@ describe('GET /Members', () => {
                })
             })
 
+    
     // make a group to test 
     it('PASS, create a new group to get members from', (done) => {
-        // const group = "Mexico"
-         request(app).post('/CreateGroup/')
-         .send({
-             groupName: "Maldives", 
-             friendAdded: "oEbner", 
-             userInput: "SJ"
-         })
+         request(app).post('/CreateGroup?userInput=Sclarke&groupName=Maldives&friendAdded=sM')
            .expect(200)
            .then((res) => {
              const body = res.body;
@@ -71,6 +66,9 @@ describe('GET /Members', () => {
            })
            .catch((err) => done(err));
         })
+      })
+
+  describe('GET /Members', () => {
 
     it('PASS, getting group members from this new group', (done) => {
       request(app).get('/Members/Maldives')
@@ -97,7 +95,7 @@ describe('GET /Members', () => {
 
   describe('/Members tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
-        request(app).delete('/Users/SJ')
+        request(app).delete('/Users/sClarke')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
@@ -107,7 +105,7 @@ describe('GET /Members', () => {
            
     })
     it("PASS, Deleting user 2 just created", (done) => {
-        request(app).delete('/Users/oEbner')
+        request(app).delete('/Users/sM')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");
