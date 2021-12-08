@@ -8,12 +8,10 @@ import axios from "axios";
 
 require('dotenv').config()
 
-
 function Home(props){
     const username = process.env.REACT_APP_USERNAME;
     const jwtToken = localStorage.getItem("token")
     console.log(`JWT token: ${jwtToken}`)
-
     const [response, setResponse] = useState({})
     const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
     // Hold all transactions for current group to display on home screen 
@@ -52,7 +50,7 @@ function Home(props){
       async function fetchData() {
         // GET curent user's current group
         const username = process.env.REACT_APP_USERNAME;
-        const response_current_group = await axios(`/CurrentGroup/sjclarke`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
+        const response_current_group = await axios(`/CurrentGroup/${username}`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
         console.log(response_current_group.data);
         // Extract current group from the response from backend
         setCurrentGroup(response_current_group.data);
