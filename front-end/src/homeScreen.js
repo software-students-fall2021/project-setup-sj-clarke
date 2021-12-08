@@ -26,7 +26,8 @@ function Home(props){
     const [currentUser, setCurrentUser] = useState(); 
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
-    const [totalExpense, setTotalExpense] = useState(); 
+    const [totalExpense, setTotalExpense] = useState();
+    const [uName, setUName] = useState(localStorage.getItem("loggedInUser"));
 
    
   useEffect(() => {
@@ -50,7 +51,7 @@ function Home(props){
       async function fetchData() {
         // GET curent user's current group
         const username = process.env.REACT_APP_USERNAME;
-        const response_current_group = await axios(`/CurrentGroup/${username}`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
+        const response_current_group = await axios(`/CurrentGroup/${uName}`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
         console.log(response_current_group.data);
         // Extract current group from the response from backend
         setCurrentGroup(response_current_group.data);
@@ -60,7 +61,7 @@ function Home(props){
         
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(response.data.reverse());
+        setTransactions(response.data);
         console.log("hello")
       }
       // fetch the data

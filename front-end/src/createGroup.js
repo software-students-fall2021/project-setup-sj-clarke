@@ -16,8 +16,9 @@ function CreateGroup() {
   const [friend, setFriend] = useState([])
   const {register, handleSubmit, errors} = useForm()
   const jwtToken = localStorage.getItem("token")
-    console.log(`JWT token: ${jwtToken}`)
-    const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
+  console.log(`JWT token: ${jwtToken}`)
+  const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"))
 
   useEffect(() => {
     // a nested function that fetches the data
@@ -63,7 +64,7 @@ function CreateGroup() {
   }, []);
   
 
-const currentUser = "sjclarke"; 
+
 const [newGroupAdditionValues, setNewGroupAdditionValues] = useState(
     {
       group: "",

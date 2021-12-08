@@ -580,7 +580,6 @@ app.get("/Users", async (req, res)  => {
   // send info to database once we make database connection 
   res.status(200).json(response); 
   })
-// })
 
 // sends a response for cookies including the Set-Cookie header
 app.get("/set-cookie", (req, res) => {
@@ -664,11 +663,12 @@ app.post("/login", async (req, res) => {
 
 })
 
+
 app.get("/signup/:userInput", async (req, res, next) => {
   try{
     const response = await user.find({username: username_query});
     res.json(response[0].SignUp)
-    console.log("hello")
+ 
   }
   catch(err){
     res.json(err)
@@ -710,6 +710,14 @@ app.post("/signup/", async (req, res) => {
     }
 
 })
+
+app.get("/accountinfo/:usernameInput", async (req, res) => {
+  let username_query = req.params.usernameInput;
+  console.log(username_query)
+  const response = await user.find({username : username_query})
+  res.json(response[0])
+  
+  })
 
 
 

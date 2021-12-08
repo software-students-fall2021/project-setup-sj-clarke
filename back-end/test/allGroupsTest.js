@@ -7,7 +7,9 @@ const request = require("supertest")
 const app = require("../app.js");
 const { response } = require("express");
 let mongoose = require("mongoose");
+const chaiHttp = require('chai-http');
 
+chai.use(chaiHttp);
 
 describe('GET /AllGroups/:username ', () => {
 

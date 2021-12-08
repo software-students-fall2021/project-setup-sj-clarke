@@ -8,16 +8,17 @@ import axios from "axios";
 function Friends() {
   const [friends, setFriends] = useState([]);
   // will hold the current user from login page (for now just user in database we have)
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
   const username = process.env.REACT_APP_USERNAME; 
+  
 
   // console.log(username)
   useEffect(() => {  
     // a nested function that fetches the data
-    setCurrentUser(username)
+    
     async function fetchData() {
       // extract the friends list from the server response
-      const response = await axios(`/Friends/${username}`);
+      const response = await axios(`/Friends/${currentUser}`);
       // set friends
       setFriends(response.data);
     }
@@ -68,7 +69,7 @@ function Friends() {
 
   const handleRemoveFriend = (friendName) => {
     const username = process.env.REACT_APP_USERNAME;
-    axios.delete(`Friends/${username}/${friendName}`);
+    axios.delete(`Friends/${currentUser}/${friendName}`);
   };
 
   // hook JSON to hold the data of a new group addition
@@ -94,7 +95,7 @@ function Friends() {
     // newGroupAdditionalValues is the added group we will send to back end to post.
     const username = process.env.REACT_APP_USERNAME;
     
-    axios.post(`AddToGroup/${username}`, newGroupAdditionValues);
+    axios.post(`AddToGroup/${currentUser}`, newGroupAdditionValues);
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });
 
@@ -118,7 +119,7 @@ function Friends() {
     setModalisOpen(false);
     // post request to backend with new data
     const username = process.env.REACT_APP_USERNAME;
-    axios.post(`Friends/${username}`, newFriendValues);
+    axios.post(`Friends/${currentUser}`, newFriendValues);
     // clear the input line
     setNewFriendValues({ friendAdded: "" });
   };
