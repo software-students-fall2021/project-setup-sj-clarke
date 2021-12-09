@@ -26,13 +26,13 @@ function AddExpenseModal({ show, setModal }) {
     useState("");
   const [newTransactionDate, setNewTransactionDate] = useState("");
   const [currentGroup, setCurrentGroup] = useState();
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
 
   useEffect(() => {
     // a nested function that fetches the data
     async function fetchData() {
       // GET curent user's current group
-      const username = process.env.REACT_APP_USERNAME;
-      const response_current_group = await axios(`/CurrentGroup/${username}`);
+      const response_current_group = await axios(`/CurrentGroup/${currentUser}`);
       // Extract current group from the response from backend
       setCurrentGroup(response_current_group.data);
     }
@@ -50,7 +50,7 @@ function AddExpenseModal({ show, setModal }) {
     }
     console.log(temp)
     
-    const username = process.env.REACT_APP_USERNAME;
+    const username = currentUser;
     newExpense.charger = username;
     newExpense.chargee = temp;
     newExpense.amount = newTransactionAmount;

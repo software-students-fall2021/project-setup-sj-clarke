@@ -8,28 +8,28 @@ import {Link} from 'react-router-dom'
 
 function AllGroups() {
   // variables needed for all groups page and modals
-  const [currentUser, setCurrentUser] = useState(" "); 
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser")); 
+  //setCurrentUser(localStorage.getItem("loggedInUser")) 
   const [groups, setGroups] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [members, setMembers] = useState([]);
   const jwtToken = localStorage.getItem("token")
   console.log(`JWT token: ${jwtToken}`)
   const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
-
-    require('dotenv').config(); 
+  require('dotenv').config()
     const username = process.env.REACT_APP_USERNAME;
-  useEffect(() => {
+    useEffect(() => {
    // a nested function that fetches the data
+
       async function fetchData() {
       // Extract Mockaroo data
       // get all groups
-  //    setCurrentUser("sjclarke") 
+      console.log(currentUser)
       
-	  const response_groups = await axios(`/AllGroups/${username}`);
+      const response_groups = await axios(`http://localhost:5000/AllGroups/${currentUser}`);
       // set groups with the data retrieved from mockaroo
       setGroups(response_groups.data);
       // get all transactions for a group
-      // currently mock data from mockaroo
      }
    // fetch the data
    fetchData();
