@@ -52,7 +52,7 @@ function Home(props){
       async function fetchData() {
         // GET curent user's current group
         const username = process.env.REACT_APP_USERNAME;
-        const response_current_group = await axios(`/CurrentGroup/sjclarke`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
+        const response_current_group = await axios(`/CurrentGroup/${username}`)//, // { headers: { Authorization: `JWT ${jwtToken}` } });
         console.log(response_current_group.data);
         // Extract current group from the response from backend
         setCurrentGroup(response_current_group.data);
