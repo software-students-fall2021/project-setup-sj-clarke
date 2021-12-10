@@ -38,17 +38,27 @@ Express.js  back end and node.js front end.
 
 
 ## Instructions for building and testing the project 
-Git clone this repository then: 
+Clone this repository then: 
+
 cd project-setup-sj-clarke
+
 npm install (install all dependencies)
+
 cd front-end 
-pm2 start npm -- start
+
+npm start
+
 cd - 
+
 cd back-end 
-pm2 start npm -- start
+
+npm start
+
 
 Then, the front end and back end should be running.
+
 Front end: port 3000
+
 Back end: port 5000
 
 
