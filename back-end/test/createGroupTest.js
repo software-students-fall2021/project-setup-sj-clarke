@@ -3,7 +3,7 @@ const app = require("../app.js");
 const request = require("supertest");
 const chai = require('chai')
 const expect = chai.expect;
-
+// CREATE GROUP TEST
 
     describe('/CreateGroup making users', () => {
       // making 2 users 
@@ -53,8 +53,7 @@ const expect = chai.expect;
     })
 
     
-
-  // POST new group to a list of groups 
+  // POST new group for one of these users, using one user as the creator and the other as the friend added. 
     describe('/CreateGroup/ making new group', () => {
       it('PASS, adding a new group works', (done) => {
         request(app).post("/CreateGroup?userInput=SJ&groupName=China&friendAdded=oEbner")
@@ -63,7 +62,6 @@ const expect = chai.expect;
             
             const body = res.body;
             expect(body).to.contain.property('status');
-           // expect(body).to.contain.property('groupName');
             done();
           })
           .catch((err) => done(err));
@@ -71,7 +69,7 @@ const expect = chai.expect;
     })
         
         
-
+// deleting group and users just made for this test 
     describe('/CreateGroup/ deleting group just created', () => {
       it("PASS, Deleting group just created", (done) => {
         request(app).delete('/Group/China')

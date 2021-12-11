@@ -6,13 +6,12 @@ import axios from "axios";
 // Modal.setAppElement("#root");
 
 function Friends() {
+  // holds all friends for a user
   const [friends, setFriends] = useState([]);
-  // will hold the current user from login page (for now just user in database we have)
+  // holds the username of the current user from login page 
   const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
-  const username = process.env.REACT_APP_USERNAME; 
-  
 
-  // console.log(username)
+  
   useEffect(() => {  
     // a nested function that fetches the data
     
@@ -32,7 +31,6 @@ function Friends() {
   const [modalIsOpen, setModalisOpen] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(" ");
   const index = 0;
-
   const [removeFriendModal, setRemoveFriendModal] = useState(false);
   const [addedFriend, setAddedFriend] = useState();
   // creating a row for each instance within JSON file holding all of the friends
@@ -67,6 +65,7 @@ function Friends() {
     );
   };
 
+  // handles when we want to remove a friend by calling delete request
   const handleRemoveFriend = (friendName) => {
     const username = process.env.REACT_APP_USERNAME;
     axios.delete(`Friends/${currentUser}/${friendName}`);
@@ -93,8 +92,6 @@ function Friends() {
     event.preventDefault();
     setaddGroupModal(false);
     // newGroupAdditionalValues is the added group we will send to back end to post.
-    const username = process.env.REACT_APP_USERNAME;
-    
     axios.post(`AddToGroup/${currentUser}`, newGroupAdditionValues);
     // clear the input line
     setNewGroupAdditionValues({ friend: "", groupName: "" });

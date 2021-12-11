@@ -1,6 +1,5 @@
 
 // Users TESTS 
-// makes sure the connection is to a mock database not the actual db. 
 const request = require('supertest'); 
 const app = require("../app.js");
 const expect = require('chai').expect;
