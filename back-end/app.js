@@ -16,17 +16,10 @@ require('dotenv').config()
 const db = process.env.REACT_APP_DB;
 mongoose.connect(`${db}`);
 
-// const db = process.env.REACT_APP_DB;
-// mongoose.connect(`${db}`);
-// mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 
-// initializing User schema 
-
-//mongoose.connect('mongodb+srv://tripsplit:tripsplit123@tripsplit.5k1jw.mongodb.net/TripSplit?retryWrites=true&w=majority'); 
 const { Schema } = mongoose;
 require("dotenv").config({ silent: true })
-// const db = process.env.REACT_APP_DB;
-// mongoose.connect(`${db}`);
+
 //required for authentication with JSON Web Tokens
 const jwt = require("jsonwebtoken")
 const passport = require("passport")
@@ -50,19 +43,6 @@ app.use(cookieParser()) // useful middleware for dealing with cookies
 app.use(cors({ origin: process.env.FRONT_END_DOMAIN, credentials: true })) // allow incoming requests only from a "trusted" host
 
 
-// initializing User schema 
-// const user_schema = new Schema ({
-//   username:  String, // String is shorthand for {type: String}
-//   password: String,
-//   fName:   String,
-//   lName: String,
-//   currentGroup: String,
-//   allGroups: [String],
-//   friends: [String]
-  
-// });
-// initializing Group schema 
-
 const user_schema = new mongoose.Schema ({
   username:  String, // String is shorthand for {type: String}
   password: String,
@@ -73,7 +53,7 @@ const user_schema = new mongoose.Schema ({
   friends: [String]
   
 });
-
+// initializing mongoose models 
 const user = mongoose.model('user')
 
 // const group = require('./db/models/group.js').group; 
@@ -92,28 +72,8 @@ const group_schema = new Schema({
   ],
 });
 // initializing mongoose models 
-// const user = mongoose.model('user', user_schema)
 const group = mongoose.model('group', group_schema)
 
-// // example posting a group 
-//   const group_practice = new group({
-//     name:  "Cannes", 
-//     date: "2018",
-//     members: ["sjclarke", "clarkeAndrew"], 
-//     transactions:  [ 
-//       {
-//         charger: "clarkeAndrew", 
-//         chargee: "sjclarke", 
-//         amount: "90", 
-//         date: "12/04/2018", 
-//         description: "Coffee and breakfast"
-//       }
-//     ]
-//   }
-//   )
-  // user_practice.save().then(() => console.log("POSTED USER")); 
-
- // group_practice.save().then(() => console.log("POSTED GROUP")); 
 
 // Middleware 
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -150,7 +110,7 @@ app.get("/Friends/:usernameInput", async (req, res) => {
     }
     catch(err){
       // if unable to retrieve the information
-      // error 
+      // respond with error 
     res.json(err)
     }
    
@@ -173,7 +133,7 @@ app.post("/Friends/:usernameInput", async (req, res) => {
     res.status(200).json(data)
   }
   catch(err){
-    // if unable to retrieve the information
+    // if unable to retrieve the information, respond with error
     res.status(400).json(err)
   }
 })
@@ -182,7 +142,7 @@ app.delete("/Friends/:usernameInput/:friendInput", async (req, res) => {
   let username_query = req.params.usernameInput; 
   let friend_query = req.params.friendInput
   try{
-    // find user and update friends list with this added user 
+    // find user and update friends list by deleting the specified user
     await user.findOneAndUpdate({username: username_query}, {
       $pull: {
         friends: friend_query
@@ -198,8 +158,7 @@ app.delete("/Friends/:usernameInput/:friendInput", async (req, res) => {
     // if unable to retrieve the information
     res.json(err)
   }
-  // send info to database once we make database connection 
-  //res.status(200).json(data)
+
 })
 
 app.get("/CurrentGroup/:usernameInput", async (req, res) => {
@@ -219,20 +178,6 @@ app.get("/CurrentGroup/:usernameInput", async (req, res) => {
 
 app.post("/AddToGroup/:usernameInput", async (req, res) => {
   try{
-    // if: the friend or groupName passed through is not in the users friend list --> error 
-  //  const response = await user.find({username: username_query})
-  //  const allGroups = response[0].allGroups; 
-  //  const foundGroup = 0; 
-  //  allGroups.forEach(element => {
-  //   if (req.body.group == element){
-  //       foundGroup = 1; 
-  //   }
-  //  })
-  //  if (foundGroup == 0){
-  //    res.json(err)
-  //  }
-
-    // otherwise: 
     // find group and update current members list with this added user 
     await group.findOneAndUpdate({name: req.body.groupName}, {
       $push: {
@@ -261,20 +206,18 @@ app.post("/AddToGroup/:usernameInput", async (req, res) => {
     // if unable to retrieve the information
     res.json(err)
   }
-  // send info to database once we make database connection
 })
 
 
 // GET all transactions for any group
 // send back json of the group, then front end retracts the list of transactions
 app.get("/Transactions/:groupInput", async (req, res) => {
-  // aquire from database (for now we are calling mockaroo)
-  console.log(req.headers); 
+  // aquire from database
   let group_query = req.params.groupInput; 
   try{
-    // find user in database 
+    // find group in database 
     const response = await group.find({name: group_query});
-    // send the data in the response
+    // send the data of transactions in the response
     res.json(response[0].transactions)
     console.log(response)
   }
@@ -312,6 +255,7 @@ const data = {
 res.json(data)
 })
 
+// for "settle up" button 
 app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,res) => {
   let group_query = req.params.groupInput;
   let transactionID = req.params.transactionID; 
@@ -339,7 +283,7 @@ app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,r
       console.log(transactionID)
       console.log(trans[i]._id)
       
-      // copy the whole transaction into a new id
+      // copy the whole transaction into a new id, updating the chargee[user] to a 1 instead of 0 
       temp._id = trans[i]._id
       trans[i].chargee[username] +=1; 
       temp.charger = trans[i].charger
@@ -350,9 +294,6 @@ app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,r
       temp.completed = trans[i].completed
       index = i; 
       
-      console.log(temp.chargee)
-      // temp.chargee[username] = 1
-      console.log(temp.chargee)
       final.push(temp)
     }
     else {
@@ -360,7 +301,6 @@ app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,r
     }
 
   }
-
 
   await group.findOneAndUpdate({name: group_query}, 
     { $set: {
@@ -373,17 +313,7 @@ app.post("/updateTransaction/:groupInput/:transactionID/:username", async (req,r
 
     )
 
-  // temp.chargee[username] = 1
-  // console.log(temp.chargee[username])
-  // currentGroup[0].transactions = temp; 
-
-  // console.log(currentGroup[0].transactions)
-  // find one and update group, pass through transaction 
-  // await group.findOneAndReplace({name: group_query}, {
-  //   $push: {
-  //     transactions: [temp]
-  //   }
-  // })
+ 
 })
 
   
@@ -443,10 +373,11 @@ app.get("/CreateGroup/:groupnameInput", async (req, res,next) => {
   }
 })
 
+// DELETE a group
 app.delete("/Group/:groupInput", async (req, res) => {
   let group_query = req.params.groupInput; 
   try{
-    // find user and update friends list with this added user 
+    // find group and remove the collection of groups
     await group.remove({name: group_query})
     const data = {
       status: "deleted", 
@@ -461,7 +392,7 @@ app.delete("/Group/:groupInput", async (req, res) => {
 })
 
 
-// test this
+// POST group
 app.post("/CreateGroup/", async (req, res)=>{
   /*const data = {
     status: "Posted", 
@@ -541,8 +472,7 @@ app.get("/CurrentGroupMembers/:user", async (req, res, next) => {
 
 
 // POST a new User
-// data coming through will be the user
-// add the User
+
 app.post("/Users", (req, res) => {
 const data = new user ({
   fName: req.body.fName,
@@ -558,10 +488,11 @@ data.save()
   .then((data) => res.status(200).json(data)); 
 })
 
+// DELETING a user 
 app.delete("/Users/:userInput", async (req, res) => {
   let user_query = req.params.userInput; 
   try{
-    // find user and update friends list with this added user 
+    // find user and delete from collection
     await user.findOneAndDelete({username: user_query})
     const data = {
       status: "deleted", 
@@ -575,6 +506,7 @@ app.delete("/Users/:userInput", async (req, res) => {
   }
 })
 
+// GET all users
 app.get("/Users", async (req, res)  => {
   const response = await user.find();
   // send info to database once we make database connection 
@@ -717,9 +649,6 @@ app.get("/accountinfo/:usernameInput", async (req, res) => {
   res.json(response[0])
   
   })
-
-
-
 
 
 // export the express app we created to make it available to other modules

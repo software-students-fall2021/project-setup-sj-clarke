@@ -1,5 +1,4 @@
-
-process.env.NODE_ENV = 'test';
+// ALL GROUPS TESTS
 
 const chai = require('chai')
 const expect = require("chai").expect; 
@@ -10,9 +9,8 @@ let mongoose = require("mongoose");
 const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
-
+// first need to make a user 
 describe('GET /AllGroups/:username ', () => {
-
   it('OK, making user 1', (done) => {
     request(app).post('/Users')
       .send({
@@ -34,6 +32,7 @@ describe('GET /AllGroups/:username ', () => {
          done();
        })
     })
+    // get all groups for this user we just made (should be no groups yet)
     it('PASS, getting all friends of a user', (done) => {
       request(app).get(`/AllGroups/SJ`)
         .then((res) => {
@@ -44,7 +43,8 @@ describe('GET /AllGroups/:username ', () => {
         .catch((err) => done(err));
     });
   })
-  describe('/AllGroups tests deleting user just created so DB not affected', () => {
+  // delete the user we made for this test (so DB not affected)
+  describe('/AllGroups/:username tests: deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
         request(app).delete('/Users/SJ')
         .then((res)=> {
