@@ -1,0 +1,33 @@
+[
+    {
+        "id": "1",
+        "friendAdded": "Sarah-Jane"
+    },
+    {
+        "id": "2",
+        "friendAdded": "Sarah"
+    },
+    {
+        "id": "3",
+        "friendAdded": "Sam"
+    },
+    {
+        "id": "4",
+        "friendAdded": "Liv"
+    },
+    {
+        "id": "5", 
+        "friendAdded": "Julia"
+
+    }, 
+    {
+        "id": "6", 
+        "friendAdded": "Isabelle"
+
+    }, 
+    {
+        "id": "7", 
+        "friendAdded": "Zach"
+
+    }
+]
