@@ -54,7 +54,7 @@ describe('POST /Members', () => {
             })
 
     
-    // make a group to test 
+    // Make a group to test 
     it('PASS, create a new group to get members from', (done) => {
          request(app).post('/CreateGroup?userInput=Sclarke&groupName=Maldives&friendAdded=sM')
            .expect(200)
@@ -69,7 +69,6 @@ describe('POST /Members', () => {
       })
 
   describe('GET /Members', () => {
-
     it('PASS, getting group members from this new group', (done) => {
       request(app).get('/Members/Maldives')
         .then((res) => {
@@ -79,6 +78,8 @@ describe('POST /Members', () => {
         })
         .catch((err) => done(err));
     });
+
+  
     it("PASS, Deleting group just created", (done) => {
         request(app).delete('/Group/Maldives')
         .then((res)=> {
@@ -95,7 +96,7 @@ describe('POST /Members', () => {
 
   describe('/Members tests deleting user just created so DB not affected', () => {
     it("PASS, Deleting user 1 just created", (done) => {
-        request(app).delete('/Users/sClarke')
+        request(app).delete('/Users/Sclarke')
         .then((res)=> {
             const body = res.body;
             expect(body).to.contain.property("status");

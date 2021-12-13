@@ -10,6 +10,7 @@ require('dotenv').config()
 
 
 function Home(props){
+    // log in info
     const username = process.env.REACT_APP_USERNAME;
     const jwtToken = localStorage.getItem("token")
     console.log(`JWT token: ${jwtToken}`)
@@ -23,12 +24,10 @@ function Home(props){
     const [chargee, setChargee] = useState([]); 
     const [amount, setAmount] = useState(); 
     const [description, setDescription] = useState(); 
-    // we will need to get the current user from the login and set it here
-    // for now I am using 1 current user. 
-    const [currentUser, setCurrentUser] = useState(); 
     const [currentGroup, setCurrentGroup] = useState(); 
     const [transactionInfoModal, setTransactionInfoModal] = useState(false); 
     const [totalExpense, setTotalExpense] = useState();
+    // setting current user as the logged in user from local storage
     const [uName, setUName] = useState(localStorage.getItem("loggedInUser"));
 
    
@@ -59,12 +58,8 @@ function Home(props){
         setCurrentGroup(response_current_group.data);
         // Query all transactions for the current group
         const response = await axios(`/Transactions/${response_current_group.data}`)// , { headers: { Authorization: `JWT ${jwtToken}` } });
-        console.log(response.data);
-        
-        // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(response.data.reverse());
-        console.log("hello")
+        setTransactions(response.data);
       }
       // fetch the data
       fetchData();
@@ -72,19 +67,6 @@ function Home(props){
 
   },[])
 
-
- 
-
-  
-    
-    console.log(transactions)
-    
-
-
-
-
-    
-  
     const index = 1; 
   
     // general layout of home screen 

@@ -12,11 +12,18 @@ http://104.131.21.102:3000/
 
 ## Instructions on how to run the app: 
 cd project-setup-sj-clarke
+
+npm install (install all dependencies)
+
 cd front-end 
-pm2 start npm -- start
+
+npm start 
+
 cd - 
+
 cd back-end 
-pm2 start npm -- start
+
+npm start
 
 Then, the front end and back end should be running.
 Front end: port 3000
