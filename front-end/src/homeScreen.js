@@ -8,10 +8,12 @@ import axios from "axios";
 
 require('dotenv').config()
 
+
 function Home(props){
     const username = process.env.REACT_APP_USERNAME;
     const jwtToken = localStorage.getItem("token")
     console.log(`JWT token: ${jwtToken}`)
+
     const [response, setResponse] = useState({})
     const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
     // Hold all transactions for current group to display on home screen 
@@ -61,7 +63,7 @@ function Home(props){
         
         // Extract the data from the server response
         // Set transactions to this data so we can render the rows of the home screen table with the transactions
-        setTransactions(response.data);
+        setTransactions(response.data.reverse());
         console.log("hello")
       }
       // fetch the data

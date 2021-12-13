@@ -8,6 +8,7 @@ function SettleUp({ showModal, setModal, amount, charger, currentuser, transacti
   console.log({charger})
   console.log({currentuser})
   console.log({transactionIDArr})
+  
 
   async function handleYesClose() {
     

@@ -10,6 +10,9 @@ function Friends() {
   // will hold the current user from login page (for now just user in database we have)
   const [currentUser, setCurrentUser] = useState(localStorage.getItem("loggedInUser"));
   const username = process.env.REACT_APP_USERNAME; 
+  const jwtToken = localStorage.getItem("token")
+  console.log(`JWT token: ${jwtToken}`)
+  const [isLoggedIn, setIsLoggedIn] = useState(jwtToken && true)
   
 
   // console.log(username)
@@ -126,6 +129,8 @@ function Friends() {
 
   // General friends page layout
   return (
+    <>
+    {isLoggedIn ? (
     <div className="Friends">
       <title className="CurrentTripTitle">
         Friends
@@ -225,6 +230,10 @@ function Friends() {
         </button>
       </Modal>
     </div>
+    ):(
+      <Link to="/login?error=home"/>
+    )}
+    </>
   );
 }
 

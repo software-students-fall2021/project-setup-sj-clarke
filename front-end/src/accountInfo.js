@@ -3,7 +3,7 @@ import './accountInfo.css'
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import "./mockUsers.json"
-import {Link} from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { set } from 'js-cookie'
 
 
@@ -66,7 +66,11 @@ function Account(props){
 
         </div>
         ): (
-            <Link to="/login?error=home"/>
+            <div className="NotLoggedIn">
+                <p>Please login to view this information.</p>
+
+            <Link to="/">Login</Link>
+            </div>
         )}
         </>
     )
