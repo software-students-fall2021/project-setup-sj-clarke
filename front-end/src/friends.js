@@ -3,6 +3,7 @@ import * as ReactBootStrap from "react-bootstrap";
 import Modal from "react-modal";
 import "./friends.css";
 import axios from "axios";
+import { Link } from 'react-router-dom'
 // Modal.setAppElement("#root");
 
 function Friends() {

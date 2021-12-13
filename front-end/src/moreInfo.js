@@ -191,13 +191,13 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
           {arrOfYouOwe.map((obj) => (
             <tr key={obj.name}>
               <td>{obj.name}</td>
-              <td>${obj.amount}</td>
+              <td>${parseFloat(obj.amount).toFixed(2)}</td>
               <td>
                 <button
                   className="btn-xx"
                   onClick={() => {
                     setModal(true);
-                    setModalAmount(obj.amount);
+                    setModalAmount(parseFloat(obj.amount).toFixed(2));
                     setModalUser(obj.name); 
                   }}
                 >
@@ -220,7 +220,7 @@ function MoreInfo({ setSettleUpModal, setAmount, setChargee }) {
           {arrOfOweYou.map((obj) => (
             <tr key={obj.name}>
               <td>{obj.name}</td>
-              <td>${obj.amount}</td>
+              <td>${parseFloat(obj.amount).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
