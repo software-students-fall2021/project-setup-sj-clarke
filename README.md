@@ -73,7 +73,7 @@ Link to contributing.md file: https://github.com/software-students-fall2021/proj
 
 Wireframe: https://github.com/software-students-fall2021/user-experience-design-sj-clarke/tree/main/ux-design/Wireframes (link to wireframes on user experience git hub)
 
-Prototype: https://tripsplit.invisionapp.com/console/share/US34ZYPCAH 
+Prototype: https://tripsplit.invisionapp.com/overview/TripSplit-mobile-ckuxb4sct001e017d8g2wbpsf/screens?sortBy=1&sortOrder=1&viewLayout=2
 ( Link to Invision )
 
 
